@@ -66,7 +66,7 @@
 
 \begin{abstract}
 
-\boldmath Collisions are a main cause of throughput degradation in WLANs. The current contention mechanism used in this type of network called Carrier Sense Multiple Access with Collision Avoidance (CSMA/CA) uses a Binary Exponential Backoff (BEB) mechanism to delay each contender attempt of transmitting, effectively reducing the collision probability. Nevertheless, CSMA/CA relies on a random backoff which in principle is unable to eliminate collisions, resulting in a network throughput degradation as more contenders attempt to share the channel. Carrier Sense Multiple Access with Enhanced Collision Avoindance (CSMA/ECA) is able to create a collision-free schedule in a totally distributed manner by means of picking a deterministic backoff after successfull transmissions. CSMA/ECA is able to support many contenders in a collision-free schedule, surpassing the achieved throughput of CSMA/CA and provide short-term throughput fairness among contenders.
+\boldmath Collisions are a main cause of throughput degradation in WLANs. The current contention mechanism used in this type of network called Carrier Sense Multiple Access with Collision Avoidance (CSMA/CA) uses a Binary Exponential Backoff (BEB) mechanism to delay each contender attempt of transmitting, effectively reducing the collision probability. Nevertheless, CSMA/CA relies on a random backoff which in principle is unable to eliminate collisions, resulting in a network throughput degradation as more contenders attempt to share the channel. Carrier Sense Multiple Access with Enhanced Collision Avoindance (CSMA/ECA) is able to create a collision-free schedule in a totally distributed manner by means of picking a deterministic backoff after successful transmissions. CSMA/ECA is able to support many contenders in a collision-free schedule, surpassing the achieved throughput of CSMA/CA and provide short-term throughput fairness among contenders.
 
 This work reviews CSMA/ECA mechanisms and provides insightful simulations and the first real-life tests results that reveal its benefits over CSMA/CA under different network traffic conditions.
 
@@ -77,6 +77,15 @@ OpenFWWF, WMP, MAC, Collision-free, CSMA/ECA.
 \end{IEEEkeywords}
 
 \section{Introduction}\label{introduction}
+Wireless Local Area Networks (WLANs) are a popular solution for wireless connectivity, whereas in public places, work environments or at home. This technology works over an unlicensed spectrum in the Industrial, Scientific and Medical (ISM) radio bands (at around $2.4$ or $5$~GHz), which is a main reason of its popularity. 
+
+Stations share the wireless medium, therefore must be coordinated in order to avoid simultaneous transmissions which prevent the correct reception of the transmitted packet by the receiver. These events are referred to as \emph{collisions}. Collisions take up as much channel-time as succesfull transmissions, degrading the network performance.
+
+The Distributed Coordination Function (DCF) is the MAC protocol for WLANs. It is based on Carrier Sense Multiple Access with Collision Avoidance (CSMA/CA) and defines contention mechanism for dealing with collision events. Time in WLANs is slotted, it is splitted into \emph{collisions}, \emph{successful} and \emph{empty} slots, which are composed of collisions or successful transmissions events separated by tiny empty slots of fixed width ($9$ or $20$~$\mu$s~\cite{802Standards}).
+
+%By its nature, radio transmissions in WLANs are half-duplex. That is, transmitters are unable to listen to the channel while transmitting. 
+
+
 \section{Related Work}\label{relatedWork}
 \section{Simulation Results}\label{simulations}
 \section{Prototyping CSMA/ECA}\label{prototype}
