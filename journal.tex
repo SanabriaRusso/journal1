@@ -1,0 +1,91 @@
+\documentclass[a4paper,journal]{IEEEtran}
+%\documentclass[conference]{IEEEtran}
+%for using the therefore symbol
+%\usepackage{amssymb}
+%end
+
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{color, colortbl}
+\usepackage{xcolor}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{footnote}
+\usepackage{cite}
+%The below is used to add notes to tables without disrupting the IEEEtran format
+\usepackage{threeparttable}
+%Multiple figures in a row
+%\usepackage{caption}
+%\usepackage{subcaption}
+
+% Disable below if wanting to comply exclusively to conference mode of IEEEtran
+% \IEEEoverridecommandlockouts
+
+\begin{document}
+%opening
+ \title{Prototyping Collision-Free MAC Protocols in Real Hardware}
+
+
+%A more simple output, useful when involving people from different affiliations
+  %\author{
+    %  \IEEEauthorblockN{Luis Sanabria-Russo\IEEEauthorrefmark{0}, Jaume Barcelo\IEEEauthorrefmark{0}, Boris Bellalta\IEEEauthorrefmark{0}}\\
+      %\IEEEauthorblockA{\IEEEauthorrefmark{0}Universitat Pompeu Fabra, Barcelona, Spain
+      %\\\{luis.sanabria, jaume.barcelo, boris.bellalta\}@upf.edu}
+  %}
+
+\author{Luis Sanabria-Russo \\
+		NeTS Research Group at\\
+		Universitat Pompeu Fabra, Barcelona, Spain\\
+		\texttt{Luis.Sanabria@upf.edu}}
+
+%This is the style of three columns, as indicated in IEEEtran
+% \author{\IEEEauthorblockN{Luis Sanabria-Russo}
+%  \IEEEauthorblockA{Department of Information\\
+%  and Communications Technologies\\
+%  Universitat Pompeu Fabra\\
+%  Barcelona, Spain\\
+%  Email: luis.sanabria@upf.edu}
+%  \and
+%  \IEEEauthorblockN{Jaume Barcelo}
+%  \IEEEauthorblockA{Department of Information\\
+%  and Communications Technologies\\
+%  Universitat Pompeu Fabra\\
+%  Barcelona, Spain\\
+%  Email: cristina.cano@upf.edu} 
+%  \and
+%  \IEEEauthorblockN{Boris Bellalta}
+%  \IEEEauthorblockA{Department of Information\\
+%  and Communications Technologies\\
+%  Universitat Pompeu Fabra\\
+%  Barcelona, Spain\\
+%  Email: boris.bellalta@upf.edu}}
+
+
+\maketitle
+
+\begin{abstract}
+
+\boldmath Collisions are a main cause of throughput degradation in WLANs. The current contention mechanism used in this type of network called Carrier Sense Multiple Access with Collision Avoidance (CSMA/CA) uses a Binary Exponential Backoff (BEB) mechanism to delay each contender attempt of transmitting, effectively reducing the collision probability. Nevertheless, CSMA/CA relies on a random backoff which in principle is unable to eliminate collisions, resulting in a network throughput degradation as more contenders attempt to share the channel. Carrier Sense Multiple Access with Enhanced Collision Avoindance (CSMA/ECA) is able to create a collision-free schedule in a totally distributed manner by means of picking a deterministic backoff after successfull transmissions. CSMA/ECA is able to support many contenders in a collision-free schedule, surpassing the achieved throughput of CSMA/CA and provide short-term throughput fairness among contenders.
+
+This work reviews CSMA/ECA mechanisms and provides insightful simulations and the first real-life tests results that reveal its benefits over CSMA/CA under different network traffic conditions.
+
+\end{abstract}
+
+\begin{IEEEkeywords}
+OpenFWWF, WMP, MAC, Collision-free, CSMA/ECA.
+\end{IEEEkeywords}
+
+\section{Introduction}\label{introduction}
+\section{Related Work}\label{relatedWork}
+\section{Simulation Results}\label{simulations}
+\section{Prototyping CSMA/ECA}\label{prototype}
+\section{CSMA/ECA in real hardware results}\label{prototypeResults}
+\section{Conclusions}\label{conclusions}
+\section{Acknowledgements}
+
+
+\bibliographystyle{IEEEtran}
+\bibliography{../ref}
+
+\end{document}
