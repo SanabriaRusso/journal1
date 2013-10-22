@@ -22,6 +22,9 @@
 % Disable below if wanting to comply exclusively to conference mode of IEEEtran
 % \IEEEoverridecommandlockouts
 
+
+\usepackage{lipsum}
+
 \begin{document}
 %opening
  \title{Prototyping Collision-Free MAC Protocols in Real Hardware}
@@ -66,32 +69,48 @@
 
 \begin{abstract}
 
-\boldmath Collisions are a main cause of throughput degradation in WLANs. The current contention mechanism used in this type of network called Carrier Sense Multiple Access with Collision Avoidance (CSMA/CA) uses a Binary Exponential Backoff (BEB) technique to delay each contender attempt of transmitting, effectively reducing the collision probability. Nevertheless, CSMA/CA relies on a random backoff that while effective and totally distributed, in principle is unable to eliminate collisions; degrading the network throughput as more contenders attempt to share the channel. Carrier Sense Multiple Access with Enhanced Collision Avoindance (CSMA/ECA) is able to create a collision-free schedule in a totally distributed manner by means of picking a deterministic backoff after successful transmissions. CSMA/ECA is able to support many contenders in a collision-free schedule, surpassing the achieved throughput of CSMA/CA and provides short-term throughput fairness among contenders.
+\boldmath Collisions are a main cause of throughput degradation in WLANs. The current contention mechanism used in this type of network called Carrier Sense Multiple Access with Collision Avoidance (CSMA/CA) uses a Binary Exponential Backoff (BEB) technique to delay each contender attempt of transmitting, effectively reducing the collision probability. Nevertheless, CSMA/CA relies on a random backoff that while effective and totally distributed, in principle is unable to eliminate collisions; degrading the network throughput as more contenders attempt to share the channel. Carrier Sense Multiple Access with Enhanced Collision Avoindance (CSMA/ECA) is able to create a collision-free schedule in a totally distributed manner by means of picking a deterministic backoff after successful transmissions. CSMA/ECA is able to support many contenders in a collision-free schedule, surpassing the achieved throughput of CSMA/CA and providing short-term throughput fairness among contenders.
 
-This work reviews CSMA/ECA, providing insightful simulation results revealing its advantages over CSMA/CA. It also shows the first real-hardware implementation tests results of CSMA/ECA under saturated and unsaturated conditions.
+This work describes CSMA/ECA and its mechanisms to achieve a collision-free schedule with many contenders by providing insightful simulation and real implementation results revealing its advantages over CSMA/CA. 
+%It also shows the first real-hardware implementation tests results of CSMA/ECA under saturated and unsaturated conditions.
 
 \end{abstract}
 
 \begin{IEEEkeywords}
-OpenFWWF, WMP, MAC, Collision-free, CSMA/ECA.
+CSMA/ECA, WLAN, MAC, Collision-free, OpenFWWF.
 \end{IEEEkeywords}
 
 \section{Introduction}\label{introduction}
-Wireless Local Area Networks (WLANs or IEEE 802.11 networks~\cite{802Standards}) are a popular solution for wireless connectivity, whereas in public places, work environments or at home. This technology works over an unlicensed spectrum in the Industrial, Scientific and Medical (ISM) radio bands (at around $2.4$ or $5$~GHz), which is a main reason for its popularity. 
+Wireless Local Area Networks (WLANs or IEEE 802.11 networks~\cite{802Standards}) are a popular solution for wireless connectivity, whether in public places, work environments or at home. This technology works over an unlicensed spectrum in the Industrial, Scientific and Medical (ISM) radio bands (at around $2.4$ or $5$~GHz), which is a main reason for its popularity. 
 
-The Medium Access Control (MAC) scheme used in WLANs is called Distributed Coordination Function (DCF) and is based on Carrier Sense Multiple Access with Collision Avoidance (CSMA/CA) protocol. It has been widely adopted by manufacturers and consumers, making it very cheap to implement and an ubiquitous technology. Nevertheless, ever-growing throughput demands from upper layers have proven to be limited by WLANs' MAC, which by its nature is prone to collisions that degrade the overall performance as more nodes join the network.
+The Medium Access Control (MAC) scheme used in WLANs is called Distributed Coordination Function (DCF) and is based on Carrier Sense Multiple Access with Collision Avoidance (CSMA/CA) protocol. It has been widely adopted by manufacturers and consumers, making it very cheap to implement and an ubiquitous technology. Nevertheless, the ever-growing throughput demands from upper layers have proven to be limited by WLANs' MAC~\cite{perahia2008ieee}, which by its nature is prone to collisions that degrade the overall performance as more nodes join the network.
 
 The research community has pushed forward many alternatives to the current MAC in WLANs~\cite{bharghavan1994map,wang2004ncr,cali2000dti,lopez-toledo2006aoi,
-barcelo2008lba,bellalta2009vtc,HE,CSMA_ECA,L_MAC2,hui2011epp,barcelo2011tcf}, but when a proposal deviates too much from CSMA/CA or time-critical operations are modified, its hardware implementation as part of WLANs MAC often becomes unlikely~\cite{WMP}; the standardization process taking many years without certainty of approval~\cite{perahia2008ieee}. 
+barcelo2008lba,bellalta2009vtc,HE,CSMA_ECA,L_MAC2,hui2011epp,barcelo2011tcf}, but when a proposal deviates too much from CSMA/CA or time-critical operations are modified, its hardware implementation as part of WLANs' MAC often becomes unlikely~\cite{WMP}; the standardization process taking many years without certainty of approval~\cite{perahia2008ieee}. 
 
 %Backwards compatibility is paramount, mostly because the existing user base is very big. Also, a suitable candidate to replace CSMA/CA should increase the number of supported contenders while augmenting the offered throughput.
 
+A CSMA/CA replacement should be able to provide advantages in terms of throughput and handle many contenders without sacrificing short-term throughput fairness. Furthermore, to support the existing user base and ease its implementation on real hardware, the new MAC protocol should be built on top of the current standard, ensuring backwards compatibility and avoiding a drastic deviation from CSMA/CA.
 
+%Furthermore, due to the proliferation of evermore WiFi-capable devices, it is thought that a suitable replacement should 
+
+A suitable candidate, and the one to be tested in this work, is called Carrier Sense Multiple Access with Enhanced Collision Avoidance (CSMA/ECA)~\cite{barcelo2008lba}. It is capable of attaining higher throughput than CSMA/CA by making a simple modification to the contention mechanism. In CSMA/ECA, nodes pick a deterministic backoff after successful transmissions; constructing a collision-free schedule among successful contenders. Further enhancements, like \emph{Hysteresis} and \emph{Fair Share}~\cite{research2standards} allowed CSMA/ECA to support many more contenders in a collision-free schedule without compromising short-term fairness.
+
+Although many studies have been made analyzing the performance of CSMA/ECA~\cite{barcelo2008lba,research2standards,bellalta2009vtc,E2CA_performance}, neither assesses the protocol's backwards compatibility property. Furthermore, all the aforementioned studies are based on simulation results, bypassing the influence of realistic testing scenarios over the overall network performance.
+
+This work provides the first performance analysis of CSMA/ECA~\cite{research2standards} under unsaturated conditions. Furthermore, CSMA/ECA is prototyped in real hardware using OpenFWWF~\cite{OpenFWWF} and the impact of CSMA/ECA nodes in a CSMA/CA network is scrutinized for the first time.
+
+The rest of this work is divided as follows: an overview of different MAC protocols for WLANs is provided in  Section~\ref{relatedWork}. CSMA/ECA, as well as its properties for allocating many contenders in a collision-free schedule are explained in Section~\ref{introProtocol}. Section~\ref{simulations} details the simulation procedure for testing CSMA/ECA under unsaturated network conditions, while Section~\ref{prototype} goes through the prototyping of CSMA/ECA in real hardware. The results for the simulation and prototypes are presented in Section~\ref{prototypeResults}. Conclusions are drawn in Section~\ref{conclusions}.
+
+
+{\color{blue}\lipsum}
 
 \section{Related Work}\label{relatedWork}
-\section{Simulation Results}\label{simulations}
+\section{Carrier Sense Multiple Access with Enhanced Collision Avoidance (CSMA/ECA)}\label{introProtocol}
+	\subsection{Co-existing with CSMA/CA}
+\section{Simulation}\label{simulations}
 \section{Prototyping CSMA/ECA}\label{prototype}
-\section{CSMA/ECA in real hardware results}\label{prototypeResults}
+\section{Coexistence with CSMA/CA}\label{prototypeResults}
 \section{Conclusions}\label{conclusions}
 \section{Acknowledgements}
 

@@ -1,0 +1,10 @@
+Classes/
+*.bst
+*.cls
+*.aux
+*.blg
+*.dvi
+*.bbl
+*.log
+*.backup
+*~
