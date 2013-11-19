@@ -103,9 +103,23 @@ This work provides the first performance analysis of CSMA/ECA~\cite{research2sta
 The rest of this work is divided as follows: an overview of different MAC protocols for WLANs is provided in  Section~\ref{relatedWork}. CSMA/ECA, as well as its properties for allocating many contenders in a collision-free schedule are explained in Section~\ref{introProtocol}. Section~\ref{simulations} details the simulation procedure for testing CSMA/ECA under unsaturated network conditions, while Section~\ref{prototype} goes through the prototyping of CSMA/ECA in real hardware. The results for the simulation and prototypes are presented in Section~\ref{prototypeResults}. Conclusions are drawn in Section~\ref{conclusions}.
 
 
-{\color{blue}\lipsum}
+%{\color{blue}\lipsum}
 
 \section{Related Work}\label{relatedWork}
+Big advances in the WLANs PHY~\cite{perahia2008ieee,6191306} push the community towards the development of MAC protocols able to take advantage of a much faster PHY.
+
+\subsection{Zero Collision MAC} 
+
+Zero Collision MAC (ZC MAC)~\cite{ZMAC} achieves a zero collision schedule for WLANs in a totally distributed way. It does so by allowing contenders to reserve one empty slot ($s_{e}$) from a  predefined virtual schedule of $N$-slots length. Backlogged stations pick a slot in the virtual cycle to attempt transmission. If two or more stations pick the same slot in the cycle, their transmissions will eventually collide; forcing the involved contenders to randomly and uniformly select other empty slot from those detected in the previous cycle plus the slot where they collided. When all $M$ stations reserve a different slot, a collision-free schedule is achieved.
+
+ZC MAC is able to outperform CSMA/CA under different scenarios. Nevertheless, there is a lack of backwards compatibility tests with CSMA/CA, throughput fairness considerations or evaluations under unsaturated conditions. 
+
+Given that the length of ZC MAC's virtual cycle has to be predefined without actual knowledge of the real number of contenders in the deployment, the protocol is unable to provide a collision-free schedule when $M>N$. Furthermore, if $N$ is overestimated ($N>>M$), the fixed-width empty slots between each contender successful transmission are no longer negligible and contribute to the degradation of the network performance.
+
+%Important to see how L-MAC leverages this previous information requirement and translates into a clock-drift issue.
+
+\subsection{Learning-MAC}
+
 \section{Carrier Sense Multiple Access with Enhanced Collision Avoidance (CSMA/ECA)}\label{introProtocol}
 	\subsection{Co-existing with CSMA/CA}
 \section{Simulation}\label{simulations}
