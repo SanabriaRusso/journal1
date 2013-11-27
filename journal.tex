@@ -84,7 +84,7 @@ CSMA/ECA, WLAN, MAC, Collision-free, OpenFWWF.
 \section{Introduction}\label{introduction}
 Wireless Local Area Networks (WLANs or IEEE 802.11 networks~\cite{802Standards}) are a popular solution for wireless connectivity, whether in public places, work environments or at home. This technology works over an unlicensed spectrum in the Industrial, Scientific and Medical (ISM) radio bands (at around $2.4$ or $5$~GHz), which is a main reason for its popularity. 
 
-The Medium Access Control (MAC) scheme used in WLANs is called Distributed Coordination Function (DCF) and is based on Carrier Sense Multiple Access with Collision Avoidance (CSMA/CA) protocol. It has been widely adopted by manufacturers and consumers, making it very cheap to implement and an ubiquitous technology. Nevertheless, the ever-growing throughput demands from upper layers have proven to be limited by WLANs' MAC~\cite{perahia2008ieee}, which by its nature is prone to collisions that degrade the overall performance as more nodes join the network.
+The Medium Access Control (MAC) scheme used in WLANs is called Distributed Coordination Function (DCF) and is based on Carrier Sense Multiple Access with Collision Avoidance (CSMA/CA) protocol. It has been widely adopted by manufacturers and consumers, making it very cheap to implement and an ubiquitous technology (DCF and CSMA/CA will be used interchangeably throughout this work). Nevertheless, the ever-growing throughput demands from upper layers have proven to be limited by WLANs' MAC~\cite{perahia2008ieee}, which by its nature is prone to collisions that degrade the overall performance as more nodes join the network.
 
 The research community has pushed forward many alternatives to the current MAC in WLANs~\cite{bharghavan1994map,wang2004ncr,cali2000dti,lopez-toledo2006aoi,
 barcelo2008lba,bellalta2009vtc,HE,CSMA_ECA,L_MAC2,hui2011epp,barcelo2011tcf}, but when a proposal deviates too much from CSMA/CA or time-critical operations are modified, its hardware implementation as part of WLANs' MAC often becomes unlikely~\cite{WMP}; the standardization process taking many years without certainty of approval~\cite{perahia2008ieee}. 
@@ -158,7 +158,17 @@ Collisions are handled as in DCF. Upon collision, the involved nodes will double
   \label{fig:BECA}
 \end{figure*}
 
-In Figure~\ref{fig:BECA}, the STA~\# labels represent stations willing to transmit. The horizontal lines are a time abstraction with each number indicating the number of slots left for the backoff to expire. Stations willing to transmit begin the contention for the channel by picking a random backoff, $B$. The red outline highlights the fact that stations STA 3 and STA 4 will eventually collide because they selected the same $B$. After recomputing the random backoff, STA 4's attempt results in a successful transmission, which instructs the node to pick a deterministic backoff, $B_{d}=7$ in this case. By doing so, all successful STAs will not collide among each other in future cycles.
+In Figure~\ref{fig:BECA}, the \emph{STA~\#} labels represent stations willing to transmit. The horizontal lines are a time abstraction with each number indicating the amount of slots left for the backoff to expire. Stations willing to transmit begin the contention for the channel by picking a random backoff, $B$. The red outline highlights the fact that stations STA 3 and STA 4 will eventually collide because they selected the same $B$. After recomputing the random backoff, STA 4's attempt results in a successful transmission, which instructs the node to pick a deterministic backoff, $B_{d}=7$ in this case. By doing so, all successful STAs will not collide among each other in future cycles.
+
+Collision slots being orders of magnitude larger than empty slots degrade the network performance. When CSMA/ECA builds the collision-free schedule all contenders are able to successfully transmit more often, increasing the aggregated throughput beyond DCF's. Figure~\ref{fig:BECA-throughput} shows the achieved throughput of CSMA/ECA and CSMA/CA, alongside the Jain's Fairness Index (JFI)~\cite{JFI}.
+
+\begin{figure}[htbp]
+\centering
+  \includegraphics[width=0.7\linewidth, angle=-90]{figures/DCF-vs-ECA.eps}
+  \caption{CSMA/ECA example in saturation}
+  \label{fig:BECA}
+\end{figure}
+
 
 	\subsection{Co-existing with CSMA/CA}
 \section{Simulation}\label{simulations}
