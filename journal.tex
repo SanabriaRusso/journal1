@@ -18,6 +18,7 @@
 %Multiple figures in a row
 %\usepackage{caption}
 %\usepackage{subcaption}
+\usepackage{amsmath}
 
 % Disable below if wanting to comply exclusively to conference mode of IEEEtran
 % \IEEEoverridecommandlockouts
@@ -112,13 +113,38 @@ Big advances in the WLANs PHY~\cite{perahia2008ieee,6191306} push the community 
 
 Zero Collision MAC (ZC MAC)~\cite{ZMAC} achieves a zero collision schedule for WLANs in a totally distributed way. It does so by allowing contenders to reserve one empty slot ($s_{e}$) from a  predefined virtual schedule of $N$-slots length. Backlogged stations pick a slot in the virtual cycle to attempt transmission. If two or more stations pick the same slot in the cycle, their transmissions will eventually collide; forcing the involved contenders to randomly and uniformly select other empty slot from those detected in the previous cycle plus the slot where they collided. When all $M$ stations reserve a different slot, a collision-free schedule is achieved.
 
-ZC MAC is able to outperform CSMA/CA under different scenarios. Nevertheless, there is a lack of backwards compatibility tests with CSMA/CA, throughput fairness considerations or evaluations under unsaturated conditions. 
-
-Given that the length of ZC MAC's virtual cycle has to be predefined without actual knowledge of the real number of contenders in the deployment, the protocol is unable to provide a collision-free schedule when $M>N$. Furthermore, if $N$ is overestimated ($N>>M$), the fixed-width empty slots between each contender successful transmission are no longer negligible and contribute to the degradation of the network performance.
+ZC MAC is able to outperform CSMA/CA under different scenarios. Nevertheless, given that the length of ZC MAC's virtual cycle has to be predefined without actual knowledge of the real number of contenders in the deployment, the protocol is unable to provide a collision-free schedule when $M>N$. Furthermore, if $N$ is overestimated ($N>>M$), the fixed-width empty slots between each contender successful transmission are no longer negligible and contribute to the degradation of the network performance.
 
 %Important to see how L-MAC leverages this previous information requirement and translates into a clock-drift issue.
 
 \subsection{Learning-MAC}
+
+Learning-MAC~\cite{L_MAC} is another interesting MAC protocol which is able to build a collision-free schedule for many contenders. It does so defining a \emph{learning strength} parameter, $\beta\in(0,1)$. Each contender starts by picking a slot for transmission $s$ of the schedule $n$ of length $C$ at random with uniform probability. After a contender picks slot $s(n)$, its selection in the next schedule ($s(n+1)$) will be conditioned by the result of the current attempt. Equation~\ref{success} and Eq.~\ref{collision} show the probability of selecting the same slot $s(n)$ in cycle $n+1$.
+
+\begin{equation} \label{success}
+		\left. \begin{aligned}
+			p_{s(n)}(n+1)&=1,\\
+			p_{j}(n+1)&=0,
+		\end{aligned}
+	\right\}
+	\qquad \text{\emph{Success}}
+\end{equation}
+\begin{equation} \label{collision}
+	\left. \begin{aligned}
+			p_{s(n)}(n+1)&=\beta p_{s(n)}(n),\\
+			p_{j}(n+1)&=\beta p_{j}(n)+\frac{1-\beta}{C -1},
+		\end{aligned}
+	\right\}
+	\qquad \text{\emph{Collision}}
+\end{equation}
+\\
+, for all $j\neq s(n),~j\in \{1,\dots ,C\}$. That is, if a station successfully transmitted in $s(n)$, it will pick the same slot on the next schedule with probability one. Otherwise, the selection follows Eq.~\ref{collision}.
+
+The selection of $\beta$ implies a compromise between fairness and convergence speed, which the authors determined $\beta=0.95$ to provide satisfactory results.
+
+L-MAC is able to achieve better levels of throughput than the current MAC with a very fast convergence speed. Nevertheless, the choice of $\beta$ suppose a previous knowledge of the number of empty slots ($C-N$, where $N$ is the number of contenders), which is not easily available to the current MAC or may require a centralized entity~\cite{barcelo2011tcf}.
+
+Further extensions to L-MAC introduced an \emph{Adaptative} schedule length in order to increase the number of supported contenders in a collision-free schedule. This adaptive schedule length ($C_{i}$) is doubled or halved depending on the presence of collisions or many empty slots per schedule, respectively. The effects of reducing the schedule length may provoke a re-convergence phase which can result in short-term fairness issues. Furthermore, L-MAC is unable to achieve a collision-free schedule unless $N\leq C$.
 
 \section{Carrier Sense Multiple Access with Enhanced Collision Avoidance (CSMA/ECA)}\label{introProtocol}
 	\subsection{Co-existing with CSMA/CA}
