@@ -147,6 +147,19 @@ L-MAC is able to achieve better levels of throughput than the current MAC with a
 Further extensions to L-MAC introduced an \emph{Adaptative} schedule length in order to increase the number of supported contenders in a collision-free schedule. This adaptive schedule length ($C_{i}$) is doubled or halved depending on the presence of collisions or many empty slots per schedule, respectively. The effects of reducing the schedule length may provoke a re-convergence phase which can result in short-term fairness issues. Furthermore, L-MAC is unable to achieve a collision-free schedule unless $N\leq C$.
 
 \section{Carrier Sense Multiple Access with Enhanced Collision Avoidance (CSMA/ECA)}\label{introProtocol}
+CSMA/ECA~\cite{barcelo2008lba} is a totally distributed and collision-free MAC for WLANs. It differs from DCF in that it picks a deterministic backoff, $B_{d}=CW_{\min}/2$ after successful transmissions; where $CW_{\min}/2$ is the minimum contention window of typical value $CW_{\min}=16$. By doing so, contenders that successfully transmitted on schedule $n$, will do so without colliding with other successful nodes in future cycles.
+
+Collisions are handled as in DCF. Upon collision, the involved nodes will double their contention window by incrementing their \emph{backoff stage} $k\in[0,m]$ in one and picking a random backoff, $B\in[0,2^{k}CW_{\min}]$; where $k$ is reset ($k=0$) after each successful transmission and $m$ is the maximum backoff stage of typical value $m=5$. Figure~\ref{fig:BECA} shows and example of CSMA/ECA dynamics.
+
+\begin{figure*}[tbhp]
+\centering
+  \includegraphics[width=0.9\linewidth]{figures/basicECA.eps}
+  \caption{CSMA/ECA example in saturation}
+  \label{fig:BECA}
+\end{figure*}
+
+In Figure~\ref{fig:BECA}, the STA~\# labels represent stations willing to transmit. The horizontal lines are a time abstraction with each number indicating the number of slots left for the backoff to expire. Stations willing to transmit begin the contention for the channel by picking a random backoff, $B$. The red outline highlights the fact that stations STA 3 and STA 4 will eventually collide because they selected the same $B$. After recomputing the random backoff, STA 4's attempt results in a successful transmission, which instructs the node to pick a deterministic backoff, $B_{d}=7$ in this case. By doing so, all successful STAs will not collide among each other in future cycles.
+
 	\subsection{Co-existing with CSMA/CA}
 \section{Simulation}\label{simulations}
 \section{Prototyping CSMA/ECA}\label{prototype}
