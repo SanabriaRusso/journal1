@@ -28,7 +28,7 @@
 
 \begin{document}
 %opening
- \title{Prototyping Collision-Free MAC Protocols in Real Hardware}
+ \title{The Evolution of MAC for Wireless LANs}
 
 
 %A more simple output, useful when involving people from different affiliations
@@ -101,25 +101,27 @@ Although many studies have been made analyzing the performance of CSMA/ECA~\cite
 
 This work provides the first performance analysis of CSMA/ECA~\cite{research2standards} under unsaturated conditions. Furthermore, CSMA/ECA is prototyped in real hardware using OpenFWWF~\cite{OpenFWWF} and the impact of CSMA/ECA nodes in a real CSMA/CA network is scrutinized for the first time.
 
-The rest of this work is divided as follows: an overview of different MAC protocols for WLANs is provided in  Section~\ref{relatedWork}. CSMA/ECA, as well as its properties for allocating many contenders in a collision-free schedule are explained in Section~\ref{introProtocol}. Section~\ref{simulations} details the simulation procedure for testing CSMA/ECA under unsaturated network conditions, while Section~\ref{prototype} goes through the prototyping of CSMA/ECA in real hardware. The results for the simulation and prototypes are presented in Section~\ref{prototypeResults}. Conclusions are drawn in Section~\ref{conclusions}.
+The rest of this work is divided as follows: an overview of similar distributed and collision-free MAC protocols for WLANs is provided in  Section~\ref{relatedWork}. CSMA/ECA, as well as its properties for allocating many contenders in a collision-free schedule are explained in Section~\ref{introProtocol}. Section~\ref{simulations} details the simulation procedure for testing CSMA/ECA under unsaturated network conditions, while Section~\ref{prototype} goes through the prototyping of CSMA/ECA in real hardware. The results for the simulation and prototypes are presented in Section~\ref{prototypeResults}. Conclusions are drawn in Section~\ref{conclusions}.
 
 
 %{\color{blue}\lipsum}
 
 \section{Related Work}\label{relatedWork}
-Big advances in the WLANs PHY~\cite{perahia2008ieee,6191306} push the community towards the development of MAC protocols able to take advantage of a much faster PHY.
+Time in WLANs is divided into tiny empty slots of fixed length $\sigma_{e}$, collisions and successful slots of length $\sigma_{c}$ and $\sigma_{s}$, respectively. Collision and successful slots contain collisions or successful transmissions, making them an order of magnitude larger than empty slots ($\sigma_{e}\ll\min(\sigma_{s},\sigma_{c}))$. One of the effects of collisions is the degradation the network performance by wasting channel time on collisions slots. 
+
+Big advances in the WLANs PHY~\cite{perahia2008ieee,6191306} push the community towards the development of MAC protocols able to take advantage of a much faster PHY. The followings are MAC protocols for WLANs, distributed and capable of attaining greater throughput than CSMA/CA by constructing a collision-free schedule.
 
 \subsection{Zero Collision MAC} 
 
-Zero Collision MAC (ZC MAC)~\cite{ZMAC} achieves a zero collision schedule for WLANs in a totally distributed way. It does so by allowing contenders to reserve one empty slot ($s_{e}$) from a  predefined virtual schedule of $N$-slots length. Backlogged stations pick a slot in the virtual cycle to attempt transmission. If two or more stations pick the same slot in the cycle, their transmissions will eventually collide; forcing the involved contenders to randomly and uniformly select other empty slot from those detected in the previous cycle plus the slot where they collided. When all $M$ stations reserve a different slot, a collision-free schedule is achieved.
+Zero Collision MAC (ZC MAC)~\cite{ZMAC} achieves a zero collision schedule for WLANs in a totally distributed way. It does so by allowing contenders to reserve one empty slot ($s_{e}$) from a  predefined virtual schedule of $N$-slots in length. Backlogged stations pick a slot in the virtual cycle to attempt transmission. If two or more stations pick the same slot in the cycle, their transmissions will eventually collide; forcing the involved contenders to randomly and uniformly select other empty slot from those detected in the previous cycle plus the slot where they collided. When all $M$ stations reserve a different slot, a collision-free schedule is achieved.
 
-ZC MAC is able to outperform CSMA/CA under different scenarios. Nevertheless, given that the length of ZC MAC's virtual cycle has to be predefined without actual knowledge of the real number of contenders in the deployment, the protocol is unable to provide a collision-free schedule when $M>N$. Furthermore, if $N$ is overestimated ($N>>M$), the fixed-width empty slots between each contender successful transmission are no longer negligible and contribute to the degradation of the network performance.
+ZC MAC is able to outperform CSMA/CA under different scenarios. Nevertheless, given that the length of ZC MAC's virtual cycle has to be predefined without actual knowledge of the real number of contenders in the deployment, the protocol is unable to provide a collision-free schedule when $M>N$. Furthermore, if $N$ is overestimated ($N\gg M$), the fixed-width empty slots between each contender successful transmission are no longer negligible and contribute to the degradation of the network performance.
 
 %Important to see how L-MAC leverages this previous information requirement and translates into a clock-drift issue.
 
 \subsection{Learning-MAC}
 
-Learning-MAC~\cite{L_MAC} is another interesting MAC protocol which is able to build a collision-free schedule for many contenders. It does so defining a \emph{learning strength} parameter, $\beta\in(0,1)$. Each contender starts by picking a slot for transmission $s$ of the schedule $n$ of length $C$ at random with uniform probability. After a contender picks slot $s(n)$, its selection in the next schedule ($s(n+1)$) will be conditioned by the result of the current attempt. Equation~\ref{success} and Eq.~\ref{collision} show the probability of selecting the same slot $s(n)$ in cycle $n+1$.
+Learning-MAC~\cite{L_MAC} is another interesting MAC protocol which is able to build a collision-free schedule for many contenders. It does so defining a \emph{learning strength} parameter, $\beta\in(0,1)$. Each contender starts by picking a slot for transmission $s$ of the schedule $n$ of length $C$ at random with uniform probability. After a contender picks slot $s(n)$, its selection in the next schedule ($s(n+1)$) will be conditioned by the result of the current attempt. Equation~\ref{success} and Eq.~\ref{collision} extracted from~\cite{L_MAC} show the probability of selecting the same slot $s(n)$ in cycle $n+1$.
 
 \begin{equation} \label{success}
 		\left. \begin{aligned}
@@ -138,7 +140,7 @@ Learning-MAC~\cite{L_MAC} is another interesting MAC protocol which is able to b
 	\qquad \text{\emph{Collision}}
 \end{equation}
 \\
-, for all $j\neq s(n),~j\in \{1,\dots ,C\}$. That is, if a station successfully transmitted in $s(n)$, it will pick the same slot on the next schedule with probability one. Otherwise, the selection follows Eq.~\ref{collision}.
+, for all $j\neq s(n),~j\in \{1,\dots ,C\}$. That is, if a station successfully transmitted in $s(n)$, it will pick the same slot on the next schedule with probability one. Otherwise, it follows Eq.~\ref{collision}.
 
 The selection of $\beta$ implies a compromise between fairness and convergence speed, which the authors determined $\beta=0.95$ to provide satisfactory results.
 
@@ -147,9 +149,9 @@ L-MAC is able to achieve better levels of throughput than the current MAC with a
 Further extensions to L-MAC introduced an \emph{Adaptative} schedule length in order to increase the number of supported contenders in a collision-free schedule. This adaptive schedule length ($C_{i}$) is doubled or halved depending on the presence of collisions or many empty slots per schedule, respectively. The effects of reducing the schedule length may provoke a re-convergence phase which can result in short-term fairness issues. Furthermore, L-MAC is unable to achieve a collision-free schedule unless $N\leq C$.
 
 \section{Carrier Sense Multiple Access with Enhanced Collision Avoidance (CSMA/ECA)}\label{introProtocol}
-CSMA/ECA~\cite{barcelo2008lba} is a totally distributed and collision-free MAC for WLANs. It differs from DCF in that it picks a deterministic backoff, $B_{d}=CW_{\min}/2$ after successful transmissions; where $CW_{\min}/2$ is the minimum contention window of typical value $CW_{\min}=16$. By doing so, contenders that successfully transmitted on schedule $n$, will do so without colliding with other successful nodes in future cycles.
+CSMA/ECA~\cite{barcelo2008lba} is a totally distributed and collision-free MAC for WLANs. It differs from DCF in that it picks a deterministic backoff, $B_{d}=CW_{\min}/2$ after successful transmissions; where $CW_{\min}$ is the minimum contention window of typical value $CW_{\min}=16$. By doing so, contenders that successfully transmitted on schedule $n$, will do so without colliding with other successful nodes in future cycles.
 
-Collisions are handled as in DCF. Upon collision, the involved nodes will double their contention window by incrementing their \emph{backoff stage} $k\in[0,m]$ in one and picking a random backoff, $B\in[0,2^{k}CW_{\min}]$; where $k$ is reset ($k=0$) after each successful transmission and $m$ is the maximum backoff stage of typical value $m=5$. Figure~\ref{fig:BECA} shows and example of CSMA/ECA dynamics.
+Collisions are handled as in DCF. Upon collision, the involved nodes will double their contention window by incrementing their \emph{backoff stage} $k\in[0,m]$ in one and picking a random backoff, $B\in[0,2^{k}CW_{\min}]$; where $k$ is reset ($k=0$) after each successful transmission and $m$ is the maximum backoff stage of typical value $m=5$. Figure~\ref{fig:BECA} shows an example of CSMA/ECA dynamics.
 
 \begin{figure*}[tbhp]
 \centering
@@ -158,7 +160,7 @@ Collisions are handled as in DCF. Upon collision, the involved nodes will double
   \label{fig:BECA}
 \end{figure*}
 
-In Figure~\ref{fig:BECA}, the \emph{STA~\#} labels represent stations willing to transmit. The horizontal lines are a time abstraction with each number indicating the amount of slots left for the backoff to expire. Stations willing to transmit begin the contention for the channel by picking a random backoff, $B$. The red outline highlights the fact that stations STA 3 and STA 4 will eventually collide because they selected the same $B$. After recomputing the random backoff, STA 4's attempt results in a successful transmission, which instructs the node to pick a deterministic backoff, $B_{d}=7$ in this case. By doing so, all successful STAs will not collide among each other in future cycles.
+In Figure~\ref{fig:BECA}, the \emph{STA~\#} labels represent stations willing to transmit. The horizontal lines are a time abstraction with each number indicating the amount of empty slots left for the backoff to expire. Stations willing to transmit begin the contention for the channel by picking a random backoff, $B$. The red outline highlights the fact that stations STA 3 and STA 4 will eventually collide because they selected the same $B$. After recomputing the random backoff, STA 4's attempt results in a successful transmission, which instructs the node to pick a deterministic backoff, $B_{d}=7$ in this case. By doing so, all successful STAs will not collide among each other in future cycles.
 
 Collision slots being orders of magnitude larger than empty slots degrade the network performance. When CSMA/ECA builds the collision-free schedule all contenders are able to successfully transmit more often, increasing the aggregated throughput beyond DCF's. Figure~\ref{fig:BECA-throughput} shows the achieved throughput of CSMA/ECA and CSMA/CA, alongside the Jain's Fairness Index (JFI)~\cite{JFI}.
 
@@ -169,6 +171,9 @@ Collision slots being orders of magnitude larger than empty slots degrade the ne
   \label{fig:BECA}
 \end{figure}
 
+Referring to Figure~\ref{fig:BECA}, CSMA/ECA is able to achieve an aggregated throughput that goes beyond CSMA/CA up until the number of contenders ($N$) is greater than $B_{d}=7$. Beyond this point, the network will have a mixed behavior relating to backoff mechanism: some nodes will successfully transmit and pick a deterministic backoff while others will collide due to the lack of empty slots and return to a random backoff. As more contenders join the network, CSMA/ECA performance will approximate to CSMA/CA's.
+
+The \emph{JFI for CSMA/ECA} and \emph{JFI for CSMA/CA} curves in Figure~\ref{fig:BECA} show the Jain's Fairness index for both protocols. A value equal to one throughout the range of contenders suggests that the available throughput is shared evenly among all stations.
 
 	\subsection{Co-existing with CSMA/CA}
 \section{Simulation}\label{simulations}
