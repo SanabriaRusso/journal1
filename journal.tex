@@ -155,7 +155,7 @@ Collisions are handled as in DCF. Upon collision, the involved nodes will double
 
 \begin{figure*}[tbhp]
 \centering
-  \includegraphics[width=0.9\linewidth]{figures/basicECA.eps}
+  \includegraphics[width=0.8\linewidth]{figures/basicECA.eps}
   \caption{CSMA/ECA example in saturation}
   \label{fig:BECA}
 \end{figure*}
@@ -176,18 +176,42 @@ Referring to Figure~\ref{fig:BECA}, CSMA/ECA is able to achieve an aggregated th
 The \emph{JFI for CSMA/ECA} and \emph{JFI for CSMA/CA} curves in Figure~\ref{fig:BECA} show the Jain's Fairness index for both protocols. A value equal to one throughout the range of contenders suggests that the available throughput is shared evenly among all stations.
 
 	\subsection{Supporting many more contenders}
-	As was mentioned before, CSMA/ECA is only able to build a collision-free schedule if the number of contenders $N$, is less or equal than $B_{d}$. When $N > B_{d}$, collisions reappear. To recover the collision-free schedule, CSMA/ECA instructs nodes {\bfseries not} to reset their backoff stage ($k$) after successful transmissions but to pick a deterministic backoff $B_{d}=CW(k)/2$; where $CW(k)=2^{k}CW_{\min}$. This measure allocates many more contenders in a collision-free schedule and it is called \emph{Hysteresis}.
+	As was mentioned before, CSMA/ECA is only able to build a collision-free schedule if the number of contenders $N$, is less or equal than $B_{d}$. When $N > B_{d}$, collisions reappear. 
 	
-	Hysteresis enables CSMA/ECA nodes to have different schedules ($B_{d}$), carrying the undesired effect of unevenly divide the channel time among contenders (some nodes will have to wait more in order to attempt transmissions). This unfairness is leveraged by instructing nodes at backoff stage $k$ to transmit $2^{k}$ packets on each attempt, thus proportionally compensating those nodes at higher backoff stages. This measure was first proposed by Fang. et al. in~\cite{L_MAC}, and further implemented as \emph{Fair Share} for CSMA/ECA~\cite{research2standards}.
+	To recover the collision-free schedule, CSMA/ECA instructs nodes {\bfseries not} to reset their backoff stage ($k$) after successful transmissions, but to pick a deterministic backoff $B_{d}=CW(k)/2$; where $CW(k)=2^{k}CW_{\min}$. This measure allocates many more contenders in a collision-free schedule and is called \emph{Hysteresis}.
+	
+	Hysteresis enables CSMA/ECA nodes to have different schedules ($B_{d}$), carrying the undesired effect of unevenly divide the channel time among contenders (some nodes will have to wait more in order to attempt transmissions).
+	
+	This unfairness is leveraged by instructing nodes at backoff stage $k$ to transmit $2^{k}$ packets on each attempt, thus proportionally compensating those nodes at higher backoff stages. This measure was first proposed by Fang. et al. in~\cite{L_MAC}, and further implemented as \emph{Fair Share} for CSMA/ECA~\cite{research2standards}. Figure~\ref{fig:fairness} shows the JFI for CSMA/CA as well as for CSMA/ECA with both enhancements: Hysteresis and Fair Share.
+	
+	\begin{figure}[htbp]
+	\centering
+		\includegraphics[width=0.7\linewidth, angle=-90]{figures/fairness-combined.eps}
+		\caption{Fairness comparison with nodes under saturation}
+		\label{fig:fairness}
+	\end{figure}
+	
+	In Figure~\ref{fig:fairness}, the only curve deviating from JFI = 1 is \emph{CSMA/ECA w/ hysteresis}; suggesting an uneven partition of the channel access time among contenders.
 	
 	\begin{figure*}[tbhp]
 	\centering
-		\includegraphics[width=0.9\linewidth]{figures/csma_eca_different_backoff_short.eps}
+		\includegraphics[width=0.8\linewidth]{figures/csma_eca_different_backoff_short.eps}
 		\caption{CSMA/ECA + Hysteresis example in saturation ($CW_{\min}=16$)}
 		\label{fig:ECA+Hyst}
 	\end{figure*}
 	
+	As with Figure~\ref{fig:BECA}, Figure~\ref{fig:ECA+Hyst} shows four stations attempting to transmit. The red outline indicates a collision between STA 3 and STA 4, which will provoke an increment on both station's backoff stage ($k=k+1$). Once STA 4's random backoff expires, CSMA/ECA instructs the station to transmit $2^{k}$ packets, and then pick a deterministic backoff, $B_{d}=CW(k)/2$. The same behavior is followed by STA 3.
 	
+	With Hysteresis and Fair Share, CSMA/ECA is able to achieve greater throughput than CSMA/CA and for many more contenders, as shown in Figure~\ref{fig:ECA+H+F-throughput} extracted from~\cite{research2standards}. In the figure, the \emph{CSMA/ECA with Hysteresis and Fair Share} curve shows a greater throughput because collisions are eliminated and Fair Share allows nodes to send $2^{k}$ packets upon each transmission.
+
+	\begin{figure}[htbp]
+	\centering
+		\includegraphics[width=0.7\linewidth,angle=-90]{figures/throughput-combined.eps}
+		\caption{Throughput comparison~\cite{research2standards}}
+		\label{fig:ECA+H+F-throughput}
+	\end{figure}
+	
+	\subsection{Endurance to clock drift}
 	
 	
 	
