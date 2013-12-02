@@ -20,6 +20,8 @@
 %\usepackage{subcaption}
 \usepackage{amsmath}
 
+\usepackage[hyphens]{url}
+
 % Disable below if wanting to comply exclusively to conference mode of IEEEtran
 % \IEEEoverridecommandlockouts
 
@@ -178,11 +180,13 @@ The \emph{JFI for CSMA/ECA} and \emph{JFI for CSMA/CA} curves in Figure~\ref{fig
 	\subsection{Supporting many more contenders}
 	As was mentioned before, CSMA/ECA is only able to build a collision-free schedule if the number of contenders $N$, is less or equal than $B_{d}$. When $N > B_{d}$, collisions reappear. 
 	
-	To recover the collision-free schedule, CSMA/ECA instructs nodes {\bfseries not} to reset their backoff stage ($k$) after successful transmissions, but to pick a deterministic backoff $B_{d}=CW(k)/2$; where $CW(k)=2^{k}CW_{\min}$. This measure allocates many more contenders in a collision-free schedule and is called \emph{Hysteresis}.
+	To recover the collision-free schedule CSMA/ECA instructs nodes {\bfseries not} to reset their backoff stage ($k$) after successful transmissions, but to pick a deterministic backoff $B_{d}=CW(k)/2$; where $CW(k)=2^{k}CW_{\min}$. This measure allocates many more contenders in a collision-free schedule and is called \emph{Hysteresis}.
 	
 	Hysteresis enables CSMA/ECA nodes to have different schedules ($B_{d}$), carrying the undesired effect of unevenly divide the channel time among contenders (some nodes will have to wait more in order to attempt transmissions).
 	
-	This unfairness is leveraged by instructing nodes at backoff stage $k$ to transmit $2^{k}$ packets on each attempt, thus proportionally compensating those nodes at higher backoff stages. This measure was first proposed by Fang. et al. in~\cite{L_MAC}, and further implemented as \emph{Fair Share} for CSMA/ECA~\cite{research2standards}. Figure~\ref{fig:fairness} shows the JFI for CSMA/CA as well as for CSMA/ECA with both enhancements: Hysteresis and Fair Share.
+	This unfairness issue is solved by instructing nodes at backoff stage $k$ to transmit $2^{k}$ packets on each attempt, thus proportionally compensating those nodes at higher backoff stages. CSMA/ECA with Hysteresis and Fair Share will be referred to as CSMA/ECA$_{\text{Hys+FS}}$ in order to distinguish it from what was described until this point.
+	
+	This measure was first proposed by Fang. et al. in~\cite{L_MAC}, and further implemented as \emph{Fair Share} for CSMA/ECA~\cite{research2standards}. Figure~\ref{fig:fairness} shows the JFI for CSMA/CA as well as for CSMA/ECA$_{\text{Hys+FS}}$.
 	
 	\begin{figure}[htbp]
 	\centering
@@ -196,13 +200,13 @@ The \emph{JFI for CSMA/ECA} and \emph{JFI for CSMA/CA} curves in Figure~\ref{fig
 	\begin{figure*}[tbhp]
 	\centering
 		\includegraphics[width=0.8\linewidth]{figures/csma_eca_different_backoff_short.eps}
-		\caption{CSMA/ECA + Hysteresis example in saturation ($CW_{\min}=16$)}
+		\caption{CSMA/ECA$_{\text{Hys+FS}}$ example in saturation ($CW_{\min}=16$)}
 		\label{fig:ECA+Hyst}
 	\end{figure*}
 	
-	As with Figure~\ref{fig:BECA}, Figure~\ref{fig:ECA+Hyst} shows four stations attempting to transmit. The red outline indicates a collision between STA 3 and STA 4, which will provoke an increment on both station's backoff stage ($k=k+1$). Once STA 4's random backoff expires, CSMA/ECA instructs the station to transmit $2^{k}$ packets, and then pick a deterministic backoff, $B_{d}=CW(k)/2$. The same behavior is followed by STA 3.
+	As with Figure~\ref{fig:BECA}, Figure~\ref{fig:ECA+Hyst} shows four stations attempting to transmit. The red outline indicates a collision between STA 3 and STA 4, which will provoke an increment on both station's backoff stage ($k=k+1$). Once STA 4's random backoff expires, CSMA/ECA$_{\text{Hys+FS}}$ instructs the station to transmit $2^{k}$ packets, and then pick a deterministic backoff, $B_{d}=CW(k)/2$. The same behavior is followed by STA 3.
 	
-	With Hysteresis and Fair Share, CSMA/ECA is able to achieve greater throughput than CSMA/CA and for many more contenders, as shown in Figure~\ref{fig:ECA+H+F-throughput} extracted from~\cite{research2standards}. In the figure, the \emph{CSMA/ECA with Hysteresis and Fair Share} curve shows a greater throughput because collisions are eliminated and Fair Share allows nodes to send $2^{k}$ packets upon each transmission.
+	With Hysteresis and Fair Share, CSMA/ECA$_{\text{Hys+FS}}$ is able to achieve greater throughput than CSMA/CA and for many more contenders, as shown in Figure~\ref{fig:ECA+H+F-throughput} extracted from~\cite{research2standards}. In the figure, the \emph{CSMA/ECA with Hysteresis and Fair Share} curve shows a greater throughput because collisions are eliminated and Fair Share allows nodes to send $2^{k}$ packets upon each transmission.
 
 	\begin{figure}[htbp]
 	\centering
@@ -211,11 +215,41 @@ The \emph{JFI for CSMA/ECA} and \emph{JFI for CSMA/CA} curves in Figure~\ref{fig
 		\label{fig:ECA+H+F-throughput}
 	\end{figure}
 	
-	\subsection{Endurance to clock drift}
+	\subsection{Clock drift issue in descentralized collision-free MAC protocols}
+	CSMA/ECA relies on stations being able to correctly count empty slots and consequently attempt transmissions in the appropriate slot according to the backoff timer. Failure to due so may be caused by clock malfunction inside the Wireless Network Interface Cards (WNIC), which is commonly referred to as \emph{clock drift}. As pointed out in~\cite{slotDrift}, slot drift is a common issue that degrades the throughput in distributed collision-free MAC protocols like the ones reviewed in Sect.~\ref{relatedWork}.
 	
-	
+	Miscounting empty slots have a direct impact on CSMA/ECA$_{\text{Hys+FS}}$. In a collision-free schedule with saturated CSMA/ECA$_{\text{Hys+FS}}$ contenders, a station miscounting empty slots will \emph{drift} to a possibly busy slot, collide and force a re-convergence (if possible) to a collision-free schedule. The following section provides an overview of the impact clock drift has over CSMA/ECA$_{\text{Hys+FS}}$ nodes.
 	
 \section{Simulation}\label{simulations}
+This section provides the first simulations results revealing the impact of clock drift over CSMA/ECA$_{\text{Hys+FS}}$. The coexistence of CSMA/ECA$_{\text{Hys+FS}}$ and CSMA/CA nodes is also simulated and the results are discussed.
+
+	\subsection{Technical details}
+	Results are obtained by making iterative simulations over a modified version of the COST~\cite{COST} simulator. The PHY and MAC parameters used follow the IEEE 802.11n standard, which are detailed in Table~\ref{tab:mac-params}. The following assumptions were made:
+	
+	\begin{itemize}
+		\item All nodes are within reach of each other.
+		\item There are no external interferences.
+	\end{itemize}
+	
+	\begin{table}
+		\centering
+		\caption{PHY and MAC parameters for the simulations}
+		\label{tab:mac-params}
+		\begin{tabular}{|c|c|}
+			\hline
+			{\bfseries Parameter} & {\bfseries Value}\\
+			\hline
+			\multicolumn{2}{|c|}{{\bfseries PHY}}\\
+			\hline
+			Tal & 7\\
+			\hline
+			\multicolumn{2}{|c|}{{\bfseries MAC}}\\
+			\hline
+		\end{tabular}
+	\end{table}
+	
+	
+
 \section{Prototyping CSMA/ECA}\label{prototype}
 \section{Coexistence with CSMA/CA}\label{prototypeResults}
 \section{Conclusions}\label{conclusions}
