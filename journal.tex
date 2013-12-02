@@ -229,7 +229,10 @@ This section provides the first simulations results revealing the impact of cloc
 	\begin{itemize}
 		\item All nodes are within reach of each other.
 		\item There are no external interferences.
+		\item Collisions take as much channel time as successful transmissions.
 	\end{itemize}
+	
+	Results are shown with $95$\% confidence intervals.
 	
 	\begin{table}
 		\centering
@@ -237,16 +240,27 @@ This section provides the first simulations results revealing the impact of cloc
 		\label{tab:mac-params}
 		\begin{tabular}{|c|c|}
 			\hline
-			{\bfseries Parameter} & {\bfseries Value}\\
-			\hline
 			\multicolumn{2}{|c|}{{\bfseries PHY}}\\
 			\hline
-			Tal & 7\\
+			{\bfseries Parameter} & {\bfseries Value}\\
+			\hline
+			PHY rate & 1~Mbps\\
+			Empty slot & $16~\mu s$\\
+			DIFS & $34~\mu s$\\
+			SIFS & $9~\mu s$\\
 			\hline
 			\multicolumn{2}{|c|}{{\bfseries MAC}}\\
 			\hline
+			{\bfseries Parameter} & {\bfseries Value}\\
+			\hline
+			Maximum backoff stage ($m$) & 5\\
+			Minium Contention Window ($CW_{\min}$) & 16\\
+			
+			\hline
 		\end{tabular}
 	\end{table}
+	
+	\subsection{CSMA/ECA$_{\text{Hys+FS}}$ under clock drift scenarios}
 	
 	
 
