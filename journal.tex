@@ -215,24 +215,25 @@ The \emph{JFI for CSMA/ECA} and \emph{JFI for CSMA/CA} curves in Figure~\ref{fig
 		\label{fig:ECA+H+F-throughput}
 	\end{figure}
 	
-	\subsection{Clock drift issue in descentralized collision-free MAC protocols}
-	CSMA/ECA relies on stations being able to correctly count empty slots and consequently attempt transmissions in the appropriate slot according to the backoff timer. Failure to due so may be caused by clock malfunction inside the Wireless Network Interface Cards (WNIC), which is commonly referred to as \emph{clock drift}. As pointed out in~\cite{slotDrift}, slot drift is a common issue that degrades the throughput in distributed collision-free MAC protocols like the ones reviewed in Sect.~\ref{relatedWork}.
+	\subsection{Clock drift issue in descentralized collision-free MAC protocols}\label{clockDrift-issue}
+	CSMA/ECA relies on stations being able to correctly count empty slots and consequently attempt transmissions in the appropriate slot according to the backoff timer. Failure to do so may be caused by clock malfunction inside the Wireless Network Interface Cards (WNIC), which is commonly referred to as \emph{clock drift}. As pointed out in~\cite{slotDrift}, clock drift is a common issue that degrades the throughput in distributed collision-free MAC protocols like the ones reviewed in Sect.~\ref{relatedWork}.
 	
-	Miscounting empty slots have a direct impact on CSMA/ECA$_{\text{Hys+FS}}$. In a collision-free schedule with saturated CSMA/ECA$_{\text{Hys+FS}}$ contenders, a station miscounting empty slots will \emph{drift} to a possibly busy slot, collide and force a re-convergence (if possible) to a collision-free schedule. The following section provides an overview of the impact clock drift has over CSMA/ECA$_{\text{Hys+FS}}$ nodes.
+	Miscounting empty slots have a direct impact on CSMA/ECA. In a collision-free schedule with saturated CSMA/ECA contenders, a station miscounting empty slots will \emph{drift} to a possibly busy slot, collide and force a re-convergence (if possible) to a collision-free schedule. The following section provides an overview of the impact clock drift has over CSMA/ECA and CSMA/ECA$_{\text{Hys+FS}}$ nodes.
 	
 \section{Simulation}\label{simulations}
-This section provides the first simulations results revealing the impact of clock drift over CSMA/ECA$_{\text{Hys+FS}}$. The coexistence of CSMA/ECA$_{\text{Hys+FS}}$ and CSMA/CA nodes is also simulated and the results are discussed.
+This section provides the first simulations results revealing the impact of clock drift over CSMA/ECA and CSMA/ECA$_{\text{Hys+FS}}$. The coexistence of CSMA/ECA$_{\text{Hys+FS}}$ and CSMA/CA nodes is also simulated and the results are discussed for the first time.
 
 	\subsection{Technical details}
-	Results are obtained by making iterative simulations over a modified version of the COST~\cite{COST} simulator. The PHY and MAC parameters used follow the IEEE 802.11n standard, which are detailed in Table~\ref{tab:mac-params}. The following assumptions were made:
+	Results are obtained by making iterative simulations over a modified version of the COST~\cite{COST} simulator and is available at~\cite{sim:parameters}. PHY and MAC parameters are detailed in Table~\ref{tab:mac-params}. The following assumptions were made:
 	
 	\begin{itemize}
+		\item Unspecified parameters follow the IEEE 802.11n standard.
 		\item All nodes are within reach of each other.
-		\item There are no external interferences.
-		\item Collisions take as much channel time as successful transmissions.
+		\item There are no external interferences or channel errors.
+		\item Collisions take as much channel time as successful transmissions ($\sigma_{s}=\sigma_{c}$).
 	\end{itemize}
 	
-	Results are shown with $95$\% confidence intervals.
+	If not mentioned otherwise, results are derived from 100 simulations of 25 seconds in length with all contenders under saturation. Figures show $95$\% confidence intervals.
 	
 	\begin{table}
 		\centering
@@ -254,14 +255,24 @@ This section provides the first simulations results revealing the impact of cloc
 			{\bfseries Parameter} & {\bfseries Value}\\
 			\hline
 			Maximum backoff stage ($m$) & 5\\
-			Minium Contention Window ($CW_{\min}$) & 16\\
-			
+			Minium Contention Window ($CW_{\min}$) & 16\\		
 			\hline
 		\end{tabular}
 	\end{table}
 	
-	\subsection{CSMA/ECA$_{\text{Hys+FS}}$ under clock drift scenarios}
+	\subsection{Performance under clock drifts}
+	As mentioned in Section~\ref{clockDrift-issue}, miscounting empty slots can increase the collision probability and therefore reduce the aggregated throughput. Figure~\ref{fig:clockDrift} shows the network aggregated throughput with 16 saturated stations and an increasing clock drift probability.
 	
+	\begin{figure}[htbp]
+	\centering
+		\includegraphics[width=0.7\linewidth,angle=-90]{figures/clockDrift/throughput_and_BOS_w_SD.eps}
+		\caption{Throughput when increasing the clock drift probability}
+		\label{fig:clockDrift}
+	\end{figure}
+	
+	In Figure~\ref{fig:clockDrift}, a station has a clock drift probability equal to $p_{cd}$. Each station has a probability of $p_{cd}/2$ of miscounting one slot more, and $p_{cd}/2$ of miscounting one slot less. Because CSMA/CA is based on a random backoff, miscounting slots has no significant effect on the throughput. For the CSMA/ECA curve, it is possible to appreciate a slight decrease of the throughput as $p_{cd}$ increases, caused by an increased number of collisions due to the drift.
+	
+	The CSMA/ECA$_{\text{Hys+FS}}$ curve in Figure~\ref{fig:clockDrift} shows instead an increase of the aggregated throughput as $p_{cd}$ grows. The augment in collisions make CSMA/ECA$_{\text{Hys+FS}}$ contenders to increment their backoff stage ($k=k+1$) and aggregate packets for transmissions according to Fair Share (sending $2^{k}$ packets in each attempt). As it also can be appreciated in the figure, the average backoff stage for CSMA/ECA$_{\text{Hys+FS}}$ contenders increases rapidly to its maximum value ($m=5$), producing the aggregation of packets that causes the throughput increase.
 	
 
 \section{Prototyping CSMA/ECA}\label{prototype}
