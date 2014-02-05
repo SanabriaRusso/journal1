@@ -265,27 +265,53 @@ This section provides the simulation parameters for testing CSMA/ECA and CSMA/EC
 			{\bfseries Parameter} & {\bfseries Value}\\
 			\hline
 			Maximum backoff stage ($m$) & 5\\
-			Minium Contention Window ($CW_{\min}$) & 16\\		
+			Minium Contention Window ($CW_{\min}$) & 16\\
+			Packet size (Bytes) & 1024\\
+			MAC queue size (Packets) & 1000\\
 			\hline
 		\end{tabular}
 	\end{table}
 	
+	\subsection{Saturated and Non-saturated stations}\label{unsaturation}
+	A saturated station always has packets in its MAC queue, that is, its packet arrival rate to the MAC queue ($\Delta_{\text{PAR}}$) has to be greater than the achievable throughput. To ensure saturation stations are set to fill their MAC queue at $\Delta_{\text{PAR}}=65$~Mbps, which is purposefully greater than the capacity of the channel.
+	
+	To evaluate the performance under non-saturated conditions, stations need to be able to empty their MAC queues. To do so, the packet arrival rate to the MAC queue is set to $\Delta_{\text{PAR}}=1$~Mbps.
+	
 	\subsection{Performance under clock drift}
-	As mentioned in Section~\ref{clockDrift-issue}, miscounting empty slots can increase the collision probability and therefore reduce the aggregated throughput. Figure~\ref{fig:clockDrift} shows the network aggregated throughput with 16 saturated stations and an increasing clock drift probability.
-	
-	\begin{figure}[htbp]
-	\centering
-		\includegraphics[width=0.7\linewidth,angle=-90]{figures/clockDrift/throughput_and_BOS_w_SD.eps}
-		\caption{Throughput when increasing the clock drift probability}
-		\label{fig:clockDrift}
-	\end{figure}
-	
-	In Figure~\ref{fig:clockDrift}, a station has a clock drift probability equal to $p_{cd}$. Each station has a probability of $p_{cd}/2$ of miscounting one slot more, and $p_{cd}/2$ of miscounting one slot less. Because CSMA/CA is based on a random backoff, miscounting slots has no significant effect on the throughput. For the CSMA/ECA curve, it is possible to appreciate a slight decrease of the throughput as $p_{cd}$ increases, caused by an increased number of collisions due to the drift.
-	
-	The CSMA/ECA$_{\text{Hys+FS}}$ curve in Figure~\ref{fig:clockDrift} shows instead an increase of the aggregated throughput as $p_{cd}$ grows. The increase in collisions make CSMA/ECA$_{\text{Hys+FS}}$ contenders to increment their backoff stage ($k=k+1$) and aggregate packets for transmissions according to Fair Share (sending $2^{k}$ packets in each attempt). As it also can be appreciated in the figure, the average backoff stage for CSMA/ECA$_{\text{Hys+FS}}$ contenders increases rapidly to its maximum value ($m=5$), producing the aggregation of packets that causes the throughput increase.
+	Clock drift is simulated by setting a drift probability, $p_{cd}$. Each station has a probability of $p_{cd}/2$ of miscounting one slot more, and $p_{cd}/2$ of miscounting one slot less~\cite{slotDrift}.
 	
 
 \section{Results}\label{results}
+
+	\subsection{Unsaturated scenario}\label{resultsUnsaturated}
+	Emptying the MAC queue in CSMA/ECA means that the node will reset its backoff stage and then pick a random backoff when a new packet arrives at the queue; breaking the collision-free schedule (if any).
+	
+   	\begin{figure}[htbp]
+		\centering
+		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturation/throughput_and_BOS_unsaturated.eps}
+		\caption{Throughput and average backoff stage in unsaturated conditions}
+		\label{fig:throughputUnsat}
+	\end{figure}
+
+	In Figure~\ref{fig:throughputUnsat}, the aggregated throughput increases linearly until saturation is reached due to the increased number of transmitters. The \emph{CSMA/CA unsaturated} curve deviates form the linear increase at around 21 contenders, while the \emph{CSMA/ECA$_{\text{Hys+FS}}$ unsaturated} curve does it at around 60 nodes.
+
+
+
+%Figure~\ref{fig:clockDrift} shows the network aggregated throughput with 16 saturated stations and an increasing clock drift probability.
+%	
+%	\begin{figure}[htbp]
+%	\centering
+%		\includegraphics[width=0.7\linewidth,angle=-90]{figures/clockDrift/throughput_and_BOS_w_SD.eps}
+%		\caption{Throughput when increasing the clock drift probability}
+%		\label{fig:clockDrift}
+%	\end{figure}
+%	
+%In Figure~\ref{fig:clockDrift}, a station has a clock drift probability equal to $p_{cd}$. Each station has a probability of $p_{cd}/2$ of miscounting one slot more, and $p_{cd}/2$ of miscounting one slot less. Because CSMA/CA is based on a random backoff, miscounting slots has no significant effect on the throughput. For the CSMA/ECA curve, it is possible to appreciate a slight decrease of the throughput as $p_{cd}$ increases, caused by an increased number of collisions due to the drift.
+%	
+%The CSMA/ECA$_{\text{Hys+FS}}$ curve in Figure~\ref{fig:clockDrift} shows instead an increase of the aggregated throughput as $p_{cd}$ grows. The increase in collisions make CSMA/ECA$_{\text{Hys+FS}}$ contenders to increment their backoff stage ($k=k+1$) and aggregate packets for transmissions according to Fair Share (sending $2^{k}$ packets in each attempt). As it also can be appreciated in the figure, the average backoff stage for CSMA/ECA$_{\text{Hys+FS}}$ contenders increases rapidly to its maximum value ($m=5$), producing the aggregation of packets that causes the throughput increase.
+	
+
+
 %\section{Coexistence with CSMA/CA}\label{prototypeResults}
 \section{Conclusions}\label{conclusions}
 \section{Acknowledgements}
