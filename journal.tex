@@ -118,7 +118,7 @@ The rest of this work is divided as follows: an overview of similar distributed 
 \section{Related Work}\label{relatedWork}
 Time in WLANs is divided into tiny empty slots of fixed length $\sigma_{e}$, collisions and successful slots of length $\sigma_{c}$ and $\sigma_{s}$, respectively. Collision and successful slots contain collisions or successful transmissions, making them an order of magnitude larger than empty slots ($\sigma_{e}\ll\min(\sigma_{s},\sigma_{c}))$. One of the effects of collisions is the degradation the network performance by wasting channel time on collisions slots. 
 
-Big advances in the WLANs PHY~\cite{perahia2008ieee,6191306} push the community towards the development of MAC protocols able to take advantage of a much faster PHY. The followings are MAC protocols for WLANs, distributed and capable of attaining greater throughput than CSMA/CA by constructing a collision-free schedule.
+Big advances in the WLANs PHY~\cite{perahia2008ieee,6191306} push the community towards the development of MAC protocols able to take advantage of a much faster PHY. By reducing the time spent in collisions nodes are able to transmit more often, which in turn translates to an increase in the network throughput. The followings are MAC protocols for WLANs, distributed and capable of attaining greater throughput than CSMA/CA by constructing a collision-free schedule.
 
 \subsection{Zero Collision MAC} 
 
@@ -284,16 +284,36 @@ This section provides the simulation parameters for testing CSMA/ECA and CSMA/EC
 \section{Results}\label{results}
 
 	\subsection{Unsaturated scenario}\label{resultsUnsaturated}
-	Emptying the MAC queue in CSMA/ECA means that the node will reset its backoff stage and then pick a random backoff when a new packet arrives at the queue; breaking the collision-free schedule (if any).
+	Emptying the MAC queue in CSMA/ECA means that nodes will reset their backoff stage and pick a random backoff when a new packet arrives at the queue; breaking the collision-free schedule (if any). The followings show the impact over throughput, service time and number of collisions of this type of scenario when using CSMA/CA, CSMA/ECA$_{\text{Hys+FS}}$ and a network with a combination of both protocols.\\
 	
+	\subsubsection{Throughput}
    	\begin{figure}[htbp]
 		\centering
-		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturation/throughput_and_BOS_unsaturated.eps}
-		\caption{Throughput and average backoff stage in unsaturated conditions}
+		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/throughput-unsaturated-w-BOS.eps}
+		\caption{Throughput in unsaturated conditions}
 		\label{fig:throughputUnsat}
 	\end{figure}
 
-	In Figure~\ref{fig:throughputUnsat}, the aggregated throughput increases linearly until saturation is reached due to the increased number of transmitters. The \emph{CSMA/CA unsaturated} curve deviates form the linear increase at around 21 contenders, while the \emph{CSMA/ECA$_{\text{Hys+FS}}$ unsaturated} curve does it at around 60 nodes.
+	
+	In Figure~\ref{fig:throughputUnsat}, the aggregated throughput increases linearly for the \emph{CSMA/CA unsaturated} curve until saturation is reached at around 22 nodes, where the throughput begins to degrade. The \emph{CSMA/ECA$_{\text{Hys+FS}}$ unsaturated} curve has a similar behavior, entering saturation at around 60 nodes. Nevertheless, it seems to stop the linear increase at around 30 nodes. This throughput degradation coupled with the steep increase in the average backoff stage of CSMA/ECA$_{\text{Hys+FS}}$ contenders suggests an increment in dropped packets due to retransmission attempts. This effect is shown in Figure~\ref{fig:droppedDueToRET}, where at around 30 nodes CSMA/ECA$_{\text{Hys+FS}}$ contenders start colliding and dropping packets.
+
+   	\begin{figure}[htbp]
+		\centering
+		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/droppedPacketsDueRET.eps}
+		\caption{Number of droppped packets due to retransmissions attempts}
+		\label{fig:droppedDueToRET}
+	\end{figure}
+	
+	\subsubsection{Service Time}
+	It is related to the elapsed time between the arrival of a packet to the MAC queue up util an acknowledgment is received for such packet.
+	
+	\begin{figure}[htbp]
+		\centering
+		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/serviceTime.eps}
+		\caption{Average system service time: aggregating the average service of all stations}
+		\label{fig:serviceTime}
+	\end{figure}
+	
 
 
 
