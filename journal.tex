@@ -225,13 +225,11 @@ The \emph{JFI for CSMA/ECA} and \emph{JFI for CSMA/CA} curves in Figure~\ref{fig
 	\subsection{Clock drift issue in descentralized collision-free MAC protocols}\label{clockDrift-issue}
 	CSMA/ECA relies on stations being able to correctly count empty slots and consequently attempt transmissions in the appropriate slot according to the backoff timer. Failure to do so may be caused by clock imperfections inside the Wireless Network Interface Cards (WNIC), which is commonly referred to as \emph{clock drift}. As pointed out in~\cite{slotDrift}, clock drift is a common issue that degrades the throughput in distributed collision-free MAC protocols like the ones reviewed in Sect.~\ref{relatedWork}.
 	
-	Miscounting empty slots have a direct impact on CSMA/ECA. In a collision-free schedule with saturated CSMA/ECA contenders, a station miscounting empty slots will \emph{drift} to a possibly busy slot, collide and force a re-convergence (if possible) to a collision-free schedule. 
+	Miscounting empty slots has a direct impact on CSMA/ECA. In a collision-free schedule with saturated CSMA/ECA contenders, a station miscounting empty slots will \emph{drift} to a possibly busy slot, collide and force a re-convergence (if possible) to a collision-free schedule. 
 	%The following section provides an overview of the impact clock drift has over CSMA/ECA and CSMA/ECA$_{\text{Hys+FS}}$ nodes.
 	
 \section{Simulation}\label{simulations}
-This section provides the simulation parameters for testing CSMA/ECA and CSMA/ECA$_{\text{Hys+FS}}$ under unsaturated traffic conditions, the effect of clock drift, and the coexistence with CSMA/CA.
-
-%This section provides the first simulations results revealing the impact of clock drift over CSMA/ECA and CSMA/ECA$_{\text{Hys+FS}}$. The coexistence of CSMA/ECA$_{\text{Hys+FS}}$ and CSMA/CA nodes is also simulated and the results are discussed for the first time.
+This section provides the simulation parameters for testing CSMA/ECA and CSMA/ECA$_{\text{Hys+FS}}$ under two different traffic conditions, namely saturated and unsaturated. Further, the simulation of the clock drift effect, and the coexistence with CSMA/CA are also subjects to be addressed in this section.
 
 	\subsection{Technical details}
 	Results are obtained by making iterative simulations over a modified version of the COST~\cite{COST} simulator, available at~\cite{sim:parameters}. PHY and MAC parameters are detailed in Table~\ref{tab:mac-params}. The following assumptions were made:
@@ -243,7 +241,7 @@ This section provides the simulation parameters for testing CSMA/ECA and CSMA/EC
 		\item Collisions take as much channel time as successful transmissions ($\sigma_{s}=\sigma_{c}$).
 	\end{itemize}
 	
-	If not mentioned otherwise, results are derived from 100 simulations of 25 seconds in length with all contenders under saturation. Figures show $95$\% confidence intervals.
+	If not mentioned otherwise, results are derived from 100 simulations of 100 seconds in length with all contenders under saturation. Figures show $95$\% confidence intervals.
 	
 	\begin{table}
 		\centering
@@ -255,7 +253,7 @@ This section provides the simulation parameters for testing CSMA/ECA and CSMA/EC
 			\hline
 			{\bfseries Parameter} & {\bfseries Value}\\
 			\hline
-			PHY rate & 1~Mbps\\
+			PHY rate & 11~Mbps\\
 			Empty slot & $16~\mu s$\\
 			DIFS & $34~\mu s$\\
 			SIFS & $9~\mu s$\\
@@ -280,23 +278,52 @@ This section provides the simulation parameters for testing CSMA/ECA and CSMA/EC
 	\subsection{Performance under clock drift}
 	Clock drift is simulated by setting a drift probability, $p_{cd}$. Each station has a probability of $p_{cd}/2$ of miscounting one slot more, and $p_{cd}/2$ of miscounting one slot less~\cite{slotDrift}.
 	
+	\subsection{Coexistance with CSMA/CA}
+	To test the performance of CSMA/CA and CSMA/ECA$_{\text{Hys+FS}}$ stations in the same network, simulations are done with a CSMA/CA node density of 1/3, 1/2 and 2/3 of the total.
+	
 
 \section{Results}\label{results}
 
-	\subsection{Unsaturated scenario}\label{resultsUnsaturated}
-	Emptying the MAC queue in CSMA/ECA means that nodes will reset their backoff stage and pick a random backoff when a new packet arrives at the queue; breaking the collision-free schedule (if any). The followings show the impact over throughput, service time and number of collisions of this type of scenario when using CSMA/CA, CSMA/ECA$_{\text{Hys+FS}}$ and a network with a combination of both protocols.\\
+	\subsection{Saturated scenario}\label{resultsSaturated}
+	In CSMA/CA, a saturated scenario coupled with an big number of contenders will normally be related to an increase in the collision probability. This effect is the result of resetting the backoff stage after a successful transmission and the generation of a random backoff. On the other hand, a saturated scenario provides an advantageous condition to CSMA/ECA$_{\text{Hys+FS}}$ nodes in terms of the reduction in the number of collisions, given that a collision-free schedule would be possible (without considering unideal external conditions).
+	
+	This section aims at overviewing the throughput of CSMA/CA and CSMA/ECA$_{\text{Hys+FS}}$  in saturation, as well as the collision probability, the average service time and the effect of clock drift over the throughput.
 	
 	\subsubsection{Throughput}
+	
+	
+	\subsubsection{Effect of clock drift over the achieved throughput in saturation}
+	
+	Figure~\ref{fig:clockDrift} shows the network aggregated throughput with 16 saturated stations and an increasing clock drift probability.
+	
+	\begin{figure}[htbp]
+	\centering
+		\includegraphics[width=0.7\linewidth,angle=-90]{figures/clockDrift/throughput_and_BOS_w_SD.eps}
+		\caption{Throughput when increasing the clock drift probability}
+		\label{fig:clockDrift}
+	\end{figure}
+	
+	In Figure~\ref{fig:clockDrift}, a station has a clock drift probability equal to $p_{cd}$. Each station has a probability of $p_{cd}/2$ of miscounting one slot more, and $p_{cd}/2$ of miscounting one slot less. Because CSMA/CA is based on a random backoff, miscounting slots has no significant effect on the throughput. For the CSMA/ECA curve, it is possible to appreciate a slight decrease of the throughput as $p_{cd}$ increases, caused by an increased number of collisions due to the drift.
+	
+	The CSMA/ECA$_{\text{Hys+FS}}$ curve in Figure~\ref{fig:clockDrift} shows instead an increase of the aggregated throughput as $p_{cd}$ grows. The increase in collisions make CSMA/ECA$_{\text{Hys+FS}}$ contenders to increment their backoff stage ($k=k+1$) and aggregate packets for transmissions according to Fair Share (sending $2^{k}$ packets in each attempt). As it also can be appreciated in the figure, the average backoff stage for CSMA/ECA$_{\text{Hys+FS}}$ contenders increases rapidly to its maximum value ($m=5$), producing the aggregation of packets that causes the throughput increase.
+
+
+	\subsection{Unsaturated scenario}\label{resultsUnsaturated}
+	Emptying the MAC queue in CSMA/ECA means that nodes will reset their backoff stage and pick a random backoff when a new packet arrives at the queue; breaking the collision-free schedule (if any)  for CSMA/ECA$_{\text{Hys+FS}}$ contenders. The followings show the impact over throughput and service time when using CSMA/CA, CSMA/ECA$_{\text{Hys+FS}}$ and a network with a combination of both protocols. Additionally, the effect of clock drift over the achieved throughput is also analyzed.\\
+	
+	\subsubsection{Throughput}
+	
    	\begin{figure}[htbp]
 		\centering
 		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/throughput-unsaturated-w-BOS.eps}
 		\caption{Throughput in unsaturated conditions}
 		\label{fig:throughputUnsat}
 	\end{figure}
-
 	
-	In Figure~\ref{fig:throughputUnsat}, the aggregated throughput increases linearly for the \emph{CSMA/CA unsaturated} curve until saturation is reached at around 22 nodes, where the throughput begins to degrade. The \emph{CSMA/ECA$_{\text{Hys+FS}}$ unsaturated} curve has a similar behavior, entering saturation at around 60 nodes. Nevertheless, it seems to stop the linear increase at around 30 nodes. This throughput degradation coupled with the steep increase in the average backoff stage of CSMA/ECA$_{\text{Hys+FS}}$ contenders suggests an increment in dropped packets due to retransmission attempts. This effect is shown in Figure~\ref{fig:droppedDueToRET}, where at around 30 nodes CSMA/ECA$_{\text{Hys+FS}}$ contenders start colliding and dropping packets.
-
+	In Figure~\ref{fig:throughputUnsat}, the aggregated throughput increases linearly for the \emph{CSMA/CA unsaturated} curve until saturation is reached at around 22 nodes, where the throughput begins to degrade. The \emph{CSMA/ECA$_{\text{Hys+FS}}$ unsaturated} curve has a similar behavior, entering saturation at around 60 nodes. Nevertheless, it seems to stop the linear increase at around 30 nodes. This throughput degradation coupled with the steep increase in the average backoff stage of CSMA/ECA$_{\text{Hys+FS}}$ contenders suggests an increment in dropped packets due to retransmission attempts. This effect is shown in Figure~\ref{fig:droppedDueToRET}, where at around 30 nodes CSMA/ECA$_{\text{Hys+FS}}$ contenders start colliding and dropping packets. 
+	
+	After 40 contenders, the MAC queue of CSMA/ECA$_{\text{Hys+FS}}$ nodes starts to fill, as appreciated in Figure~\ref{fig:MacQ}; gradually building a collision-free schedule due to CSMA/ECA$_{\text{Hys+FS}}$'s deterministic backoff after successful transmissions.
+	
    	\begin{figure}[htbp]
 		\centering
 		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/droppedPacketsDueRET.eps}
@@ -304,8 +331,15 @@ This section provides the simulation parameters for testing CSMA/ECA and CSMA/EC
 		\label{fig:droppedDueToRET}
 	\end{figure}
 	
+	 \begin{figure}[htbp]
+		\centering
+		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/queueSize.eps}
+		\caption{Number of packets in the MAC queue of a node}
+		\label{fig:MacQ}
+	\end{figure}
+	
 	\subsubsection{Service Time}
-	It is related to the elapsed time between the arrival of a packet to the MAC queue up util an acknowledgment is received for such packet.
+	It is related to the elapsed time between the arrival of a packet to the MAC queue up util an acknowledgment is received for such packet(s).
 	
 	\begin{figure}[htbp]
 		\centering
@@ -314,22 +348,7 @@ This section provides the simulation parameters for testing CSMA/ECA and CSMA/EC
 		\label{fig:serviceTime}
 	\end{figure}
 	
-
-
-
-%Figure~\ref{fig:clockDrift} shows the network aggregated throughput with 16 saturated stations and an increasing clock drift probability.
-%	
-%	\begin{figure}[htbp]
-%	\centering
-%		\includegraphics[width=0.7\linewidth,angle=-90]{figures/clockDrift/throughput_and_BOS_w_SD.eps}
-%		\caption{Throughput when increasing the clock drift probability}
-%		\label{fig:clockDrift}
-%	\end{figure}
-%	
-%In Figure~\ref{fig:clockDrift}, a station has a clock drift probability equal to $p_{cd}$. Each station has a probability of $p_{cd}/2$ of miscounting one slot more, and $p_{cd}/2$ of miscounting one slot less. Because CSMA/CA is based on a random backoff, miscounting slots has no significant effect on the throughput. For the CSMA/ECA curve, it is possible to appreciate a slight decrease of the throughput as $p_{cd}$ increases, caused by an increased number of collisions due to the drift.
-%	
-%The CSMA/ECA$_{\text{Hys+FS}}$ curve in Figure~\ref{fig:clockDrift} shows instead an increase of the aggregated throughput as $p_{cd}$ grows. The increase in collisions make CSMA/ECA$_{\text{Hys+FS}}$ contenders to increment their backoff stage ($k=k+1$) and aggregate packets for transmissions according to Fair Share (sending $2^{k}$ packets in each attempt). As it also can be appreciated in the figure, the average backoff stage for CSMA/ECA$_{\text{Hys+FS}}$ contenders increases rapidly to its maximum value ($m=5$), producing the aggregation of packets that causes the throughput increase.
-	
+	In Figure~\ref{fig:serviceTime}, a rapid increase in the service time for CSMA/CA nodes is appreciated at the saturation point (around 20 contenders). For the CSMA/ECA$_{\text{Hys+FS}}$ nodes the service time is still low at CSMA/CA saturation point eventhough we see an increase in the number of dropped packets (see Figure~\ref{fig:droppedDueToRET}). This is due to Hysteresis and Fair Share, which reduces the average service time given that more packets are transmitted for the same time period. As CSMA/ECA$_{\text{Hys+FS}}$ nodes get saturated, the service time increases because of the contention mechanism (see the saturation point for CSMA/ECA$_{\text{Hys+FS}}$ nodes in Figure~\ref{fig:MacQ}).\\	
 
 
 %\section{Coexistence with CSMA/CA}\label{prototypeResults}
