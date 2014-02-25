@@ -375,8 +375,31 @@ This section provides the simulation parameters for testing CSMA/ECA$_{\text{Hys
 	
 	In Figure~\ref{fig:serviceTime-unsat}, a rapid increase in the service time for CSMA/CA nodes is appreciated at the saturation point (around 20 contenders). For the CSMA/ECA$_{\text{Hys+FS}}$ nodes the service time is still low at CSMA/CA saturation point even-though we see an increase in the number of dropped packets (see Figure~\ref{fig:droppedDueToRET}). This is due to Hysteresis and Fair Share, which reduces the average service time given that more packets are transmitted and acknowledged with a single ACK. As CSMA/ECA$_{\text{Hys+FS}}$ nodes get saturated, the service time increases because of the contention mechanism (see the number of packets in the MAC queue for CSMA/ECA$_{\text{Hys+FS}}$ nodes in Figure~\ref{fig:MacQ} and how it is related to the increase in service time shown in Figure~\ref{fig:serviceTime-unsat}).\\	
 
-
-%\section{Coexistence with CSMA/CA}\label{prototypeResults}
+	\subsection{Coexistence with CSMA/CA}
+	
+	CSMA/ECA is thought to be an evolution of CSMA/CA given its similarities and the ability to coexists with the latter. This section provides simulations results for a setup of different proportions of CSMA/ECA$_{\text{Hys+FS}}$ nodes in a CSMA/CA network, namely: 1/4, 1/2 and 3/4 of the total nodes run CSMA/ECA$_{\text{Hys+FS}}$, while the rest uses CSMA/CA.
+	
+	\subsubsection{Throughput}
+	
+	Figure~\ref{fig:mixedThroughput-sat} shows the network throughput for different proportions of CSMA/ECA$_{\text{Hys+FS}}$ nodes.
+	
+	\begin{figure}[htbp]
+		\centering
+		\includegraphics[width=0.7\linewidth,angle=-90]{figures/saturated/mixed/throughput-saturated-mixed.eps}
+		\caption{Network throughput when composed by various proportions of CSMA/ECA$_{\text{Hys+FS}}$ nodes}
+		\label{fig:mixedThroughput-sat}
+	\end{figure}
+	
+	In the figure it is appreciated how the mixed network setups curves lay between the only CSMA/CA and CSMA/ECA$_{\text{Hys+FS}}$ curves. As the proportion of CSMA/CA nodes decreases, the throughput increases as the result of a lower probability of collision among CSMA/ECA$_{\text{Hys+FS}}$ contenders. Further, although there is still a probability of collisions due to the presence of CSMA/CA contenders, these collisions trigger the Hysteresis and Fair Share extension of CSMA/ECA$_{\text{Hys+FS}}$ nodes, producing the throughput increase when compared to a CSMA/CA network. Figure~\ref{fig:mixedThroughput-sat-stations} provides an overview of the average throughput of CSMA/CA and CSMA/ECA$_{\text{Hys+FS}}$ stations respectively.
+	
+	\begin{figure}[htbp]
+		\centering
+		\includegraphics[width=0.9\linewidth,angle=-90]{figures/saturated/mixed/throughput-saturated-mixed-stationGroups.eps}
+		\caption{Average throughput of CSMA/CA stations in a network also composed by various proportions of CSMA/ECA$_{\text{Hys+FS}}$ nodes}
+		\label{fig:mixedThroughput-sat-stations}
+	\end{figure}
+		
+	
 \section{Conclusions}\label{conclusions}
 \section{Acknowledgements}
 
