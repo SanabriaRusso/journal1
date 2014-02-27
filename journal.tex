@@ -280,7 +280,7 @@ This section provides the simulation parameters for testing CSMA/ECA$_{\text{Hys
 	Clock drift is simulated by setting a drift probability, $p_{cd}$. Each station has a probability of $p_{cd}/2$ of miscounting one slot more, and $p_{cd}/2$ of miscounting one slot less. This approach follows the one proposed by Gong et. al in~\cite{slotDrift}.
 	
 	\subsection{Coexistance with CSMA/CA}
-	To test the performance of CSMA/CA and CSMA/ECA$_{\text{Hys+FS}}$ stations in the same network, simulations are done with a CSMA/CA node density of 1/3, 1/2 and 2/3 of the total.
+	To test the performance of CSMA/CA and CSMA/ECA$_{\text{Hys+FS}}$ stations in the same network, simulations are done with a CSMA/CA node density of 1/4, 1/2 and 3/4 of the total.
 	
 
 \section{Results}\label{results}
@@ -377,26 +377,35 @@ This section provides the simulation parameters for testing CSMA/ECA$_{\text{Hys
 
 	\subsection{Coexistence with CSMA/CA}
 	
-	CSMA/ECA is thought to be an evolution of CSMA/CA given its similarities and the ability to coexists with the latter. This section provides simulations results for a setup of different proportions of CSMA/ECA$_{\text{Hys+FS}}$ nodes in a CSMA/CA network, namely: 1/4, 1/2 and 3/4 of the total nodes run CSMA/ECA$_{\text{Hys+FS}}$, while the rest uses CSMA/CA.
-	
+	CSMA/ECA is thought to be an evolution of CSMA/CA given its similarities and the ability to coexists with the latter. This section provides simulations results for a setup of different proportions of CSMA/CA nodes in a network where there are also CSMA/ECA$_{\text{Hys+FS}}$ contenders, that is: 1/4, 1/2 and 3/4 of the total nodes run CSMA/CA, while the rest uses CSMA/ECA$_{\text{Hys+FS}}$. This network configuration will be referred to as \emph{mixed network setup} from here on.	
 	\subsubsection{Throughput}
 	
-	Figure~\ref{fig:mixedThroughput-sat} shows the network throughput for different proportions of CSMA/ECA$_{\text{Hys+FS}}$ nodes.
+	Figure~\ref{fig:mixedThroughput-sat} shows the network throughput for different proportions of CSMA/CA nodes in a mixed network setup.
 	
 	\begin{figure}[htbp]
 		\centering
 		\includegraphics[width=0.7\linewidth,angle=-90]{figures/saturated/mixed/throughput-saturated-mixed.eps}
-		\caption{Network throughput when composed by various proportions of CSMA/ECA$_{\text{Hys+FS}}$ nodes}
+		\caption{Network throughput when composed by various proportions of CSMA/CA and CSMA/ECA$_{\text{Hys+FS}}$ nodes}
 		\label{fig:mixedThroughput-sat}
 	\end{figure}
 	
-	In the figure it is appreciated how the mixed network setups curves lay between the only CSMA/CA and CSMA/ECA$_{\text{Hys+FS}}$ curves. As the proportion of CSMA/CA nodes decreases, the throughput increases as the result of a lower probability of collision among CSMA/ECA$_{\text{Hys+FS}}$ contenders. Further, although there is still a probability of collisions due to the presence of CSMA/CA contenders, these collisions trigger the Hysteresis and Fair Share extension of CSMA/ECA$_{\text{Hys+FS}}$ nodes, producing the throughput increase when compared to a CSMA/CA network. Figure~\ref{fig:mixedThroughput-sat-stations} provides an overview of the average throughput of CSMA/CA and CSMA/ECA$_{\text{Hys+FS}}$ stations respectively.
+	In the figure it is appreciated how the mixed network setups curves lay between the CSMA/CA and CSMA/ECA$_{\text{Hys+FS}}$ curves. As the proportion of CSMA/CA nodes decreases, the throughput increases as the result of a lower probability of collision, as can be seen in Figure~\ref{fig:mixedCollisions-sat}.
+	
+	%Further, although there is still a probability of collisions due to the presence of CSMA/CA contenders, these collisions trigger the Hysteresis and Fair Share extension of CSMA/ECA$_{\text{Hys+FS}}$ nodes, producing the throughput increase when compared to a CSMA/CA network. Figure~\ref{fig:mixedThroughput-sat-stations} provides an overview of the average throughput of CSMA/CA and CSMA/ECA$_{\text{Hys+FS}}$ stations respectively.
 	
 	\begin{figure}[htbp]
 		\centering
 		\includegraphics[width=0.9\linewidth,angle=-90]{figures/saturated/mixed/throughput-saturated-mixed-stationGroups.eps}
-		\caption{Average throughput of CSMA/CA stations in a network also composed by various proportions of CSMA/ECA$_{\text{Hys+FS}}$ nodes}
+		\caption{Average throughput of stations in a mixed network: a) 25\% of CSMA/CA nodes, b) 50\% of CSMA/CA nodes and c) 75\% of CSMA/CA nodes. The remaining proportion is composed of CSMA/ECA$_{\text{Hys+FS}}$ nodes}
 		\label{fig:mixedThroughput-sat-stations}
+	\end{figure}
+	
+	As shown in Figures~\ref{fig:mixedThroughput-sat}~and~\ref{fig:mixedThroughput-sat-stations}, at the lower proportion of CSMA/CA nodes ($1/4$) the average network and station throughput is the greatest among the tested mixed network setups. This is because collisions trigger Hysteresis and Fair Share in CSMA/ECA$_{\text{Hys+FS}}$ nodes, lowering the number of times these nodes enter in a contention and reducing the overall collision probability when compared to an only CSMA/CA network (see Figure~\ref{fig:mixedCollisions-sat}). As the proportion of CSMA/CA nodes increases, the network throughput approximates to CSMA/CA.	
+	\begin{figure}[htbp]
+		\centering
+		\includegraphics[width=0.7\linewidth,angle=-90]{figures/saturated/mixed/collisions-mixed-saturated.eps}
+		\caption{Average percentage of collision slots for the tested mixed network setups proportions}
+		\label{fig:mixedCollisions-sat}
 	\end{figure}
 		
 	
