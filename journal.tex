@@ -19,6 +19,7 @@
 %\usepackage{caption}
 %\usepackage{subcaption}
 \usepackage{amsmath}
+\usepackage{mathtools}
 
 \usepackage[hyphens]{url}
 
@@ -72,11 +73,11 @@
 
 \begin{abstract}
 
-\boldmath Collisions are a main cause of throughput degradation in WLANs. The current contention mechanism used in IEEE 802.11 networks is called Carrier Sense Multiple Access with Collision Avoidance (CSMA/CA). It uses a Binary Exponential Backoff (BEB) technique to delay each contender attempt of transmitting, effectively reducing the collision probability. Nevertheless, CSMA/CA relies on a random backoff that while effective and totally distributed, in principle is unable to eliminate collisions; degrading the network throughput as more contenders attempt to share the channel. Carrier Sense Multiple Access with Enhanced Collision Avoindance (CSMA/ECA) is able to create a collision-free schedule in a totally distributed manner by means of picking a deterministic backoff after successful transmissions. By modifying the backoff mechanism of CSMA/CA, CSMA/ECA is able to support many contenders in a collision-free schedule, surpassing the achieved throughput of CSMA/CA and providing short-term throughput fairness among contenders.
+\boldmath Collisions are a main cause of throughput degradation in WLANs. The current contention mechanism used in IEEE 802.11 networks is called Carrier Sense Multiple Access with Collision Avoidance (CSMA/CA). It uses a Binary Exponential Backoff (BEB) technique to defer each contender attempt of transmitting, effectively reducing the collision probability. Nevertheless, CSMA/CA relies on a random backoff that while effective and totally distributed, in principle is unable to eliminate collisions; degrading the network throughput as more contenders attempt to share the channel. Carrier Sense Multiple Access with Enhanced Collision Avoidance (CSMA/ECA) is able to create a collision-free schedule in a totally distributed manner by means of picking a deterministic backoff after successful transmissions. Further, by applying simple extensions to the backoff mechanism of CSMA/ECA it is able to support many contenders in a collision-free schedule, surpassing the achieved throughput of CSMA/CA and providing short-term throughput fairness among contenders.
 
-This work describes CSMA/ECA and its mechanisms to achieve a collision-free schedule with many contenders by providing insightful simulation under different network traffic conditions and hardware anomalies such as an imperfect clock.
-%and real implementation results revealing its advantages over CSMA/CA. 
-%It also shows the first real-hardware implementation tests results of CSMA/ECA under saturated and unsaturated conditions.
+This work describes CSMA/ECA, its mechanisms to achieve a collision-free schedule with many contenders as well as its performance when coexisting with CSMA/CA nodes. Further, the effects of imperfect clocks over CSMA/ECA's deterministic backoff mechanism and its consecuences when attempting to implement the protocol in real hardware are also analysed. Results are derived from computer simulations using a modified version of an event-based network simulator.
+
+%This work describes CSMA/ECA and its mechanisms to achieve a collision-free schedule with many contenders by providing insightful simulation under different network traffic conditions and hardware anomalies such as an imperfect clock.
 
 \end{abstract}
 
@@ -85,20 +86,20 @@ CSMA/ECA, WLAN, MAC, Collision-free, Clock Drift.
 \end{IEEEkeywords}
 
 \section{Introduction}\label{introduction}
-Wireless Local Area Networks (WLANs or IEEE 802.11 networks~\cite{802Standards}) are a popular solution for wireless connectivity, whether in public places, work environments or at home. This technology works over an unlicensed spectrum in the Industrial, Scientific and Medical (ISM) radio bands (at around $2.4$ or $5$~GHz), which is a main reason for its popularity. 
+Wireless Local Area Networks (WLANs or IEEE 802.11 networks~\cite{802Standards}) are a popular solution for wireless connectivity, whether in public places, work environments or at home. This technology works over an unlicensed spectrum in the Industrial, Scientific and Medical (ISM) radio bands (at around $2.4$ or $5$~GHz), offering a good tradeoff between performance and costs; which is a main reason for its popularity. 
 
-The Medium Access Control (MAC) scheme used in WLANs is called Distributed Coordination Function (DCF) and is based on Carrier Sense Multiple Access with Collision Avoidance (CSMA/CA) protocol. It has been widely adopted by manufacturers and consumers, making it very cheap to implement and an ubiquitous technology (DCF and CSMA/CA will be used interchangeably throughout this work). Nevertheless, the ever-growing throughput demands from upper layers have proven to be limited by WLANs' MAC~\cite{perahia2008ieee}, which by its nature is prone to collisions that degrade the overall performance as more nodes join the network.
+The Medium Access Control (MAC) scheme used in WLANs is called Distributed Coordination Function (DCF) and is based on Carrier Sense Multiple Access with Collision Avoidance (CSMA/CA) protocol. It has been widely adopted by manufacturers and consumers, making it very cheap to implement and an ubiquitous technology\footnote{DCF and CSMA/CA will be used interchangeably throughout this work}. Nevertheless, the ever-growing throughput demands from upper layers have proven to be limited by WLANs' MAC~\cite{perahia2008ieee}, which by its nature is prone to collisions that degrade the overall performance as more nodes join the network.
 
 The research community has pushed forward many alternatives to the current MAC in WLANs~\cite{bharghavan1994map,wang2004ncr,cali2000dti,lopez-toledo2006aoi,
 barcelo2008lba,bellalta2009vtc,HE,CSMA_ECA,L_MAC2,hui2011epp,barcelo2011tcf}, but when a proposal deviates too much from CSMA/CA or time-critical operations are modified, its hardware implementation as part of WLANs' MAC often becomes unlikely~\cite{WMP}; the standardization process taking many years without certainty of approval~\cite{perahia2008ieee}. 
 
 %Backwards compatibility is paramount, mostly because the existing user base is very big. Also, a suitable candidate to replace CSMA/CA should increase the number of supported contenders while augmenting the offered throughput.
 
-A CSMA/CA replacement should be able to provide advantages in terms of throughput and handle many contenders without sacrificing short-term throughput fairness. Furthermore, to support the existing user base and ease its implementation on real hardware, the new MAC protocol should be built on top of the current standard, ensuring backwards compatibility and avoiding a drastic deviation from CSMA/CA.
+A CSMA/CA replacement should be able to provide advantages in terms of throughput, support Quality of Service (QoS) mechanisms featuring in CSMA/CA and handle many contenders without sacrificing short-term throughput fairness. Furthermore, to support the existing user base and ease its implementation on real hardware, the new MAC protocol should be backwards compatible.
 
 %Furthermore, due to the proliferation of evermore WiFi-capable devices, it is thought that a suitable replacement should 
 
-A suitable candidate, and the one to be tested in this work, is called Carrier Sense Multiple Access with Enhanced Collision Avoidance (CSMA/ECA)~\cite{barcelo2008lba}. It is capable of attaining higher throughput than CSMA/CA by making a simple modification to the contention mechanism. In CSMA/ECA, nodes pick a deterministic backoff after successful transmissions; constructing a collision-free schedule among successful contenders. Further enhancements, like \emph{Hysteresis} and \emph{Fair Share}~\cite{research2standards} allowed CSMA/ECA to support many more contenders in a collision-free schedule without compromising short-term fairness.
+A suitable candidate, and the one to be evaluated in this work, is called Carrier Sense Multiple Access with Enhanced Collision Avoidance (CSMA/ECA)~\cite{barcelo2008lba}. It is capable of attaining higher throughput than CSMA/CA by making a simple modification to the contention mechanism. In CSMA/ECA, nodes pick a deterministic backoff after successful transmissions; constructing a collision-free schedule among successful contenders. Further enhancements, like \emph{Hysteresis} and \emph{Fair Share}~\cite{research2standards} allowed CSMA/ECA to support many more contenders in a collision-free schedule without compromising short-term fairness.
 
 Although many studies have been made analysing the performance of CSMA/ECA~\cite{barcelo2008lba,research2standards,bellalta2009vtc,E2CA_performance}, neither assesses the protocol's backwards compatibility property under different traffic conditions. Furthermore, the impact of imperfect clocks over the deterministic backoff mechanism is also lacking.
 
@@ -122,7 +123,7 @@ Big advances in the WLANs PHY~\cite{perahia2008ieee,6191306} push the community 
 
 \subsection{Zero Collision MAC} 
 
-Zero Collision MAC (ZC MAC)~\cite{ZMAC} achieves a zero collision schedule for WLANs in a totally distributed way. It does so by allowing contenders to reserve one empty slot ($s_{e}$) from a  predefined virtual schedule of $N$-slots in length. Backlogged stations pick a slot in the virtual cycle to attempt transmission. If two or more stations pick the same slot in the cycle, their transmissions will eventually collide; forcing the involved contenders to randomly and uniformly select other empty slot from those detected in the previous cycle plus the slot where they collided. When all $M$ stations reserve a different slot, a collision-free schedule is achieved.
+Zero Collision MAC (ZC-MAC)~\cite{ZMAC} achieves a zero collision schedule for WLANs in a totally distributed way. It does so by allowing contenders to reserve one empty slot ($s_{e}$) from a  predefined virtual schedule of $N$-slots in length. Backlogged stations pick a slot in the virtual cycle to attempt transmission. If two or more stations pick the same slot in the cycle, their transmissions will eventually collide; forcing the involved contenders to randomly and uniformly select other empty slot from those detected empty in the previous cycle plus the slot where they collided. When all $M$ stations reserve a different slot, a collision-free schedule is achieved.
 
 ZC MAC is able to outperform CSMA/CA under different scenarios. Nevertheless, given that the length of ZC MAC's virtual cycle has to be predefined without actual knowledge of the real number of contenders in the deployment, the protocol is unable to provide a collision-free schedule when $M>N$. Furthermore, if $N$ is overestimated ($N\gg M$), the fixed-width empty slots between each contender successful transmission are no longer negligible and contribute to the degradation of the network performance.
 
@@ -130,7 +131,7 @@ ZC MAC is able to outperform CSMA/CA under different scenarios. Nevertheless, gi
 
 \subsection{Learning-MAC}
 
-Learning-MAC~\cite{L_MAC} is another MAC protocol is able to build a collision-free schedule for many contenders. It does so defining a \emph{learning strength} parameter, $\beta\in(0,1)$. Each contender starts by picking a slot for transmission $s$ of the schedule $n$ of length $C$ at random with uniform probability. After a contender picks slot $s(n)$, its selection in the next schedule ($s(n+1)$) will be conditioned by the result of the current attempt. (\ref{success}) and (\ref{collision}) extracted from~\cite{L_MAC} show the probability of selecting the same slot $s(n)$ in cycle $n+1$.
+Learning-MAC~\cite{L_MAC} is another MAC protocol able to build a collision-free schedule for many contenders. It does so defining a \emph{learning strength} parameter, $\beta\in(0,1)$. Each contender starts by picking a slot for transmission $s$ of the schedule $n$ of length $C$ at random with uniform probability. After a contender picks slot $s(n)$, its selection in the next schedule ($s(n+1)$) will be conditioned by the result of the current attempt. (\ref{success}) and (\ref{collision}) extracted from~\cite{L_MAC} show the probability of selecting the same slot $s(n)$ in cycle $n+1$.
 
 \begin{equation} \label{success}
 		\left. \begin{aligned}
@@ -153,9 +154,10 @@ Learning-MAC~\cite{L_MAC} is another MAC protocol is able to build a collision-f
 
 The selection of $\beta$ implies a compromise between fairness and convergence speed, which the authors determined $\beta=0.95$ to provide satisfactory results.
 
-L-MAC is able to achieve better levels of throughput than the current MAC with a very fast convergence speed. Nevertheless, the choice of $\beta$ suppose a previous knowledge of the number of empty slots ($C-N$, where $N$ is the number of contenders), which is not easily available to the current MAC or may require a centralised entity~\cite{barcelo2011tcf}.
+L-MAC is able to achieve higher throughput than the current MAC with a very fast convergence speed. Nevertheless, the choice of $\beta$ suppose a previous knowledge of the number of empty slots ($C-N$, where $N$ is the number of contenders), which is not easily available to the current MAC or may require a centralised entity~\cite{barcelo2011tcf}.
 
-Further extensions to L-MAC introduced an \emph{Adaptative} schedule length in order to increase the number of supported contenders in a collision-free schedule. This adaptive schedule length ($C_{i}$) is doubled or halved depending on the presence of collisions or many empty slots per schedule, respectively. The effects of reducing the schedule length may provoke a re-convergence phase which can result in short-term fairness issues. Furthermore, L-MAC is unable to achieve a collision-free schedule unless $N\leq C$.
+Further extensions to L-MAC introduced an \emph{Adaptative} schedule length in order to increase the number of supported contenders in a collision-free schedule. This adaptive schedule length ($C_{i}$) is doubled or halved depending on the presence of collisions or many empty slots per schedule, respectively. The effects of reducing the schedule length may provoke a re-convergence phase which can result in short-term fairness issues. 
+%Furthermore, L-MAC is unable to achieve a collision-free schedule unless $N\leq C$.
 
 \section{Carrier Sense Multiple Access with Enhanced Collision Avoidance (CSMA/ECA)}\label{introProtocol}
 CSMA/ECA~\cite{barcelo2008lba} is a totally distributed and collision-free MAC for WLANs. It differs from DCF in that it picks a deterministic backoff, $B_{d}=CW_{\min}/2$ after successful transmissions; where $CW_{\min}$ is the minimum contention window of typical value $CW_{\min}=16$. By doing so, contenders that successfully transmitted on schedule $n$, will do so without colliding with other successful nodes in future cycles.
@@ -166,10 +168,10 @@ Collisions are handled as in DCF. Upon collision, the involved nodes will double
 \centering
   \includegraphics[width=0.8\linewidth]{figures/basicECA.eps}
   \caption{CSMA/ECA example in saturation}
-  \label{fig:BECA}
+  \label{fig:BECA-example}
 \end{figure*}
 
-In Figure~\ref{fig:BECA}, the \emph{STA-\#} labels represent stations willing to transmit. The horizontal lines represent a time axis with each number indicating the amount of empty slots left for the backoff to expire. Stations willing to transmit begin the contention for the channel by picking a random backoff, $B$. The first outline highlights the fact that stations STA-3 and STA-4 will eventually collide because they have selected the same $B$. After recomputing the random backoff, STA-4's attempt results in a successful transmission, which instructs the node to pick a deterministic backoff, $B_{d}=7$ in this case. By doing so, all successful STAs will not collide among each other in future cycles.
+In Figure~\ref{fig:BECA-example}, the \emph{STA-\#} labels represent stations willing to transmit. The horizontal lines represent a time axis with each number indicating the amount of empty slots left for the backoff to expire. Stations willing to transmit begin the contention for the channel by picking a random backoff, $B$. The first outline highlights the fact that stations STA-3 and STA-4 will eventually collide because they have selected the same $B$. After recomputing the random backoff, STA-4's attempt results in a successful transmission, which instructs the node to pick a deterministic backoff, $B_{d}=7$ in this case. By doing so, all successful STAs will not collide among each other in future cycles.
 
 Collision slots being orders of magnitude larger than empty slots degrade the network performance. When CSMA/ECA builds the collision-free schedule all contenders are able to successfully transmit more often, increasing the aggregated throughput beyond DCF's. Figure~\ref{fig:BECA} shows the achieved throughput of CSMA/ECA and CSMA/CA, alongside the Jain's Fairness Index (JFI)~\cite{JFI}.
 
@@ -189,7 +191,7 @@ The \emph{JFI for CSMA/ECA} and \emph{JFI for CSMA/CA} curves in Figure~\ref{fig
 	
 	To be able to attain a collision-free schedule even when the number of contenders exceeds $B_{d}$, we introduce \emph{Hysteresis}. Hysteresis is a property of the protocol that instructs nodes {\bfseries not} to reset their backoff stage ($k$) after successful transmissions, but to pick a deterministic backoff $B_{d}=CW(k)/2$; where $CW(k)=2^{k}CW_{\min}$. This measure allows the adaptation of the schedule length, admitting many more contenders in a collision-free schedule.
 	
-	Hysteresis enables CSMA/ECA nodes to have different schedules ($B_{d}$), carrying the undesired effect of unevenly divide the channel time among contenders (some nodes will have to wait more in order to attempt transmissions).
+	Hysteresis enables CSMA/ECA nodes to have different schedules ($B_{d}$), carrying the undesired effect of unevenly divide the channel time among contenders (i.e., some nodes will have to wait more in order to attempt transmissions).
 	
 	This unfairness issue is solved by instructing nodes at backoff stage $k$ to transmit $2^{k}$ packets on each attempt, thus proportionally compensating those nodes at higher backoff stages. This additional extension to CSMA/ECA is called \emph{Fair Share}. CSMA/ECA with Hysteresis and Fair Share will be referred to as CSMA/ECA$_{\text{Hys+FS}}$ in order to distinguish it from what was described until this point.
 	
@@ -211,13 +213,13 @@ The \emph{JFI for CSMA/ECA} and \emph{JFI for CSMA/CA} curves in Figure~\ref{fig
 		\label{fig:ECA+Hyst}
 	\end{figure*}
 	
-	As with Figure~\ref{fig:BECA}, Figure~\ref{fig:ECA+Hyst} shows four stations attempting to transmit. The first outline indicates a collision between STA-3 and STA-4, which will provoke an increment on both station's backoff stage ($k=k+1$). Once STA-4's random backoff expires, CSMA/ECA$_{\text{Hys+FS}}$ instructs the station to transmit $2^{k}$ packets, and then pick a deterministic backoff, $B_{d}=CW(k)/2$. The same behavior is followed by STA 3.
+	As with Figure~\ref{fig:BECA}, Figure~\ref{fig:ECA+Hyst} shows four stations attempting to transmit. The first outline indicates a collision between STA-3 and STA-4, which will provoke an increment on both station's backoff stage ($k'=k+1$). Once STA-4's random backoff expires, CSMA/ECA$_{\text{Hys+FS}}$ instructs the station to transmit $2^{k'}$ packets, and then pick a deterministic backoff, $B_{d}=CW(k')/2$. The same behavior is followed by STA 3.
 	
 	With Hysteresis and Fair Share, CSMA/ECA$_{\text{Hys+FS}}$ is able to achieve greater throughput than CSMA/CA and for many more contenders, as shown in Figure~\ref{fig:ECA+H+F-throughput} extracted from~\cite{research2standards}. In the figure, the \emph{CSMA/ECA with Hysteresis and Fair Share} curve shows a greater throughput because collisions are eliminated and Fair Share allows nodes to send $2^{k}$ packets upon each transmission.
 
 	\begin{figure}[tb]
 	\centering
-		\includegraphics[width=0.7\linewidth,angle=-90]{figures/throughput-combined.eps}
+		\includegraphics[width=0.7\linewidth,angle=-90]{figures/throughput-combined-2.eps}
 		\caption{Throughput comparison~\cite{research2standards}}
 		\label{fig:ECA+H+F-throughput}
 	\end{figure}
@@ -228,15 +230,18 @@ The \emph{JFI for CSMA/ECA} and \emph{JFI for CSMA/CA} curves in Figure~\ref{fig
 	While miscounting empty slots have no significant effect on CSMA/CA throughput~\cite{slotDrift}, it has a direct impact on CSMA/ECA. In a collision-free schedule with saturated CSMA/ECA contenders, a station miscounting empty slots will \emph{drift} to a possibly busy slot, collide and force a re-convergence (if possible) to a collision-free schedule (see Sect.~\ref{performanceClockDrift}).
 	%The following section provides an overview of the impact clock drift has over CSMA/ECA and CSMA/ECA$_{\text{Hys+FS}}$ nodes.
 	
+	\subsection{Backwards compatibilty and coexistence}
+	CSMA/ECA$_{\text{Hys+FS}}$ springs from a modification to CSMA/CA's backoff mechanism. It keeps the range of values CSMA/CA nodes use to draw a random backoff (i.e., use the same $CW_{\min}$ and $CW_{\max}$), allowing CSMA/ECA$_{\text{Hys+FS}}$ contenders to coexist with CSMA/CA nodes in the same network. Further, the selection of CSMA/ECA$_{\text{Hys+FS}}$'s deterministic backoff, $B_d$, is the expected value for the current backoff stage $k$ ($B_d\coloneqq\lceil{E[0,CW(k)]}\rceil$); which ensures fairness among contenders. An overview of the attained throughput for different proportions of CSMA/ECA$_{\text{Hys+FS}}$ and CSMA/CA nodes is presented in Section~\ref{coexistence}.
+	
 \section{Simulation}\label{simulations}
-This section provides the simulation parameters for testing CSMA/ECA$_{\text{Hys+FS}}$ under two different traffic conditions, namely saturated and unsaturated. Further, the simulation of the clock drift effect, and the coexistence with CSMA/CA are also subjects to be addressed in this section.
+This section provides the simulation parameters for testing CSMA/ECA$_{\text{Hys+FS}}$ under two different traffic conditions, namely saturated and non-saturated. Further, the simulation of the clock drift effect, and the coexistence with CSMA/CA are also subjects to be addressed in this section.
 
 	\subsection{Scenario details}
 	Results are obtained by running multiple simulations over a modified version of the COST~\cite{COST} simulator, available at~\cite{sim:parameters}. PHY and MAC parameters are detailed in Table~\ref{tab:mac-params}. The following assumptions were made:
 	
 	\begin{itemize}
 		\item Unspecified parameters follow the IEEE 802.11n standard.
-		\item All nodes are within reach of each other.
+		\item All nodes are in communication range.
 		\item There are no external interferences or channel errors.
 		\item Collisions take as much channel time as successful transmissions ($\sigma_{s}=\sigma_{c}$).
 	\end{itemize}
@@ -272,21 +277,21 @@ This section provides the simulation parameters for testing CSMA/ECA$_{\text{Hys
 	\end{table}
 	
 	\subsection{Saturated and Non-saturated stations}\label{unsaturation}
-	A saturated station always has packets in its MAC queue, that is, its packet arrival rate to the MAC queue ($\Delta_{\text{PAR}}$) has to be greater than the achievable throughput. To ensure saturation stations are set to fill their MAC queue at $\Delta_{\text{PAR}}=65$~Mbps, which is purposefully greater than the capacity of the channel.
+	A saturated station always has packets in its MAC queue, that is, its packet arrival rate to the MAC queue ($\Delta_{\text{PAR}}$) is greater than the achievable throughput. To ensure saturation, stations are set to fill their MAC queue at $\Delta_{\text{PAR}}=65$~Mbps, which is purposefully greater than the capacity of the channel.
 	
 	To evaluate the performance under non-saturated conditions, stations need to be able to empty their MAC queues. To do so, the packet arrival rate to the MAC queue is set to $\Delta_{\text{PAR}}=1$~Mbps. These values of $\Delta{\text{PAR}}$ have proven to produce the desired effects.
 	
 	\subsection{Performance under clock drift}
 	Clock drift is simulated by setting a drift probability, $p_{cd}$. Each station has a probability of $p_{cd}/2$ of miscounting one slot more, and $p_{cd}/2$ of miscounting one slot less. This approach follows the one proposed by Gong et. al in~\cite{slotDrift}.
 	
-	\subsection{Coexistance with CSMA/CA}
-	To test the performance of CSMA/CA and CSMA/ECA$_{\text{Hys+FS}}$ stations in the same network, simulations are done with a CSMA/CA node density of 1/4, 1/2 and 3/4 of the total.
+	\subsection{Coexistance with CSMA/CA}\label{coexistence}
+	To test the performance of CSMA/CA and CSMA/ECA$_{\text{Hys+FS}}$ stations in the same network, simulations are set with a CSMA/CA node density of 1/4, 1/2 and 3/4 of the total.
 	
 
 \section{Results}\label{results}
 
-	\subsection{Saturated scenario}\label{resultsSaturated}
-	In CSMA/CA, a saturated scenario coupled with a big number of contenders will normally be related to an increase in the collision probability. This effect is in part the result of resetting the backoff stage after a successful transmission and the generation of a random backoff. On the other hand, a saturated scenario provides an advantageous condition to CSMA/ECA$_{\text{Hys+FS}}$ nodes in terms of the reduction in the number of collisions, given that a collision-free schedule would be possible (without considering unideal external conditions).
+	\subsection{Saturated nodes}\label{resultsSaturated}
+	In CSMA/CA, saturated nodes coupled with a big number of contenders will normally be related to an increase in the collision probability. This effect is in part the result of resetting the backoff stage after a successful transmission and the generation of a random backoff. On the other hand, this scenario provides an advantageous condition to CSMA/ECA$_{\text{Hys+FS}}$ nodes. In saturation, CSMA/ECA$_{\text{Hys+FS}}$ nodes build a collision-free schedule and stick to their deterministic backoff as long as they transmit successfully, effectively eliminating collisions.
 	
 	This section aims at overviewing the throughput of CSMA/CA and CSMA/ECA$_{\text{Hys+FS}}$  in saturation, as well as the collision probability, the average delay and the effect of clock drift over the throughput.
 	\\
@@ -324,49 +329,50 @@ This section provides the simulation parameters for testing CSMA/ECA$_{\text{Hys
 		\label{fig:clockDrift}
 	\end{figure}
 	
-	In Figure~\ref{fig:clockDrift}, a station has a clock drift probability equal to $p_{cd}$. Each station has a probability of $p_{cd}/2$ of miscounting one slot more, and $p_{cd}/2$ of miscounting one slot less. Because CSMA/CA is based on a random backoff, miscounting slots has no significant effect on the throughput. For the CSMA/ECA curve, it is possible to appreciate a slight decrease of the throughput as $p_{cd}$ increases, caused by an increased number of collisions due to the drift.
+	In Figure~\ref{fig:clockDrift}, a station has a clock drift probability equal to $p_{cd}$. Each station has a probability of $p_{cd}/2$ of miscounting one slot more, and $p_{cd}/2$ of miscounting one slot less. Because CSMA/CA is based on a random backoff, miscounting slots has no significant effect on the throughput. For the CSMA/ECA curve, it is possible to appreciate a slight decrease of the throughput as $p_{cd}$ increases, caused by collisions due to the drift.
 	
-	The CSMA/ECA$_{\text{Hys+FS}}$ curve in Figure~\ref{fig:clockDrift} shows instead an increase of the aggregated throughput as $p_{cd}$ grows. The increase in collisions make CSMA/ECA$_{\text{Hys+FS}}$ contenders to increment their backoff stage ($k=k+1$) and aggregate packets for transmissions according to Fair Share (sending $2^{k}$ packets in each attempt). As it also can be appreciated in the figure, the average backoff stage for CSMA/ECA$_{\text{Hys+FS}}$ contenders increases rapidly to its maximum value ($m=5$), provoking the aggregation of packets that causes the throughput increase.
-	\\
+	The CSMA/ECA$_{\text{Hys+FS}}$ curve in Figure~\ref{fig:clockDrift} shows instead an increase of the aggregated throughput as $p_{cd}$ grows. The increase in collisions make CSMA/ECA$_{\text{Hys+FS}}$ contenders to increment their backoff stage ($k'=k+1$) and aggregate packets for transmissions according to Fair Share (sending $2^{k'}$ packets in each attempt), effectively increasing the throughput. 
+	
+	As it also can be appreciated in the figure, the average backoff stage for CSMA/ECA$_{\text{Hys+FS}}$ contenders increases rapidly to its maximum value ($m=5$), reducing the effect of clock drift over CSMA/ECA$_{\text{Hys+FS}}$ nodes given that their transmissions would now be separated by more slots.	\\
 	\subsubsection{Delay}
 	
 	It is related to the elapsed time between the arrival of a packet to the MAC queue up until an acknowledgment is received for such packet(s).
 
 	\begin{figure}[tb]
 		\centering
-		\includegraphics[width=0.7\linewidth,angle=-90]{figures/saturated/serviceTime.eps}
+		\includegraphics[width=0.7\linewidth,angle=-90]{figures/saturated/serviceTime-multiplot.eps}
 		\caption{Average system delay: aggregating the average delay of all stations}
 		\label{fig:serviceTime-sat}
 	\end{figure}
 	
 	In Figure~\ref{fig:serviceTime-sat}, CSMA/ECA$_{\text{Hys+FS}}$ shows a lower delay due to the aggregation performed via Hysteresis and Fair Share, mainly because these aggregated transmissions are acknowledged by a single ACK. It is important to highlight that because nodes are in saturation, the arrival time to the MAC queue is considered the same for all the aggregated packets.
 
-	\subsection{Unsaturated scenario}\label{resultsUnsaturated}
-	Emptying the MAC queue in CSMA/ECA means that nodes will reset their backoff stage and pick a random backoff when a new packet arrives at the queue; breaking the collision-free schedule (if any)  for CSMA/ECA$_{\text{Hys+FS}}$ contenders. The followings show the impact over throughput and delay when using CSMA/CA and CSMA/ECA$_{\text{Hys+FS}}$.\\
+	\subsection{Non-saturated nodes}\label{resultsUnsaturated}
+	Emptying the MAC queue in CSMA/ECA$_{\text{Hys+FS}}$ means that nodes will reset their backoff stage and pick a random backoff when a new packet arrives at the queue; breaking the collision-free schedule (if any)  for CSMA/ECA$_{\text{Hys+FS}}$ contenders. The followings show the impact over throughput and delay when using CSMA/CA and CSMA/ECA$_{\text{Hys+FS}}$ in non-saturated conditions.\\
 	
 	\subsubsection{Throughput}
 	
    	\begin{figure}[tb]
 		\centering
-		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/throughput-unsaturated-w-BOS.eps}
-		\caption{Throughput in unsaturated conditions}
+		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/noBump/throughput-unsaturated-w-BOS-noBump.eps}
+		\caption{Throughput in non-saturation conditions}
 		\label{fig:throughputUnsat}
 	\end{figure}
 	
-	In Figure~\ref{fig:throughputUnsat}, the aggregated throughput increases linearly for the \emph{CSMA/CA unsaturated} curve until saturation is reached at around 22 nodes, where the throughput begins to degrade. The \emph{CSMA/ECA$_{\text{Hys+FS}}$ unsaturated} curve has a similar behavior, entering saturation at around 60 nodes. Nevertheless, it seems to stop the linear increase at around 30 nodes. This throughput degradation coupled with the steep increase in the average backoff stage of CSMA/ECA$_{\text{Hys+FS}}$ contenders suggests an increment in dropped packets due to retransmission attempts. This effect is shown in Figure~\ref{fig:droppedDueToRET}, where at around 30 nodes CSMA/ECA$_{\text{Hys+FS}}$ contenders start colliding and dropping packets. 
+	In Figure~\ref{fig:throughputUnsat}, the aggregated throughput increases linearly for the \emph{CSMA/CA non-saturated} curve until saturation is reached at around 22 nodes, where the throughput begins to degrade. The \emph{CSMA/ECA$_{\text{Hys+FS}}$ non-saturated} curve has a similar behavior, entering saturation at around 60 nodes. Further, at around 30 nodes we see an increase in the average backoff stage for CSMA/ECA$_{\text{Hys+FS}}$ contenders which suggests an increment in dropped packets due to retransmission attempts. This effect is shown in Figure~\ref{fig:droppedDueToRET}, where at around 30 nodes CSMA/ECA$_{\text{Hys+FS}}$ contenders start colliding and dropping packets. 
 	
 	After 40 contenders, the MAC queue of CSMA/ECA$_{\text{Hys+FS}}$ nodes starts to fill, as appreciated in Figure~\ref{fig:MacQ}; gradually building a collision-free schedule due to CSMA/ECA$_{\text{Hys+FS}}$'s deterministic backoff after successful transmissions.
 	
    	\begin{figure}[tb]
 		\centering
-		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/droppedPacketsDueRET.eps}
+		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/noBump/droppedPacketsDueRET-noBump.eps}
 		\caption{Number of droppped packets due to reaching the retransmissions threshold}
 		\label{fig:droppedDueToRET}
 	\end{figure}
 	
 	 \begin{figure}[tb]
 		\centering
-		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/queueSize.eps}
+		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/noBump/queueSize-noBump-multiplot.eps}
 		\caption{Number of packets in the MAC queue of a node}
 		\label{fig:MacQ}
 	\end{figure}
@@ -375,12 +381,12 @@ This section provides the simulation parameters for testing CSMA/ECA$_{\text{Hys
 	
 	\begin{figure}[tb]
 		\centering
-		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/serviceTime.eps}
+		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/noBump/serviceTime-noBump-multiplot.eps}
 		\caption{Average system delay: aggregating the average delay of all stations}
 		\label{fig:serviceTime-unsat}
 	\end{figure}
 	
-	In Figure~\ref{fig:serviceTime-unsat}, a rapid increase in the delay for CSMA/CA nodes is appreciated at the saturation point (around 20 contenders). For the CSMA/ECA$_{\text{Hys+FS}}$ nodes the delay is still low at CSMA/CA saturation point even-though we see an increase in the number of dropped packets (see Figure~\ref{fig:droppedDueToRET}). This is due to Hysteresis and Fair Share, which reduces the average delay given that more packets are transmitted and acknowledged with a single ACK. As CSMA/ECA$_{\text{Hys+FS}}$ nodes get saturated, the delay increases because of the contention mechanism (see the number of packets in the MAC queue for CSMA/ECA$_{\text{Hys+FS}}$ nodes in Figure~\ref{fig:MacQ} and how it is related to the increase in delay shown in Figure~\ref{fig:serviceTime-unsat}).\\	
+	In Figure~\ref{fig:serviceTime-unsat}, a rapid increase in the delay for CSMA/CA nodes is appreciated at the saturation point (around 20 contenders). For the CSMA/ECA$_{\text{Hys+FS}}$ nodes the delay is still low at CSMA/CA saturation point even-though we see an increase in the number of dropped packets (see Figure~\ref{fig:droppedDueToRET}). This is due to Hysteresis and Fair Share, which reduces the average delay given that more packets are transmitted and acknowledged with a single ACK. As CSMA/ECA$_{\text{Hys+FS}}$ nodes get saturated, the delay increases due to longer queueing and contention time (see the number of packets in the MAC queue for CSMA/ECA$_{\text{Hys+FS}}$ nodes in Figure~\ref{fig:MacQ} and how it is related to the increase in delay shown in Figure~\ref{fig:serviceTime-unsat}).\\	
 
 	\subsection{Coexistence with CSMA/CA}
 	
@@ -400,12 +406,12 @@ This section provides the simulation parameters for testing CSMA/ECA$_{\text{Hys
 	
 	%Further, although there is still a probability of collisions due to the presence of CSMA/CA contenders, these collisions trigger the Hysteresis and Fair Share extension of CSMA/ECA$_{\text{Hys+FS}}$ nodes, producing the throughput increase when compared to a CSMA/CA network. Figure~\ref{fig:mixedThroughput-sat-stations} provides an overview of the average throughput of CSMA/CA and CSMA/ECA$_{\text{Hys+FS}}$ stations respectively.
 	
-	\begin{figure}[tb]
+	\begin{figure*}[tb]
 		\centering
-		\includegraphics[width=0.9\linewidth,angle=-90]{figures/saturated/mixed/throughput-saturated-mixed-stationGroups.eps}
+		\includegraphics[width=0.4\linewidth,angle=-90]{figures/saturated/mixed/throughput-saturated-mixed-stationGroups.eps}
 		\caption{Average throughput of stations in a mixed network: a) 25\% of CSMA/CA nodes, b) 50\% of CSMA/CA nodes and c) 75\% of CSMA/CA nodes. The remaining proportion is composed of CSMA/ECA$_{\text{Hys+FS}}$ nodes}
 		\label{fig:mixedThroughput-sat-stations}
-	\end{figure}
+	\end{figure*}
 	
 	As shown in Figures~\ref{fig:mixedThroughput-sat}~and~\ref{fig:mixedThroughput-sat-stations}, at the lower proportion of CSMA/CA nodes ($1/4$) the average network and station throughput is the greatest among the tested mixed network setups. This is because collisions trigger Hysteresis and Fair Share in CSMA/ECA$_{\text{Hys+FS}}$ nodes, lowering the number of times these nodes enter in a contention and reducing the overall collision probability when compared to an only CSMA/CA network (see Figure~\ref{fig:mixedCollisions-sat}). As the proportion of CSMA/CA nodes increases, the network throughput approximates to CSMA/CA.	
 
