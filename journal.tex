@@ -565,7 +565,13 @@ This section provides the simulation parameters for testing CSMA/ECA$_{\text{Hys
 		
 
 \section{Real hardware implementation and future directions}\label{EDCA}
+The implementation of CSMA/ECA$_{\text{Hys+FS}}$ should be carried out at a firmware level due to the tight timing constrains related to the backoff procedure. There are several alternatives to modify the backoff operation in WNICs, either using open firmware like OpenFWWF~\cite{OpenFWWF} or through Field Programmable Gate Arrays (FPGA).
 
+Although the FPGA option would in theory provide the strict timing requirements, the associated costs and difficulty are greater than the OpenFWWF alternative. OpenFWWF provides an open CSMA/CA firmware for a specific model of Broadcom WNICs' chipset, so the resulting firmware can be uploaded and tested in real commercial hardware. 
+
+By making the modifications represented in Algorithm~\ref{alg:CSMA_ECA}, a proof-of-concept prototype of CSMA/ECA was built using comercial hardware~\cite{sanabria2013prototyping}. The prototype was able to create a collision-free schedule among a reduced number of contenders using a big deterministic backoff. Nevertheless, clock drift, imprecise timing~\cite{bianchi2007experimental} and other unknown prototyping problems prevented the construction of a collision-free schedule when using a small deterministic backoff or dynamic rate adaptation algorithms, like Minstrel~\cite{minstrel}.
+
+Further development on the prototype is being carried out in order to better prevent timing problems and incorporate Hysteresis and Fair Share.
 
 \section{Conclusions}\label{conclusions}
 \section{Acknowledgements}
