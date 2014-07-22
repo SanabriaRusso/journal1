@@ -113,7 +113,7 @@ This work serves as an extension to~\cite{research2standards}, and provides the 
 
 %Results are derived from computer simulations over a customised version of the COST~\cite{COST} event-based simulator.
 
-The rest of this work is divided as follows: an overview of similar distributed and collision-free MAC protocols for WLANs is provided in  Section~\ref{relatedWork}. CSMA/ECA, as well as its properties for allocating many contenders in a collision-free schedule are explained in Section~\ref{introProtocol}. Section~\ref{simulations} details the simulation environment for testing CSMA/ECA, while Section~\ref{results} explains the results. An overview a CSMA/ECA real-hardware implementation is compiled in Section~\ref{EDCA}, followed by conclusions in Section~\ref{conclusions}.
+An overview of similar distributed and collision-free MAC protocols for WLANs is provided in  Section~\ref{relatedWork}. CSMA/ECA, as well as its properties for allocating many contenders in a collision-free schedule are explained in Section~\ref{introProtocol}. Section~\ref{simulations} details the simulation environment for testing CSMA/ECA, while Section~\ref{results} explains the results. An overview a CSMA/ECA real-hardware implementation is compiled in Section~\ref{EDCA}, followed by conclusions in Section~\ref{conclusions}.
 
 %goes through the prototyping of CSMA/ECA in real hardware. The results for the simulation and prototypes are presented in Section~\ref{prototypeResults}. Conclusions are drawn in Section~\ref{conclusions}.
 
@@ -135,7 +135,7 @@ ZC-MAC is able to outperform CSMA/CA under different scenarios. Nevertheless, gi
 
 \subsection{Learning-MAC}
 
-Learning-MAC~\cite{L_MAC} is another MAC protocol able to build a collision-free schedule for many contenders. It does so defining a \emph{learning strength} parameter, $\beta\in(0,1)$. Each contender starts by picking a slot for transmission $s$ of the schedule $n$ of length $C$ at random with uniform probability. After a contender picks slot $s(n)$, its selection in the next schedule, $s(n+1)$, will be conditioned by the result of the current attempt. (\ref{success}) and (\ref{collision}) extracted from~\cite{L_MAC} show the probability of selecting the same slot $s(n)$ in cycle $n+1$.
+Learning-MAC~\cite{L_MAC} is another MAC protocol able to build a collision-free schedule for many contenders. It does so defining a \emph{learning strength} parameter, $\beta\in(0,1)$. Each contender starts by picking a slot for transmission $s$ of the schedule $n$ of length $C$ at random with uniform probability. After a contender picks slot $s(n)$, its selection in the next schedule, $s(n+1)$, will be conditioned by the result of the current attempt. (\ref{success}) and (\ref{collisions-eq}) extracted from~\cite{L_MAC} show the probability of selecting the same slot $s(n)$ in cycle $n+1$.
 
 \begin{equation} \label{success}
 		\left. \begin{aligned}
@@ -145,7 +145,7 @@ Learning-MAC~\cite{L_MAC} is another MAC protocol able to build a collision-free
 	\right\}
 	\qquad \text{\emph{Success}}
 \end{equation}
-\begin{equation} \label{collision}
+\begin{equation} \label{collisions-eq}
 	\left. \begin{aligned}
 			p_{s(n)}(n+1)&=\beta p_{s(n)}(n),\\
 			p_{j}(n+1)&=\beta p_{j}(n)+\frac{1-\beta}{C -1},
@@ -154,7 +154,7 @@ Learning-MAC~\cite{L_MAC} is another MAC protocol able to build a collision-free
 	\qquad \text{\emph{Collision}}
 \end{equation}
 \\
-for all $j\neq s(n),~j\in \{1,\dots ,C\}$. That is, if a station successfully transmitted in $s(n)$, it will pick the same slot on the next schedule with probability one. Otherwise, it follows~(\ref{collision}).
+for all $j\neq s(n),~j\in \{1,\dots ,C\}$. That is, if a station successfully transmitted in $s(n)$, it will pick the same slot on the next schedule with probability one. Otherwise, it follows~(\ref{collisions-eq}).
 
 The selection of $\beta$ implies a compromise between fairness and convergence speed, which the authors determined $\beta=0.95$ to provide satisfactory results.
 
@@ -277,9 +277,9 @@ The \emph{JFI for CSMA/ECA} and \emph{JFI for CSMA/CA} curves in Figure~\ref{fig
 	\subsection{Supporting many more contenders}\label{moreContenders}
 	As was mentioned before, CSMA/ECA is only able to build a collision-free schedule if the number of contenders $N$, is less or equal than $B_{d}$. When $N > B_{d}$, collisions reappear. 
 	
-	To be able to attain a collision-free schedule even when the number of contenders exceeds $B_{d}$, we introduce \emph{Hysteresis}. Hysteresis is a property of the protocol that instructs nodes not to reset their backoff stage ($k$) after successful transmissions, but to pick a deterministic backoff $B_{d}=CW(k)/2$; where $CW(k)=2^{k}CW_{\min}$. This measure allows the adaptation of the schedule length, admitting many more contenders in a collision-free schedule.
+	To be able to attain a collision-free schedule even when the number of contenders exceeds $B_{d}$, we introduce \emph{Hysteresis}. Hysteresis is a property of the protocol that instructs nodes not to reset their backoff stage ($k$) after successful transmissions, but to pick a deterministic backoff $B_{d}=CW(k)/2$; where $CW(k)=2^{k}CW_{\min}$. This measure allows the adaptation of the schedule length, admitting many more contenders in a collision-free schedule. This idea of a schedule is significantly different from the virtual schedule required by the protocols described in Section~\ref{relatedWork}, that is, CSMA/ECA with Hysteresis does not require a previous knowledge of neither the number of contenders nor the result of previous transmissions, easing its implementation in real hardware.
 	
-	Hysteresis enables CSMA/ECA nodes to have different schedules ($B_{d}$), carrying the undesired effect of unevenly divide the channel time among contenders (i.e., some nodes will have to wait more in order to attempt transmissions).
+	Hysteresis enables CSMA/ECA nodes to have different schedules ($B_{d}$), carrying the undesired effect of unevenly dividing the channel time among contenders (i.e., some nodes will have to wait more in order to attempt transmissions).
 	
 	This unfairness issue is solved by instructing nodes at backoff stage $k$ to transmit $2^{k}$ packets on each attempt, thus proportionally compensating those nodes at higher backoff stages. This additional extension to CSMA/ECA is called \emph{Fair Share}. CSMA/ECA with Hysteresis and Fair Share will be referred to as CSMA/ECA$_{\text{Hys+FS}}$ in order to distinguish it from what was described until this point.
 	
@@ -359,7 +359,7 @@ The \emph{JFI for CSMA/ECA} and \emph{JFI for CSMA/CA} curves in Figure~\ref{fig
 	\begin{figure}[tb]
 	\centering
 		\includegraphics[width=0.7\linewidth,angle=-90]{figures/saturated/throughput-saturated-maxAgg.eps}
-		\caption{Throughput comparison with CSMA/CA$_{\text{MaxAg}}$: even through at low number of contenders CSMA/CA$_{\text{MaxAg}}$ achieves greater throughput, collision eventually degrade the throughput below CSMA/ECA$_{\text{Hys+FS}}$'s when the number of contenders increases past $N=10$}
+		\caption{Throughput comparison with CSMA/CA$_{\text{MaxAg}}$: even through at low number of contenders CSMA/CA$_{\text{MaxAg}}$ achieves greater throughput, collisions eventually degrade the throughput below CSMA/ECA$_{\text{Hys+FS}}$'s when the number of contenders increases past $N=10$}
 		\label{fig:ECA-vs-DCF-maxAgg}
 	\end{figure}
 
@@ -372,7 +372,7 @@ The \emph{JFI for CSMA/ECA} and \emph{JFI for CSMA/CA} curves in Figure~\ref{fig
 	%The following section provides an overview of the impact clock drift has over CSMA/ECA and CSMA/ECA$_{\text{Hys+FS}}$ nodes.
 	
 	\subsection{Backwards compatibilty and coexistence}
-	CSMA/ECA$_{\text{Hys+FS}}$ springs from a modification to CSMA/CA's backoff mechanism. It keeps the range of values CSMA/CA nodes use to draw a random backoff (i.e., use the same $CW_{\min}$ and $CW_{\max}$), allowing CSMA/ECA$_{\text{Hys+FS}}$ contenders to coexist with CSMA/CA nodes in the same network. Further, the selection of CSMA/ECA$_{\text{Hys+FS}}$'s deterministic backoff, $B_d$, is the expected value for the current backoff stage $k$ ($B_d\coloneqq\lceil{E[0,CW(k)]}\rceil$); which ensures fairness among contenders. An overview of the attained throughput for different proportions of CSMA/ECA$_{\text{Hys+FS}}$ and CSMA/CA nodes is presented in Section~\ref{coexistence}.
+	CSMA/ECA$_{\text{Hys+FS}}$ springs from a modification to CSMA/CA's backoff mechanism. It keeps the range of values CSMA/CA nodes use to draw a random backoff (i.e., use the same $CW_{\min}$ and $CW_{\max}$), allowing CSMA/ECA$_{\text{Hys+FS}}$ contenders to coexist with CSMA/CA nodes in the same network. Further, the selection of CSMA/ECA$_{\text{Hys+FS}}$'s deterministic backoff, $B_d$, is the expected value for the current backoff stage $k$ ($B_d\coloneqq\lceil{E[0,CW(k)]}\rceil$); which ensures fairness among contenders. An overview of the attained throughput for different proportions of CSMA/ECA$_{\text{Hys+FS}}$ and CSMA/CA nodes is presented in Section~\ref{coexistance-w-csmaca}.
 	
 \section{Simulation}\label{simulations}
 This section provides the simulation parameters for testing CSMA/ECA$_{\text{Hys+FS}}$ under two different traffic conditions, namely saturated and non-saturated. Further, the simulation of the clock drift effect, and the coexistence with CSMA/CA are also subjects to be addressed in this section.
@@ -529,7 +529,7 @@ This section provides the simulation parameters for testing CSMA/ECA$_{\text{Hys
 	
 	In Figure~\ref{fig:serviceTime-unsat}, a rapid increase in the delay for CSMA/CA nodes is appreciated at the saturation point (around 20 contenders). For the CSMA/ECA$_{\text{Hys+FS}}$ nodes the delay is still low at CSMA/CA saturation point even-though we see an increase in the number of dropped packets (see Figure~\ref{fig:droppedDueToRET}). This is due to Hysteresis and Fair Share, which reduces the average delay given that more packets are transmitted and acknowledged with a single ACK. As CSMA/ECA$_{\text{Hys+FS}}$ nodes get saturated, the delay increases due to longer queueing and contention time (see the number of packets in the MAC queue for CSMA/ECA$_{\text{Hys+FS}}$ nodes in Figure~\ref{fig:MacQ} and how it is related to the increase in delay shown in Figure~\ref{fig:serviceTime-unsat}).\\	
 
-	\subsection{Coexistence with CSMA/CA}
+	\subsection{Coexistence with CSMA/CA}\label{coexistance-w-csmaca}
 	
 	CSMA/ECA is thought to be an evolution of CSMA/CA given its similarities and the ability to coexists with the latter. This section provides simulations results for a setup of different proportions of CSMA/CA nodes in a network where there are also CSMA/ECA$_{\text{Hys+FS}}$ contenders, that is: 1/4, 1/2 and 3/4 of the total nodes run CSMA/CA, while the rest uses CSMA/ECA$_{\text{Hys+FS}}$. This network configuration will be referred to as \emph{mixed network setup} from here on.	
 	\subsubsection{Throughput}
@@ -569,7 +569,7 @@ The implementation of CSMA/ECA$_{\text{Hys+FS}}$ should be carried out at a firm
 
 Although the FPGA option would in theory provide the strict timing requirements, the associated costs and difficulty are greater than the OpenFWWF alternative. OpenFWWF provides an open CSMA/CA firmware for a specific model of Broadcom WNICs' chipset, so the resulting firmware can be uploaded and tested in real commercial hardware. 
 
-By making the modifications represented in Algorithm~\ref{alg:CSMA_ECA}, a proof-of-concept prototype of CSMA/ECA was built using comercial hardware~\cite{sanabria2013prototyping}. The prototype was able to create a collision-free schedule among a reduced number of contenders using a big deterministic backoff. Nevertheless, clock drift, imprecise timing~\cite{bianchi2007experimental} and other unknown prototyping problems prevented the construction of a collision-free schedule when using a small deterministic backoff or dynamic rate adaptation algorithms, like Minstrel~\cite{minstrel}.
+By making the modifications represented in Algorithm~\ref{alg:CSMA_ECA}, a proof-of-concept prototype of CSMA/ECA was built using comercial hardware~\cite{sanabria2013prototyping}. The prototype was able to create a collision-free schedule among a reduced number of contenders using a big deterministic backoff. Nevertheless, clock drift, imprecise timing~\cite{bianchi2007experimental} and other prototyping non-idialities prevented the construction of a collision-free schedule when using a small deterministic backoff or dynamic rate adaptation algorithms, like Minstrel~\cite{minstrel}.
 
 Further development on the prototype is being carried out in order to better prevent timing problems and incorporate Hysteresis and Fair Share.
 
