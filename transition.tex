@@ -1,0 +1,17 @@
+\section{Transitioning towards CSMA/ECA$_{\text{Hys+FS}}$}
+%Given the benefits CSMA/ECA$_{\text{Hys+FS}}$ is able to provide in the tested scenarios, this section aims at summarising the missing features that would allow a transition to CSMA/ECA$_{\text{Hys+FS}}$. 
+
+The current PHY enhancements considered by the HEW study group include higher modulation and coding schemes as well as full duplex radios, capable of receiving and transmitting at the same time, thus augmenting the achievable throughput. Furthermore, already existing technologies like Channel bonding and Multiple-User Multiple-Input Multiple-Output (MU-MIMO) also seek to increase the throughput. The latter by allowing the transmission of different packets to multiple destinations at the same time, while the former bonds multiple WiFi channels together in order to increase the available bandwidth. Using CSMA/ECA$_{\text{Hys+FS}}$ alongside these features would provide enhanced performance by constructing collision-free schedules, thus substantially decreasing the time spent recovering from collisions.
+
+Additionally, there are several features and scenarios still to be analysed for CSMA/ECA$_{\text{Hys+FS}}$ networks. Part of what is left for future work is summarised in the following:
+
+\begin{itemize}
+	\item The performance of a CSMA/ECA$_{\text{Hys+FS}}$ network in presence of other neighbouring wireless networks and hidden nodes: transmissions from other network may negatively affect the maintenance of the collision-free schedule when not all devices in the CSMA/ECA$_{\text{Hys+FS}}$ WLAN are able to listen to them. As a consequence, not all stations will pause the backoff accordingly, resulting in large slot drifts that in consequence will disrupt the collision-free schedule, approximating CSMA/ECA$_{\text{Hys+FS}}$ performance to CSMA/CA's. A similar effect is expected when in the presence of hidden nodes.
+	\item Traffic differentiation: although priorities using different contention windows in CSMA/ECA$_{\text{Hys+FS}}$ proved to outperform CSMA/CA, other Enhanced Distributed Channel Access (EDCA) mechanisms like the Arbitration Inter-Frame Spacing (AIFS) would not work~\cite{jaumeTD}, whereas the following EDCA mechanisms would:
+	\begin{itemize}
+		\item Transmission Opportunity (TXOP): stations with an increased TXOP are able to transmit more packets. APs in CSMA/ECA$_{\text{Hys+FS}}$ can use a big TXOP in order to transmit more than users.
+		\item Multiple Queues:~\cite{jaumeTD} provides performance metrics for two traffic categories. In order to transition to CSMA/ECA$_{\text{Hys+FS}}$ a total of four access categories (AC) should be implemented, as in EDCA. Priorities to the multiple queues can be granted through different minimum and maximum contention windows.
+	\end{itemize}
+	CSMA/ECA$_{\text{Hys+FS}}$ with multiple access categories is expected to provide better traffic differentiation in WLANs, mainly due to the elimination of collisions by using a deterministic backoff after each access category's successful transmission.
+	\item Coexistence with EDCA stations in the same WLAN.
+\end{itemize}
