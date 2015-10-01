@@ -1,0 +1,30 @@
+\documentclass[]{article}
+\usepackage{amsmath}
+\usepackage{fullpage}
+\usepackage[a4paper]{geometry}
+
+\begin{document}
+
+\title{Contributions}
+\author{Luis Sanabria-Russo, Jaume Barcelo, Boris Bellalta}
+\date{\today}
+\maketitle
+
+The submitted work, \emph{A High Efficiency MAC Protocol for WLANs: Providing Fairness in Dense Scenarios}, further develops~\cite{research2standards}, which introduces Carrier Sense Multiple Access with Enhanced Collision Avoidance's extensions, called Hysteresis and Fair Share (CSMA/ECA$_{\text{Hys+FS}}$). Results obtained in~\cite{research2standards} constitute the first performance assessment of CSMA/ECA$_{\text{Hys+FS}}$ under saturated conditions. It shows CSMA/ECA$_{\text{Hys+FS}}$ evenly distributing the available throughput among many contenders, effectively eliminating collisions and outperforming CSMA/CA. 
+
+Given the encouraging results obtained in~\cite{research2standards}, the submitted work proposes CSMA/ECA$_{\text{Hys+FS}}$ as a viable WLAN MAC protocol for dense scenarios~\cite{HEW-scenarios}. The submitted work provides further insight into CSMA/ECA$_{\text{Hys+FS}}$ and covers common necessaries for proposing it as a CSMA/CA replacement. These contributions are:
+
+\begin{enumerate}
+	\item Performance evaluation of CSMA/ECA$_{\text{Hys+FS}}$ under non-saturated conditions: this kind of traffic is the most commonly found in WLANs. Given that it is also composed of periods of inactivity (not generating new packets), the node's MAC queue empties. An empty MAC queue forces CSMA/ECA$_{\text{Hys+FS}}$ nodes to withdraw from the contention for the channel. When a new packet eventually arrives at the MAC queue, nodes use a random backoff to rejoin the contention for transmission. The use of this random backoff increases the collision probability. The study under non-saturated conditions reveals the impact of using a random backoff to rejoin the contention for the channel, specifically over the overall throughput, average collisions and delay.
+	
+	\item Impact of imperfect clocks over CSMA/ECA$_{\text{Hys+FS}}$'s deterministic backoff: miscounting empty slots is a common effect observed in WLAN hardware~\cite{slotDrift}. A \emph{slot drift} is the result of miscounting empty slots and it may disrupt a collision-free schedule. This work shows how CSMA/ECA$_{\text{Hys+FS}}$ leverages imperfect clocks by using higher cycle lengths and packet aggregation (using Hysteresis and Fair Share).
+	
+	\item Formulation of throughput bounds: CSMA/ECA$_{\text{Hys+FS}}$ attempts to construct cycles where nodes transmit as often as possible while ensuring throughput fairness. This work provides a measure of the minimum and maximum throughput achievable in CSMA/ECA$_{\text{Hys+FS}}$ when the collision-free operation is reached. Furthermore, it studies the effects packet aggregation has over throughput fairness, overall throughput and time between successful transmissions.
+	
+	\item Coexistence with CSMA/CA: CSMA/ECA$_{\text{Hys+FS}}$ is thought to be a CSMA/CA evolution. This work shows the overall throughput and average percentage of collisions when testing CSMA/ECA$_{\text{Hys+FS}}$ in a network also composed by different proportions of CSMA/CA nodes. Results show that networks with a higher proportion of CSMA/ECA$_{\text{Hys+FS}}$ nodes suffer less from collisions, thus achieving higher throughput. Furthermore, it is also shown that the worst performance of CSMA/ECA$_{\text{Hys+FS}}$ nodes approximates to CSMA/CA's.
+\end{enumerate}
+
+\bibliographystyle{IEEEtran}
+\bibliography{../ref}
+
+\end{document}
