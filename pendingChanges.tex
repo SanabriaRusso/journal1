@@ -1,0 +1,56 @@
+\documentclass[]{article}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\begin{document}
+
+\title{Fixes to the original paper}
+\author{Luis Sanabria-Russo}
+\date{Today}
+\maketitle
+
+\section{Abstract}
+\begin{enumerate}
+	\item Include remarks of the real hardware implementation.
+\end{enumerate}
+
+\section{Introduction}
+\begin{enumerate}
+	\item While describing the lack of studies of CSMA/ECA in non-saturated scenarios, you should also talk about the implementation on real hardware and the introduction of channel errors.
+\end{enumerate}
+
+\section{Related Work}
+\begin{enumerate}
+	\item We should introduce the performance evaluation of L-ZC and L-MAC with Basic CSMA/ECA/
+\end{enumerate}
+
+\section{CSMA/ECA}
+\begin{enumerate}
+	\item Figures do not appear as they are mentioned. For instance, Figure 2 appears before Figure 2.
+	\item A reviewer suggests dividing the figure to highlight which curves are associated with which axis. 
+	\item Arrange the legend of the figure to mimic the order of appearance of the curves. From top to bottom.
+	\subsection{Supporting many more contenders}
+	\begin{enumerate}
+		\item Although we only treat CSMA/CA with maximum aggregation, here we should incorporate CSMA/CA$_{\text{FS}}$.
+	\end{enumerate}
+\end{enumerate}
+
+\section{Simulation Scenario}
+\begin{enumerate}
+	\item We should mention the channel errors scenario, too.
+	\item The reference to the simulator should be changed to the one we are actually using.
+	\item We should take a moment to explain why we are not using RTS/CTS and the hidden nodes assumption.
+	\item Table I should be reviewed.
+\end{enumerate}
+
+\section{Results}
+\begin{enumerate}
+	\item We should include the channel errors scenario alongside the non-saturated scenario.
+	\item Coexistence figures should be focused on the per-station statistics.
+\end{enumerate}
+
+\section{Real Hardware Implementation}
+\begin{enumerate}
+	\item Should it be a subsection of the results?
+\end{enumerate}
+
+\end{document}

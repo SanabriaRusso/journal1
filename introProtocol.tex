@@ -1,6 +1,6 @@
-\section{Carrier Sense Multiple Access with Enhanced Collision Avoidance (CSMA/ECA)}
+\section{Carrier Sense Multiple Access with Enhanced Collision Avoidance (CSMA/ECA)}\label{introProtocol}
 
-CSMA/ECA~\cite{barcelo2008lba} is a totally distributed and collision-free MAC for WLANs. It differs from CSMA/CA in that it uses a deterministic backoff, $B_{d}=CW_{\min}/2$ after successful transmissions, where $CW_{\min}$ is the minimum contention window of typical value $CW_{\min}=16$. By doing so, contenders that successfully transmitted on schedule $n$, will transmit without colliding with other successful nodes in future cycles.
+CSMA/ECA~\cite{barcelo2008lba} is a fully distributed and collision-free MAC for WLANs. It differs from CSMA/CA in that it uses a deterministic backoff, $B_{d}=CW_{\min}/2$ after successful transmissions, where $CW_{\min}$ is the minimum contention window of typical value $CW_{\min}=16$. By doing so, contenders that successfully transmitted on schedule $n$, will transmit without colliding with other successful nodes in future cycles.
 
 Collisions are handled as in CSMA/CA, which is described in Algorithm~\ref{alg:CSMA_CA}. In Algorithm~\ref{alg:CSMA_CA}, the node starts by setting the retransmissions counter and backoff stage to zero ($r\in[0,R]$ and $k\in[0,m]$ respectively, $m$ is the maximum backoff stage of typical value $m=5$, and $R$ is the retransmissions limit with typical value $R=m+1$), then generates a random backoff, $B$. When the Acknowledgement (\emph{ack}) for a sent packet is not received by the sender a collision is assumed. Upon collision, the involved nodes will double their contention window by incrementing their backoff stage in one and using a random backoff, $B\in[0,2^{k}CW_{\min}]$. This procedure is described between Line~\ref{collision} and~\ref{finalCollision} of Algorithm~\ref{alg:CSMA_CA}.
 
@@ -170,6 +170,7 @@ The \emph{JFI for CSMA/ECA} and \emph{JFI for CSMA/CA} curves in Figure~\ref{fig
 	    }
 	    {
 	      Discard packet\;
+	      $k \leftarrow 0$\;
 	      $B \leftarrow \mathcal{U}[0, 2^k \rm{CW}_{min}-1]$\;
 	    }
 	  }
@@ -187,9 +188,11 @@ The \emph{JFI for CSMA/ECA} and \emph{JFI for CSMA/CA} curves in Figure~\ref{fig
 		\label{fig:ECA+H+F-throughput}
 	\end{figure}
 
+	\textcolor{red}{We should also incorporate CSMA/CA$_{\text{FS}}$??.}
+
 
 	\subsection{The effects of Aggregation}\label{effects-of-aggregation}
-	Fair Share is an aggregation mechanism that coupled with the collision-free schedule built by CSMA/ECA$_{\text{Hys}}$ is able to provide short-term fairness. However, it also improves the throughput since the aggregation process makes the packet transmission more efficient by reducing overheads. The downside of Fair Share is that it may increase the time between two consecutive transmissions from the same node, which may affect negatively delay-sensitive applications such as gaming or high definition real-time video.
+	Fair Share is an \textcolor{red}{A-MPDU} aggregation mechanism that coupled with the collision-free schedule built by CSMA/ECA$_{\text{Hys}}$ is able to provide short-term fairness. However, it also improves the throughput since the aggregation process makes the packet transmission more efficient by reducing overheads. The downside of Fair Share is that it may increase the time between two consecutive transmissions from the same node, which may affect negatively delay-sensitive applications such as gaming or high definition real-time video. \textcolor{red}{An example of the duration of a transmission is provided by (\ref{eq:Ts}) in the following Section~\ref{ECA-bounds}.}
 	
 	In scenarios where short-term fairness and the time between consecutive transmissions are not relevant, Fair Share can be replaced by \emph{Maximum Aggregation} (MaxAg), which will significantly improve the system throughput. In Maximum Aggregation all nodes aggregate as many packets as possible at every transmission, i.e., they send $2^m$ packets in each attempt.
 
@@ -216,11 +219,11 @@ The \emph{JFI for CSMA/ECA} and \emph{JFI for CSMA/CA} curves in Figure~\ref{fig
 		\label{fig:fairness-with-maximum-aggregation}
 	\end{figure}
 	
-	Since we consider that fairness and a short inter-transmission time are even more important than raw throughput for the next generation of WLANs, we keep CSMA/ECA$_{\text{Hys+FS}}$ as the reference protocol.
+	Since we consider that fairness and a short inter-transmission time are even more important than raw throughput for the next generation of WLANs, we keep CSMA/ECA$_{\text{Hys+FS}}$ as the reference protocol. \textcolor{red}{Is this still true?}
 	
 	\subsection{Throughput bounds of CSMA/ECA$_{\text{Hys+FS}}$}\label{ECA-bounds}
 	
-	They correspond to the maximum and minimum achievable throughput without the possibility of collisions using Hysteresis and Fair Share. The ideal CSMA/ECA$_{\text{Hys+FS}}$ network uses the minimum schedule length that guarantees a collision-free operation. That is, with a schedule length of $C=2^{k}B_{d}$, where $k = \left\lceil log_{2}(N/B_{d})\right\rceil$). Using this minimum schedule length, $N$ nodes will be at the same backoff stage if $N\leq B_{d}$. Otherwise, $h = N-(C-N)$ nodes would occupy the $k$-th backoff stage and $N-h$ the immediate inferior backoff stage, i.e., the $(k-1)$-th one. The system throughput is computed as follows:
+	They correspond to the maximum and minimum achievable throughput without the possibility of collisions using Hysteresis and Fair Share. The ideal CSMA/ECA$_{\text{Hys+FS}}$ network uses the minimum schedule length that guarantees a collision-free operation. That is, with a schedule length of $C=2^{k}B_{d}$, where $k = \left\lceil log_{2}(N/B_{d})\right\rceil$. Using this minimum schedule length, $N$ nodes will be at the same backoff stage if $N\leq B_{d}$. Otherwise, $h = N-(C-N)$ nodes would occupy the $k$-th backoff stage and the other $N-h$ \textcolor{red}{nodes the $(k-1)$-th one}. The system throughput is computed as follows:
 	
 	\begin{equation}
 			S =
@@ -271,6 +274,9 @@ The \emph{JFI for CSMA/ECA} and \emph{JFI for CSMA/CA} curves in Figure~\ref{fig
 	CSMA/ECA relies on stations being able to correctly count empty slots and consequently attempt transmissions in the appropriate slot according to the backoff timer. Failure to do so may be caused by clock imperfections inside the Wireless Network Interface Cards (WNIC), which is commonly referred to as \emph{clock drift}. As pointed out in~\cite{slotDrift}, clock drift is a common issue that degrades the throughput in distributed collision-free MAC protocols like the ones reviewed in Sect.~\ref{relatedWork}.
 	
 	While miscounting empty slots have no significant effect on CSMA/CA's throughput~\cite{slotDrift}, it has a direct impact on CSMA/ECA. In a collision-free schedule with saturated CSMA/ECA contenders, a station miscounting empty slots will \emph{drift} to a possibly busy slot, collide and force a re-convergence (if possible) to a collision-free schedule (see Sect.~\ref{performanceClockDrift}).
+	
+	\textcolor{red}{\subsection{Real hardware implementation} 
+	Replacing the firmware of commercial WLAN cards with the Open Firmware for WiFi Networks, OpenFWWF~\cite{OpenFWWF}, allows the modification of time-sensitive operations in the MAC, like the backoff procedure. In Section~\ref{EDCA} we provide details regarding the tesbed, the firmware used and present results of real experiments using CSMA/ECA.}
 	
 	\subsection{Backwards compatibilty and coexistence}
 	CSMA/ECA$_{\text{Hys+FS}}$ springs from a modification to CSMA/CA's backoff mechanism. It keeps the range of values CSMA/CA nodes use to draw a random backoff (i.e., use the same $CW_{\min}$ and $CW_{\max}$), allowing CSMA/ECA$_{\text{Hys+FS}}$ contenders to coexist with CSMA/CA nodes in the same network. Further, the selection of CSMA/ECA$_{\text{Hys+FS}}$'s deterministic backoff, $B_d$, is the expected value for the current backoff stage $k$ ($B_d\coloneqq\lceil{E[0,CW(k)]}\rceil$)~\cite{research2standards}, which ensures fairness among contenders. An overview of the attained throughput for different proportions of CSMA/ECA$_{\text{Hys+FS}}$ and CSMA/CA nodes is presented in Section~\ref{coexistance-w-csmaca}.

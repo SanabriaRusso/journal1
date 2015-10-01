@@ -1,4 +1,4 @@
-\section{Simulation Scenario}
+\section{Simulation Scenario}\label{simulations}
 This section provides the simulation parameters for testing CSMA/ECA$_{\text{Hys+FS}}$ under two different traffic conditions, namely saturated and non-saturated. Further, the simulation of the clock drift effect, and the coexistence with CSMA/CA are also subjects to be addressed in this section.
 
 	\subsection{Scenario details}
@@ -8,17 +8,17 @@ This section provides the simulation parameters for testing CSMA/ECA$_{\text{Hys
 		\item Unspecified parameters follow the IEEE 802.11n ($2.4$~GHz) standard.
 		\item All nodes are in communication range.
 		\item No Request-to-Send (RTS) or Clear-to-Send (CTS) messages are used.
-		\item There are no external interference or channel errors.
+		\item There are no external interference or channel errors. \textcolor{red}{Remove}.
 		\item Collisions take as much channel time as successful transmissions.
 	\end{itemize}
 	
-	The aforementioned assumptions ensure that the simulation results are just effects of the MAC behavior, thus isolating it from external factors, i.e.: channel imperfections. Further, in a collision-free CSMA/ECA$_{\text{Hys+FS}}$ operation there is no need for RTS/CTS mechanisms, given that successful nodes already know their respective transmission slot.
+	The aforementioned assumptions ensure that the simulation results are just effects of the MAC behavior, thus isolating it from external factors, i.e.: \textcolor{red}{channel imperfections}. Further, in a collision-free CSMA/ECA$_{\text{Hys+FS}}$ operation there is no need for RTS/CTS mechanisms, given that successful nodes already know their respective transmission slot. \textcolor{red}{Maybe here is where the conversation about hidden nodes should take place?}
 	
-	If not mentioned otherwise, results are derived from 100 simulations of 100 seconds in length. Figures show $95$\% confidence intervals.
+	If not mentioned otherwise, results are derived from 100 simulations of 100 seconds in length. Figures also show the standard deviation.
 	
 	\begin{table}
 		\centering
-		\caption{PHY and MAC parameters for the simulations}
+		\caption{PHY and MAC parameters for the simulations \textcolor{red}{REVIEW}}
 		\label{tab:mac-params}
 		\begin{tabular}{|c|c|}
 			\hline
@@ -48,6 +48,8 @@ This section provides the simulation parameters for testing CSMA/ECA$_{\text{Hys
 	A saturated station always has packets in its MAC queue. This is modelled by setting the packet arrival rate to the MAC queue ($\Delta_{\text{PAR}}$) to a value greater than the achievable throughput. To ensure saturation, stations are set to fill their MAC queue at $\Delta_{\text{PAR}}=65$~Mbps, which is purposefully greater than the effective capacity of the channel.
 	
 	To evaluate the performance under non-saturated conditions, stations need to be able to empty their MAC queues. To do so, the packet arrival rate to the MAC queue is set to $\Delta_{\text{PAR}}=1$~Mbps. These values of $\Delta_{\text{PAR}}$ have proven to produce the desired effects.
+	
+	\textcolor{red}{\subsection{Channel errors} Here we explain how we implement our channel errors model}.
 	
 	\subsection{Performance under clock drift}
 	Clock drift is simulated by setting a drift probability, $p_{cd}$. Each station has a probability of $p_{cd}/2$ of miscounting one slot more, and $p_{cd}/2$ of miscounting one slot less. This approach follows the one proposed by Gong et. al in~\cite{slotDrift}.
