@@ -188,8 +188,6 @@ The \emph{JFI for CSMA/ECA} and \emph{JFI for CSMA/CA} curves in Figure~\ref{fig
 		\label{fig:ECA+H+F-throughput}
 	\end{figure}
 
-	\textcolor{red}{We should also incorporate CSMA/CA$_{\text{FS}}$??.}
-
 
 	\subsection{The effects of Aggregation}\label{effects-of-aggregation}
 	Fair Share is an \textcolor{red}{A-MPDU} aggregation mechanism that coupled with the collision-free schedule built by CSMA/ECA$_{\text{Hys}}$ is able to provide short-term fairness. However, it also improves the throughput since the aggregation process makes the packet transmission more efficient by reducing overheads. The downside of Fair Share is that it may increase the time between two consecutive transmissions from the same node, which may affect negatively delay-sensitive applications such as gaming or high definition real-time video. \textcolor{red}{An example of the duration of a transmission is provided by (\ref{eq:Ts}) in the following Section~\ref{ECA-bounds}.}
@@ -201,7 +199,7 @@ The \emph{JFI for CSMA/ECA} and \emph{JFI for CSMA/CA} curves in Figure~\ref{fig
 	\begin{figure}[tb]
 	\centering
 		\includegraphics[width=0.7\linewidth,angle=-90]{figures/throughput-max-Ag/throughput-saturated-maxAgg.eps}
-		\caption{Throughput comparison with CSMA/CA$_{\text{MaxAg}}$: even though at low number of contenders CSMA/CA$_{\text{MaxAg}}$ achieves greater throughput than CSMA/ECA$_{\text{Hys+FS}}$, collisions eventually degrade the throughput below CSMA/ECA$_{\text{Hys+FS}}$'s when the number of contenders increases past $N=10$}
+		\caption{Throughput comparison with CSMA/CA$_{\text{MaxAg}}$: even though at low number of contenders CSMA/CA$_{\text{MaxAg}}$ achieves greater throughput than CSMA/ECA$_{\text{Hys+FS}}$, collisions eventually degrade the throughput below CSMA/ECA$_{\text{Hys+FS}}$'s when the number of contenders increases past $N=10$. \textcolor{red}{This figure should also show CSMA/CA$_{\text{FS}}$}.}
 		\label{fig:ECA-vs-DCF-maxAgg}
 	\end{figure}
 	
@@ -219,7 +217,7 @@ The \emph{JFI for CSMA/ECA} and \emph{JFI for CSMA/CA} curves in Figure~\ref{fig
 		\label{fig:fairness-with-maximum-aggregation}
 	\end{figure}
 	
-	Since we consider that fairness and a short inter-transmission time are even more important than raw throughput for the next generation of WLANs, we keep CSMA/ECA$_{\text{Hys+FS}}$ as the reference protocol. \textcolor{red}{Is this still true?}
+	Since we consider that fairness and a short inter-transmission time are even more important than raw throughput for the next generation of WLANs, we keep CSMA/ECA$_{\text{Hys+FS}}$ as the reference protocol.
 	
 	\subsection{Throughput bounds of CSMA/ECA$_{\text{Hys+FS}}$}\label{ECA-bounds}
 	
@@ -275,8 +273,8 @@ The \emph{JFI for CSMA/ECA} and \emph{JFI for CSMA/CA} curves in Figure~\ref{fig
 	
 	While miscounting empty slots have no significant effect on CSMA/CA's throughput~\cite{slotDrift}, it has a direct impact on CSMA/ECA. In a collision-free schedule with saturated CSMA/ECA contenders, a station miscounting empty slots will \emph{drift} to a possibly busy slot, collide and force a re-convergence (if possible) to a collision-free schedule (see Sect.~\ref{performanceClockDrift}).
 	
-	\textcolor{red}{\subsection{Real hardware implementation} 
-	Replacing the firmware of commercial WLAN cards with the Open Firmware for WiFi Networks, OpenFWWF~\cite{OpenFWWF}, allows the modification of time-sensitive operations in the MAC, like the backoff procedure. In Section~\ref{EDCA} we provide details regarding the tesbed, the firmware used and present results of real experiments using CSMA/ECA.}
-	
+%	\textcolor{red}{\subsection{Real hardware implementation} 
+%	Replacing the firmware of commercial WLAN cards with the Open Firmware for WiFi Networks, OpenFWWF~\cite{OpenFWWF}, allows the modification of time-sensitive operations in the MAC, like the backoff procedure. In Section~\ref{EDCA} we provide details regarding the tesbed, the firmware used and present results of real experiments using CSMA/ECA.}
+%	
 	\subsection{Backwards compatibilty and coexistence}
 	CSMA/ECA$_{\text{Hys+FS}}$ springs from a modification to CSMA/CA's backoff mechanism. It keeps the range of values CSMA/CA nodes use to draw a random backoff (i.e., use the same $CW_{\min}$ and $CW_{\max}$), allowing CSMA/ECA$_{\text{Hys+FS}}$ contenders to coexist with CSMA/CA nodes in the same network. Further, the selection of CSMA/ECA$_{\text{Hys+FS}}$'s deterministic backoff, $B_d$, is the expected value for the current backoff stage $k$ ($B_d\coloneqq\lceil{E[0,CW(k)]}\rceil$)~\cite{research2standards}, which ensures fairness among contenders. An overview of the attained throughput for different proportions of CSMA/ECA$_{\text{Hys+FS}}$ and CSMA/CA nodes is presented in Section~\ref{coexistance-w-csmaca}.

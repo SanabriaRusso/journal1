@@ -49,7 +49,7 @@
 
 %A more simple output, useful when involving people from different affiliations
   \author{
-      \IEEEauthorblockN{Luis Sanabria-Russo\IEEEauthorrefmark{0}, Jaume Barcelo\IEEEauthorrefmark{0}, Boris Bellalta\IEEEauthorrefmark{0}}}%\\
+      \IEEEauthorblockN{Luis Sanabria-Russo\IEEEauthorrefmark{0}, Jaume Barcelo\IEEEauthorrefmark{0}, Boris Bellalta\IEEEauthorrefmark{0}, Francesco Gringoli\IEEEauthorrefmark{0}}}%\\
       %\IEEEauthorblockA{\IEEEauthorrefmark{0}Universitat Pompeu Fabra, Barcelona, Spain
       %\\\{luis.sanabria, jaume.barcelo, boris.bellalta\}@upf.edu}
  % }
@@ -85,7 +85,7 @@
 \maketitle
 
 \blfootnote{This work was partially supported by the Spanish government, through the project CISNETS (TEC2012-32354).\\
-L. Sanabria-Russo (\href{mailto:luis.sanabria@upf.edu}{luis.sanabria@upf.edu}) , J. Barcelo (\href{mfullyailto:jaume.barcelo@upf.edu}{jaume.barcelo@upf.edu}) and B. Bellalta (\href{mailto:boris.bellalta@upf.edu}{boris.bellalta@upf.edu}) are with the Department of Information and Communication Technologies, Universitat Pompeu Fabra, Barcelona, Spain.}
+L. Sanabria-Russo (\href{mailto:luis.sanabria@upf.edu}{luis.sanabria@upf.edu}) , J. Barcelo (\href{mfullyailto:jaume.barcelo@upf.edu}{jaume.barcelo@upf.edu}) and B. Bellalta (\href{mailto:boris.bellalta@upf.edu}{boris.bellalta@upf.edu}) are with the Department of Information and Communication Technologies, Universitat Pompeu Fabra, Barcelona, Spain.\\ F. Gringoli (\href{mailto:francesco.gringoli@unibs.it}{francesco.gringoli@unibs.it}) is with the Dipartamento di Elettronica per l’Automazione, Universit\`{a} degli Studi di Brescia, Brescia, Italy.}
 %(e-mails: \href{mailto:luis.sanabria@upf.edu}{luis.sanabria@upf.edu}, \href{mailto:jaume.barcelo@upf.edu}{jaume.barcelo@upf.edu}, \href{mailto:boris.bellalta@upf.edu}{boris.bellalta@upf.edu})
 
 \begin{abstract}
@@ -112,9 +112,7 @@ A CSMA/CA replacement should be able to provide advantages in terms of throughpu
 
 A suitable candidate, and the one to be evaluated in this work, is called Carrier Sense Multiple Access with Enhanced Collision Avoidance (CSMA/ECA)~\cite{barcelo2008lba}. It is capable of attaining higher throughput than CSMA/CA by making a simple modification to the contention mechanism. In CSMA/ECA, nodes use a deterministic backoff after successful transmissions, constructing a collision-free schedule among successful contenders in a fully decentralised way. This backoff mechanism ensures that more channel time is spent on successful transmissions rather than recovering from collisions, thus increasing the throughput of the network. Further enhancements (or extensions), like \emph{Hysteresis} and \emph{Fair Share}~\cite{research2standards} allow CSMA/ECA to support many more contenders in a collision-free schedule. Moreover, CSMA/ECA and its extensions are designed for allowing nodes to transmit as frequently as possible while keeping an even distribution of the available bandwidth among users.
 
-The 802.11 High Efficiency WLAN (HEW) Study Group (SG) envisions very crowded scenarios as one of the future challenges for WLAN protocols~\cite{HEW-scenarios}, specifically those usually encountered at stadiums or conference rooms. Further, if the need for serving many users is combined with the increased throughput demands from the upper layers, a performance improvement at the MAC becomes paramount. Although many studies have been made analysing the performance of CSMA/ECA~\cite{barcelo2008lba,research2standards,bellalta2009vtc,E2CA_performance}, there are still several open aspects that require further attention and additional insight to consider CSMA/ECA as a potential CSMA/CA replacement. Namely, neither assesses the protocol's backwards compatibility property or its behavior under non-saturated traffic conditions while serving many users. Furthermore, the impact of imperfect clocks over the deterministic backoff mechanism is also lacking.
-
-\textcolor{red}{In this part we should also assess the channel error scenario and the real implementation with OpenFWWF.}
+The 802.11 High Efficiency WLAN (HEW) Study Group (SG) envisions very crowded scenarios as one of the future challenges for WLAN protocols~\cite{HEW-scenarios}, specifically those usually encountered at stadiums or conference rooms. Further, if the need for serving many users is combined with the increased throughput demands from the upper layers, a performance improvement at the MAC becomes paramount. Although many studies have been made analysing the performance of CSMA/ECA~\cite{barcelo2008lba,research2standards,bellalta2009vtc,E2CA_performance}, there are still several open aspects that require further attention and additional insight to consider CSMA/ECA as a potential CSMA/CA replacement. Namely, neither assesses the protocol's backwards compatibility property or its behavior under non-saturated traffic conditions while serving many users. Furthermore, the impact of channel errors and imperfect clocks over the deterministic backoff mechanism is also lacking.
 
 This paper fills those gaps by extending~\cite{research2standards}, and consolidates the push for CSMA/ECA as a potential replacement of CSMA/CA for next generation WLANs. In detail, this paper provides the following contributions:
 
@@ -124,13 +122,13 @@ This paper fills those gaps by extending~\cite{research2standards}, and consolid
 	\textcolor{red}{\item The effect of channel errors over collision-free schedules and how to solve the issue of converging rapidly to the biggest cycle length with the Schedule Reset mechanism.}
 	\item Formulation of the throughput bounds for CSMA/ECA with Hysteresis and Fair Share.
 	\item Coexistence and backwards compatibility with CSMA/CA nodes under different traffic conditions.
-	\item Implementation of CSMA/ECA in real hardware.
+	\item First implementation of CSMA/ECA with Hysteresis in real hardware and the experimental results in a crowded WLAN testbed.
 \end{itemize}
 
 %Results show that CSMA/ECA with Hysteresis and Fair Share is capable of accommodating many users in collision-free schedules. Further, the coexistence tests show that the average aggregated throughput of a mixed network is higher than that observed in CSMA/CA-only networks, as well as a high resilience to clock-drifts.
 \textcolor{red}{Results, derived from a modified version of the COST~\cite{COST} simulator, show that CSMA/ECA with Hysteresis and Fair Share is capable of accommodating many users in collision-free schedules. Further, as tests in a mixed network with different proportions of CSMA/CA and CSMA/ECA nodes show, the aggregated throughput is higher than the observed in CSMA/CA-only networks without significant sacrifice from legacy stations.}
 
-Beyond simulations results, the implementation of CSMA/ECA prototypes\cite{ECA-DEMO-INFOCOM14, sanabria2013prototyping, BECA-test,CF-MAC} show that the construction of collision-free schedules using a deterministic backoff after successful transmissions is possible and results in a throughput increase by reducing the number of corrupted frames.\textcolor{red}{We then present the first real hardware implementation of CSMA/ECA with Hysteresis. Results show that indeed it is able of providing higher throughput and lower collisions than CSMA/CA for the same number of contenders.}
+Beyond simulations results, the implementation of CSMA/ECA prototypes\cite{ECA-DEMO-INFOCOM14, sanabria2013prototyping, BECA-test,CF-MAC} show that the construction of collision-free schedules using a deterministic backoff after successful transmissions is possible and results in a throughput increase by reducing the number of corrupted frames.\textcolor{red}{We then present the first real hardware implementation of CSMA/ECA with Hysteresis using the open firmware OpenFWWF~\cite{OpenFWWF}. Results show that indeed it is able of providing higher throughput and lower collisions than CSMA/CA for the same number of contenders.}
 
 An overview of similar distributed and collision-free MAC protocols for WLANs is provided in Section~\ref{relatedWork}. CSMA/ECA, as well as its extensions for allocating many contenders in a collision-free schedule are explained in Section~\ref{introProtocol}. Section~\ref{simulations} details the simulation environment for testing CSMA/ECA, while Section~\ref{results} explains the results. An overview of CSMA/ECA real-hardware implementations is compiled in Section~\ref{EDCA}, followed by a summary of the still missing CSMA/ECA features needed to become the next CSMA/CA replacement in Section~\ref{ECAtoCA}. Conclusions are drawn in Section~\ref{conclusions}.
 

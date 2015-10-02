@@ -1,5 +1,5 @@
 \section{Simulation Scenario}\label{simulations}
-This section provides the simulation parameters for testing CSMA/ECA$_{\text{Hys+FS}}$ under two different traffic conditions, namely saturated and non-saturated. Further, the simulation of the clock drift effect, and the coexistence with CSMA/CA are also subjects to be addressed in this section.
+This section provides the simulation parameters for testing CSMA/ECA$_{\text{Hys+FS}}$ under two different traffic conditions, namely saturated and non-saturated. \textcolor{red}{We also provide details on how channel imperfections are modelled and what are its effects over the transmissions}. Further, the simulation of the clock drift effect, and the coexistence with CSMA/CA are also subjects to be addressed in this section.
 
 	\subsection{Scenario details}
 	Results are obtained by running multiple simulations over a modified version of the COST simulator~\cite{COST}, available at~\cite{sim:parameters}. PHY and MAC parameters are detailed in Table~\ref{tab:mac-params}. Some assumptions were made in order to test the performance at the MAC layer:
@@ -8,12 +8,11 @@ This section provides the simulation parameters for testing CSMA/ECA$_{\text{Hys
 		\item Unspecified parameters follow the IEEE 802.11n ($2.4$~GHz) standard.
 		\item All nodes are in communication range.
 		\item No Request-to-Send (RTS) or Clear-to-Send (CTS) messages are used.
-		\item There are no external interference or channel errors. \textcolor{red}{Remove}.
 		\item Collisions take as much channel time as successful transmissions.
 	\end{itemize}
 	
-	The aforementioned assumptions ensure that the simulation results are just effects of the MAC behavior, thus isolating it from external factors, i.e.: \textcolor{red}{channel imperfections}. Further, in a collision-free CSMA/ECA$_{\text{Hys+FS}}$ operation there is no need for RTS/CTS mechanisms, given that successful nodes already know their respective transmission slot. \textcolor{red}{Maybe here is where the conversation about hidden nodes should take place?}
-	
+	The aforementioned assumptions ensure that the simulation results are just effects of the MAC behaviour.
+	%Further, in a collision-free CSMA/ECA$_{\text{Hys+FS}}$ operation there is no need for RTS/CTS mechanisms, given that successful nodes already know their respective transmission slot. \textcolor{red}{Maybe here is where the conversation about hidden nodes should take place?}
 	If not mentioned otherwise, results are derived from 100 simulations of 100 seconds in length. Figures also show the standard deviation.
 	
 	\begin{table}
@@ -49,7 +48,8 @@ This section provides the simulation parameters for testing CSMA/ECA$_{\text{Hys
 	
 	To evaluate the performance under non-saturated conditions, stations need to be able to empty their MAC queues. To do so, the packet arrival rate to the MAC queue is set to $\Delta_{\text{PAR}}=1$~Mbps. These values of $\Delta_{\text{PAR}}$ have proven to produce the desired effects.
 	
-	\textcolor{red}{\subsection{Channel errors} Here we explain how we implement our channel errors model}.
+	\textcolor{red}{\subsection{Channel errors} 
+	We model channel errors by assigning a probability of a packet being corrupted by the channel, $p_e>0$. That is, in a single packet transmission there is probability $p_e$ that the transmission will not be acknowledged. If the transmission is an A-MPDU (like in the case of CSMA/ECA$_{\text{Hys+FS}}$), $p_e$ will affect each packet individually and independently. Therefore, a A-MPDU transmission will be considered a failure is all packets in the aggregation are affected by the channel error probability.}
 	
 	\subsection{Performance under clock drift}
 	Clock drift is simulated by setting a drift probability, $p_{cd}$. Each station has a probability of $p_{cd}/2$ of miscounting one slot more, and $p_{cd}/2$ of miscounting one slot less. This approach follows the one proposed by Gong et. al in~\cite{slotDrift}.
