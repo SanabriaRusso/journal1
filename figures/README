@@ -1,0 +1,8 @@
+TODO:
+
+Many ECA unsat figures fail at 31 nodes. Something is happening here.
+
+The simulation is being executed at CSMA/ECA-1 (ECA unsat for 31 nodes 1000 times 1000 seconds long).
+
+Hints: might be the queueing time addition to the multisim that crashed everything? (remember that only 31 nodes give wrong measures).
+
