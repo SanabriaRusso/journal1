@@ -13,4 +13,4 @@ set size 0.75,0.75
 set term postscript enhanced color dashed
 set out "DCF-v-ECA-TON.eps"
 
-plot "../new_raws/Basic-ECA-sat.txt" u 1:($2/1e6):(1.96*($3/1e6)/3.16) title "CSMA/ECA" w yerrorbars ls 6 lw 2, "" u 1:($2/1e6) notitle w l ls 6 lw 2,"../new_raws/DCF-sat.txt" u 1:($2/1e6):(1.96*($3/1e6)/3.16) title "CSMA/CA" w yerrorbars ls 7 lw 2, "" u 1:($2/1e6) notitle w l ls 7 lw 2, "../new_raws/Basic-ECA-sat.txt" u 1:4:(1.96*$5/3.16) title "JFI for CSMA/ECA" w yerrorbars ls 14 lw 2 axes x1y2, "" u 1:4 notitle w l ls 14 lw 2 axes x1y2, "../new_raws/DCF-sat.txt" u 1:4:(1.96*$5/3.16) title "JFI for CSMA/CA" w yerrorbars ls 15 lw 2 axes x1y2, "" u 1:4 notitle w l ls 15 lw 2 axes x1y2
+plot "../new_raws/Basic-ECA-sat.txt" u 1:($2/1e6):(1.96*($3/1e6)/3.16) title "CSMA/ECA" w yerrorbars ls 6 lw 2, "" u 1:($2/1e6) notitle w l ls 6 lw 2,"../new_raws/DCF-sat.txt" u 1:($2/1e6):(1.96*($3/1e6)/3.16) title "CSMA/CA" w yerrorbars ls 7 lw 2, "" u 1:($2/1e6) notitle w l ls 7 lw 2, "../new_raws/Basic-ECA-sat.txt" u 1:4 title "JFI for CSMA/ECA" w p ls 14 lw 2 axes x1y2, "../new_raws/DCF-sat.txt" u 1:4 title "JFI for CSMA/CA" w p ls 15 lw 2 axes x1y2
