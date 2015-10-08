@@ -10,4 +10,4 @@ set ytics mirror
 set size 0.75,0.75
 set term postscript enhanced color dashed
 set out "fairness-maxAg-combined-TON.eps"
-plot "../new_raws/DCF-sat-maxAg.txt" u 1:4:(1.96*$5/3.16) title "CSMA/CA_{MaxAg} saturated" w yerrorbars ls 2 lw 2, "../new_raws/DCF-sat.txt" u 1:4:(1.96*$5/3.16) title "CSMA/CA saturated" w yerrorbars ls 7 lw 2, "../new_raws/ECA-sat.txt" u 1:4:(1.96*$5/3.16) title "CSMA/ECA_{Hys+FS} saturated" w yerrorbars ls 9 lw 2, "../raw/ECA-sat-maxAg.txt" u 1:4:(1.96*$5/3.16) title "CSMA/ECA_{Hys+MaxAg} saturated" w yerrorbars ls 8 lw 2
+plot "../new_raws/DCF-sat-maxAg.txt" u 1:4:(1.96*$5/3.16) title "CSMA/CA_{MaxAg} saturated" w yerrorbars ls 2 lw 2, "../new_raws/DCF-sat.txt" u 1:4:(1.96*$5/3.16) title "CSMA/CA saturated" w yerrorbars ls 7 lw 2, "../new_raws/ECA-sat.txt" u 1:4:(1.96*$5/3.16) title "CSMA/ECA_{Hys+FS} saturated" w yerrorbars ls 9 lw 2, "../tonFigs/DCF-sat-FS-singleAC.dat" u 1:32:33 title "CSMA/CA_{FS} saturated", "../raw/ECA-sat-maxAg.txt" u 1:4:(1.96*$5/3.16) title "CSMA/ECA_{Hys+MaxAg} saturated" w yerrorbars ls 8 lw 2
