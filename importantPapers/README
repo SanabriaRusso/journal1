@@ -1,6 +1,0 @@
-1 About the paper of idle sense:
-- It's not exactly the same as Schedule Reset.
-- They also listen to 'consecutive' empty slots in order to converge to the same CW in all nodes.
-- We actually do not want to converge to a single CW.
-- It's true that having different CW will be unfair, albeit that is without Fair Share.
-- FURTHER, in the experiments we identify an empty slot as the one lacking PLCP headers.
