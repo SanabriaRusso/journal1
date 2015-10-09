@@ -299,9 +299,9 @@ The \emph{JFI } curves in Figure~\ref{fig:BECA} show the Jain's Fairness index f
 			\label{fig:scheduleReset1}
 		\end{figure}
 	
-	By default Schedule Reset fills a bitmap $b$ of size $B_{\text{d}}$ with the information observed in each passing slot during $\gamma=B_{\text{d}}/C$ consecutive successful transmissions; where $C=2^{m}CW_{\min}/2$ is the biggest deterministic backoff, and $\gamma$ is referred to as the Schedule Reset \emph{threshold} from this point forward. Each bit $t,~t\in\{0,\ldots ,B_{\text{d}}-1\}$ in the bitmap is the result of a bitwise OR operation between its current value and the state of the corresponding slot. That is, $b[t]\leftarrow b[t]\vee\sigma_{t}(i)$; where $\vee$ is the OR operator and $\sigma_{t}(i)$ is a function that evaluates to $0$ if the slot corresponding to $b[t]$ is empty in iteration $i$, $i \in\{1,\ldots,\gamma\}$; or $1$ otherwise. 
+	By default Schedule Reset fills a bitmap $b$ of size $B_{\text{d}}$ with the information observed in each passing slot during $\gamma=B_{\text{d}}/C$ consecutive successful transmissions; where $C=2^{m}CW_{\min}/2$ is the biggest deterministic backoff, and $\gamma$ is referred to as the Schedule Reset \emph{threshold} from this point forward. Each bit $t,~t\in\{0,\ldots ,B_{\text{d}}-1\}$ in the bitmap is the result of a bitwise OR operation between its current value and the state of the corresponding slot. That is, $b[t]\leftarrow b[t]\vee\sigma_{i}(t)$; where $\vee$ is the OR operator and $\sigma_{i}(t)$ is a function that evaluates to $0$ if the slot corresponding to $b[t]$ is empty in iteration $i$, $i \in\{1,\ldots,\gamma\}$; or $1$ otherwise. 
 	
-	After $i=\gamma$ iterations the bitmap is evaluated using:
+	After $\gamma$ iterations the bitmap is evaluated using:
 	
 	\begin{equation}
 		\sum\limits_{t\in A} b[t] =
