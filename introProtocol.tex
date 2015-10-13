@@ -278,15 +278,16 @@ The \emph{JFI } curves in Figure~\ref{fig:BECA} show the Jain's Fairness index f
 %	\textcolor{red}{\subsection{Real hardware implementation} 
 %	Replacing the firmware of commercial WLAN cards with the Open Firmware for WiFi Networks, OpenFWWF~\cite{OpenFWWF}, allows the modification of time-sensitive operations in the MAC, like the backoff procedure. In Section~\ref{EDCA} we provide details regarding the tesbed, the firmware used and present results of real experiments using CSMA/ECA.}
 %	
-	\subsection{Backwards compatibilty and coexistence}
-	CSMA/ECA$_{\text{Hys+FS}}$ springs from a modification to CSMA/CA's backoff mechanism. It keeps the range of values CSMA/CA nodes use to draw a random backoff (i.e., use the same $CW_{\min}$ and $CW_{\max}$), allowing CSMA/ECA$_{\text{Hys+FS}}$ contenders to coexist with CSMA/CA nodes in the same network. Further, the selection of CSMA/ECA$_{\text{Hys+FS}}$'s deterministic backoff, $B_{\text{d}}$, is the expected value for the current backoff stage $k$ ($B_{\text{d}}\coloneqq\lceil{E[0,CW(k)]}\rceil$)~\cite{research2standards}, which ensures fairness among contenders. An overview of the attained throughput for different proportions of CSMA/ECA$_{\text{Hys+FS}}$ and CSMA/CA nodes is presented in Section~\ref{coexistance-w-csmaca}.
-	
+
+	\textcolor{red}{\subsection{Channel errors}}\label{errorEffect}
+	Failed transmissions due to channel errors are handled as collisions by CSMA/ECA$_{\text{Hys+FS}}$. This means that a few moments of operation under a noisy channel can increase the contenders's deterministic backoff to its maximum value, carrying the undesired effect of increasing the time between successful transmissions and consequent reduction in the overall system throughput.
+		
 	\textcolor{red}{\subsection{Schedule Reset Mechanism}\label{schedReset}}
 	CSMA/ECA$_{\text{Hys+FS}}$ instructs nodes to keep their current backoff stage after a successful transmission (resetting it to zero only if reaching the retransmission attempt limit, see line~\ref{labelReset} in Algorithm~\ref{alg:fullECA}). This is done in order to increase the cycle length and provide a collision-free schedule for many contenders, which is desirable in dense scenarios.
 	
-	Having a big deterministic backoff increases the time between successful transmissions. Furthermore, if not operating in a scenario with many nodes the empty slots between transmissions are not longer negligible and degrade the overall throughput of the system. For instance, if nodes withdraw from the contention their previously used slots will now be empty. Contenders should be aware of this issue and pursue opportunities to reduce their deterministic backoff, $B_{\text{d}}$ without sacrificing too much in collisions. 
+	Nevertheless, having a big deterministic backoff increases the time between successful transmissions. Furthermore, if not operating in a scenario with many nodes the empty slots between transmissions are not longer negligible and degrade the overall throughput of the system. For instance, if nodes withdraw from the contention their previously used slots will now be empty. On the other hand, in scenarios with channel errors contenders rapidly end up with the largest deterministic backoff. Nodes should be aware of this issue and pursue opportunities to reduce their deterministic backoff, $B_{\text{d}}$ without sacrificing too much in collisions. 
 	
-	The \emph{Schedule Reset} mechanism for CSMA/ECA$_{\text{Hys+FS}}$ consists on finding the smallest collision-free schedule between a contender's transmissions and then change the node's deterministic backoff to fit in that schedule. Take a contender with $B_{\text{d}}=32$ as an example. By listening to the slots between its transmissions, it is possible to determine the availability of smaller (and possibly) collision-free schedules.
+	The \emph{Schedule Reset} mechanism for CSMA/ECA$_{\text{Hys+FS}}$ consists on finding the smallest collision-free schedule between a contender's transmissions (if any) and then change the node's deterministic backoff to fit in that schedule. Take a contender with $B_{\text{d}}=32$ as an example. By listening to the slots between its transmissions, it is possible to determine the availability of smaller (and possibly) collision-free schedules.
 	
 	Figure~\ref{fig:scheduleReset1} shows the slots between the transmissions of a contender with $B_{\text{d}}=32$. Starting from the left, the current $B_{\text{d}}=0$ means that the next slot will be filled with the contender's own transmission. Each following slot containing either a transmission or a collision is identified with the number one, while empty slots are marked with a zero. Notice that the highlighted empty slots appear every eight slots, suggesting that a schedule reduction from $B_{\text{d}}=32$ to $B_{\text{d}}^{*}=8$ is possible\footnote{$B_{\text{d}}=2^{0}CW_{\min}/2=8$ (see Table~\ref{tab:mac-params}). So the change is made to the backoff stage, $k$. In this case from $2$, to $k=0$. This means that any new schedule must also be a power of two.}. The schedule change is performed after the contender's next successful transmission.
 	
@@ -298,21 +299,83 @@ The \emph{JFI } curves in Figure~\ref{fig:BECA} show the Jain's Fairness index f
 			\caption{Example of the Schedule Reset mechanism.}
 			\label{fig:scheduleReset1}
 		\end{figure}
+		
+		
+			\begin{algorithm}[tb]
+		\If{sxTx == 1}{
+			Initialising\;
+			\If{B == 0}{
+				$b~[B_{\text{d}}] = \{0\}$\;
+				$t = 0$\;
+			}
+		}
+		\If{(sxTx $>$ 0) \&\& (sxTx $\leq~\gamma$)}{
+			Filling the bitmap\;
+			$b[t] \|\sigma_{i}(t)$\label{bitwiseOR}\;
+			$t++$\;
+			\If{$t == B_{\text{d}} -1$}{
+				$t=0$\;
+			}
+		}
+		\If{sxTx == $\gamma$}{\label{evaluations}
+			Analising\;
+			sxTx = $0$\;
+			\For{($j=0;~j<k;~j++$)}{\label{sets}
+				$y=2^{j}CW_{\min}/2$\;
+				isItPossible $= 0$\;
+				\For{($m=y;~m<B_{\text{d}};~m+=y$)}{
+					isItPossible$~+=b[m]$\;
+				}
+				\If{isItPossible == $0$}{
+					change = $1$\;
+					newStage = $m$\;
+					{\bf break};
+				}
+			}
+		}
+		\If{change == $1$}{
+			Making the change\;
+			$k$ = newStage\;
+			change = $0$\;
+		}
+		\vspace{0.2cm}
+		\caption{Schedule Reset Mechanism for CSMA/ECA$_{\text{Hys+FS}}$. It is called a \emph{reset} when all smaller deterministic backoff are tested. On the other hand, when $j$ in line~\ref{sets} is initialised to $j=k-1$, it is called a schedule \emph{halving}}\label{alg:schedRest}
+	\end{algorithm}
+		
+		
+		\subsubsection{Keeping collision-free schedules}
+		Schedule Reset is described in Algorithm~\ref{alg:schedRest}. Each contender starts filling a bitmap $b$ of size $B_{\text{d}}$ with the information observed in each passing slot during $\gamma=B_{\text{d}}/C$ consecutive successful transmissions; where $C=2^{m}CW_{\min}/2$ is the biggest deterministic backoff, and $\gamma$ is referred to as the Schedule Reset \emph{threshold} from this point forward.
+		
+		Each bit $t,~t\in\{0,\ldots ,B_{\text{d}}-1\}$ in the bitmap is the result of a bitwise OR operation between its current value and the state of the corresponding slot. This is shown in Line~\ref{bitwiseOR} in Algorithm~\ref{alg:schedRest}, where $\sigma_{i}(t)$ is a function that evaluates to $0$ if the slot corresponding to $b[t]$ is empty in iteration $i$, $i \in\{1,\ldots,\gamma\}$; or $1$ otherwise. After $\gamma$ iterations, the bitmap is evaluated. This process starts at Line~\ref{evaluations} in Algorithm~\ref{alg:schedRest}.
+		
+	%	After $\gamma$ iterations the bitmap is evaluated.
+		
+	%	\begin{equation}
+	%		\sum\limits_{t\in A} b[t] =
+	%				\begin{cases}\label{eq:schedEval}
+	%					0, &\text{make change} \\
+	%					>0, &\text{discard}
+	%				\end{cases}
+	%	\end{equation}
+		
+		Schedule Reset tests all possible deterministic backoffs that are smaller than the current one. This is done observing the bits in the bitmap corresponding to the tested deterministic backoff. If these slots are empty, the process is stopped and the change to the new deterministic backoff is made. 
+		
+		Using Figure~\ref{fig:scheduleReset1} as an example, we can see that the sum $\sum\limits_{t} b[t]=0$, for $t\in\{8,16,24\}$. This means that the transmission slots corresponding to a deterministic backoff, $B^{*}_{\text{d}}=8$ are free, therefore a change of schedule is possible.
+		
+		
+		%In (\ref{eq:schedEval}), the set $A$ contains all possible shorter schedule lengths, e.g.: $A\in\{2^{j}CW_{\min}/2,\ldots, 2^{k-1}CW_{\min}/2\}$, for $j\in[0,\ldots,k-1]$. 
 	
-	By default Schedule Reset fills a bitmap $b$ of size $B_{\text{d}}$ with the information observed in each passing slot during $\gamma=B_{\text{d}}/C$ consecutive successful transmissions; where $C=2^{m}CW_{\min}/2$ is the biggest deterministic backoff, and $\gamma$ is referred to as the Schedule Reset \emph{threshold} from this point forward. Each bit $t,~t\in\{0,\ldots ,B_{\text{d}}-1\}$ in the bitmap is the result of a bitwise OR operation between its current value and the state of the corresponding slot. That is, $b[t]\leftarrow b[t]\vee\sigma_{i}(t)$; where $\vee$ is the OR operator and $\sigma_{i}(t)$ is a function that evaluates to $0$ if the slot corresponding to $b[t]$ is empty in iteration $i$, $i \in\{1,\ldots,\gamma\}$; or $1$ otherwise. 
+		\subsubsection{A more aggressive reduction of the schedule}
+		
+		The default $\gamma$ ensures that the bitmap registers all the transmission slots in the network (this is true for saturated traffic), providing enough information for performing the schedule reduction without disrupting collision-free schedules. Nevertheless, this $\gamma$ can be rendered too conservative for non-saturated traffic, where contenders enter and leave the contention; or when in the presence of channel errors, where collision-free schedules are disrupted and the schedule of the contenders increases rapidly to its maximum value. 
+		
+		This effect is leveraged by setting $\gamma=1$, meaning that the bitmap is filled with the information of slots between only two consecutive transmissions. This measure increases the frequency of schedule reset attempts.
+		%Further, there is the option of doing a schedule \emph{halving}. That is, with a set $A\in\{2^{k-1}CW_{\min}/2\}$.
+	%	
+	%	Schedule Reset can also be configured to increase the node's \emph{stickiness} after a successful reduction of the schedule. Stickiness is not a new concept to CSMA/ECA~\cite{barcelo2011tcf}. It simply instructs the contender to \emph{stick} to the deterministic backoff even in the event of \emph{stickiness} number of consecutive failed transmissions. This allows for a faster convergence towards a collision-free schedule, especially when performing under heavy channel errors. 
+	%	
 	
-	After $\gamma$ iterations the bitmap is evaluated using:
+	\subsection{Backwards compatibilty and coexistence}
+	CSMA/ECA$_{\text{Hys+FS}}$ springs from a modification to CSMA/CA's backoff mechanism. It keeps the range of values CSMA/CA nodes use to draw a random backoff (i.e., use the same $CW_{\min}$ and $CW_{\max}$), allowing CSMA/ECA$_{\text{Hys+FS}}$ contenders to coexist with CSMA/CA nodes in the same network. Further, the selection of CSMA/ECA$_{\text{Hys+FS}}$'s deterministic backoff, $B_{\text{d}}$, is the expected value for the current backoff stage $k$ ($B_{\text{d}}\coloneqq\lceil{E[0,CW(k)]}\rceil$)~\cite{research2standards}, which ensures fairness among contenders. An overview of the attained throughput for different proportions of CSMA/ECA$_{\text{Hys+FS}}$ and CSMA/CA nodes is presented in Section~\ref{coexistance-w-csmaca}.
 	
-	\begin{equation}
-		\sum\limits_{t\in A} b[t] =
-				\begin{cases}\label{eq:schedEval}
-					0, &\text{make change} \\
-					>0, &\text{discard}
-				\end{cases}
-	\end{equation}
 	
-	In (\ref{eq:schedEval}), the set $A$ contains all possible shorter schedule lengths, e.g.: $A\in\{2^{j}CW_{\min}/2,\ldots, 2^{k-1}CW_{\min}/2\}$, for $j\in[0,\ldots,k-1]$. Using the example in Figure~\ref{fig:scheduleReset1} to clarify (\ref{eq:schedEval}), we can see that it evaluates to zero for every value of $t\in A$, thus the schedule change is possible.
-	
-	The default $\gamma$ ensures that the bitmap registers all the transmission slots in the network (this is true for saturated traffic), providing enough information for performing the schedule reduction without disrupting collision-free schedules. Nevertheless, this $\gamma$ can be rendered too conservative for non-saturated traffic, where contenders enter and leave the contention. This is leveraged by setting $\gamma=1$, meaning that the bitmap is filled with the information of slots between only two consecutive transmissions. Further, there is the option of doing a schedule \emph{halving}. That is, with a set $A\in\{2^{k-1}CW_{\min}/2\}$.
-	
-	Schedule Reset can also be configured to increase the node's \emph{stickiness} after a successful reduction of the schedule. Stickiness is not a new concept to CSMA/ECA~\cite{barcelo2011tcf}. It simply instructs the contender to \emph{stick} to the deterministic backoff even in the event of \emph{stickiness} number of consecutive failed transmissions. This allows for a faster convergence towards a collision-free schedule, especially when performing under heavy channel errors. 
