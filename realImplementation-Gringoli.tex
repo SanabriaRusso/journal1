@@ -1,26 +1,75 @@
 \textcolor{red}{\section{Real hardware implementation}\label{EDCA}}
 
-We confirmed experimentally the simulations with a testbed of real prototypes. This phase was mandatory to check whether the behaviour of the system is still correct in the presence of unexpected phenomena like excessive channel noise, or technical limitations of the hardware like imperfect node synchronisation; and to verify the implementation feasibility of the halving technique with a real time horizon.
+We confirmed the simulations results experimentally with a testbed of real prototypes. This phase was mandatory to check whether the behaviour of the system is still correct in the presence of unexpected phenomena, like excessive channel noise, or technical limitations of the hardware like imperfect node synchronisation; and to verify the implementation feasibility of the Schedule Reset mechanism with a real time horizon.
 
-As CSMA/ECA$_{\text{Hys}}$ works with the standard 802.11 PHY, we do not need the flexibility offered by complex development kits based on FPGAs like the WARP boards (add citation): any architecture that allows a customisation of the channel access delay would fit our requirements. For this reason we chose a widely available 802.11bg WNIC from Broadcom: like many other cards, its behaviour is ruled by a firmware code that controls the underlying hardware (including the radio, carrier sense and FIFOs) in real time. In particular we used the BRCM4318KBFG PCI card as it is supported by the OpenFWWF~\cite{OpenFWWF} open--source firmware, an alternative to the original code from the manufacturer that has been recently considered as development platform in several research projects (add citations). 
-Thanks to the extremely low price of this card (refurbish devices are widely available for less than $10\$$ each), it is possible to run experiments with very large testbeds: in our case we used 25 PC-Engines Alix 2d2 nodes running Linux kernel 2.6.32 as stations and a more powerful computer with the same kernel as access point, all nodes being equipped with the aforementioned WNIC.
+As CSMA/ECA$_{\text{Hys}}$ works with the standard 802.11 PHY, we do not need the flexibility offered by complex development kits based on FPGAs like the WARP boards~\cite{amiri2007warp}: any architecture that allows a customisation of the channel access delay would fit our requirements. For this reason we chose a widely available 802.11b/g WNIC from Broadcom. Like many other cards, its behaviour is ruled by a firmware code that controls the underlying hardware (including the radio, carrier sense and FIFOs) in real time. In particular we used the BRCM4318KBFG PCI card as it is supported by the OpenFWWF~\cite{OpenFWWF} open-source firmware, an alternative to the original code from the manufacturer that has been recently considered as development platform in several research projects~\cite{WMP,gringolitmc14,gringoliccr14,berger14,CF-MAC}. 
 
-We built on the DCF protocol implemented in OpenFWWF and we adapted the firmware to create the basic collision free schedule as described in Algorithm \ref{alg:CSMA_CA}. The modification was straightforward: for every transmitted data frame, in fact, the firmware sets an ACK-time-out alarm. Later, both at the expiration of the timer or when the acknowledgment frame is received, it executes handler labelled {\tt tx\_contention\_params\_update}. Here we update the contention window value {\tt STATE\_CW} according to the success/failure outcome of the transmission attempt as in the algorithm. To embed the stickiness feature into the algorithm, we add a {\tt STATE} to the system that can be either {\tt STATE\_DETERMINISTIC} or {\tt STATE\_RANDOM} and a {\tt STICKINESS} counter that we reset each time we have a success and decrement when failing: when it gets to zero we enter the random state. Upon a successful delivery we unconditionally enter the deterministic state and we reset the stickiness counter to {\tt DEFAULT\_STICKINESS}. Setting this last parameter to zero lets the system operate without the stickiness feature.
+Thanks to the extremely low price of this card (refurbished devices are widely available for less than $\$10$ each), it is possible to run experiments with very large testbeds. We used 25 PC-Engines Alix 2d2 nodes running Linux kernel 2.6.32 as stations and a more powerful computer with the same kernel as access point, all nodes being equipped with the aforementioned WNIC.
 
-To introduce the halving mechanism we added a bitmap for monitoring the state of every single slot after a successful transmission. To index the current slot in the bitmap we use on the hardware register {\tt SPR\_IFS\_BKOFFDELAY} which counts how many slots have still to come before the next transmission and decrements once per idle slot as requested by the DCF procedure: the idea is to start with an empty bitmap and mark those slots for which the countdown procedure was interrupted. To avoid spurious detection, instead of continuously checking the state of the channel, we rely on the execution of the {\tt rx\_plcp} handler that is called each time a valid PLCP is detected. When this happens, we implicitely know that the backoff counter has been frozen since at least $20\mu s$, that is the time between the first repetitions of the short training sequence have been detected and the complete decoding of the PLCP signal data: in any case the current slot has to be marked as busy. We have the option to keep filling the bitmap for up to {\tt BITMAP\_ROUND\_BUILD} consecutive successful deliveries before checking if the central slot in the bitmap is available, and, in case halving the deterministic schedule.
+We built on the DCF protocol implemented in OpenFWWF and adapted the firmware to create collision-free schedules as described in Algorithm \ref{alg:CSMA_ECA}. The modification was straightforward: for every transmitted data frame the firmware sets an ACK-time-out alarm. Later, either at the expiration of the timer or when the acknowledgment frame is received, it executes a handler labelled {\tt tx\_contention\_params\_update}. It updates the contention window value {\tt STATE\_CW} and backoff counter according to the success/failure of the previous transmission attempt, just as in Algorithm~\ref{alg:CSMA_ECA}. Implementing CSMA/ECA$_{\text{Hys}}$ required just a modification specifying that a reset of the backoff stage (or {\tt STATE\_CW} in this case) is performed only when a packet is dropped or when the MAC queue empties.
+
+To incorporate stickiness into the prototype we added a {\tt STATE} to the system that can be either {\tt STATE\_DETERMINISTIC} or {\tt STATE\_RANDOM}, and a {\tt STICKINESS} counter that we reset each time we have a success and decrement when failing. When the counter gets to zero we enter the random state. Upon a successful transmission we unconditionally enter the deterministic state and reset the stickiness counter to {\tt DEFAULT\_STICKINESS}.
+%Setting this last parameter to zero lets the system operate without the stickiness feature.
+
+For the Schedule Reset mechanism, we added a bitmap for monitoring the state of every single slot after a successful transmission. To index the current slot in the bitmap we used the hardware register {\tt SPR\_IFS\_BKOFFDELAY}, which counts how many slots have still to come before the next transmission. The value of the register is decremented once per idle slot as requested by the DCF procedure, so the idea is to start with an empty bitmap and mark those slots for which the countdown procedure was interrupted. 
+
+To avoid spurious detection, instead of continuously checking the state of the channel, we rely on the execution of the {\tt rx\_plcp} handler, which is called each time a valid PLCP is detected. When this happens, we implicitly know that the backoff counter has been frozen at least $20\mu s$ ago, which is the time between the detection of the first short trailling sequence and the complete decoding of the PLCP signal data. In any case, the slot is marked as busy.
+
+We have the option to keep filling the bitmap for up to {\tt BITMAP\_ROUND\_BUILD} consecutive successful transmissions ($\gamma$ in Section~\ref{schedReset}) before checking if the central slot in the bitmap is available (a schedule \emph{halving}), and if that is the case we perform a halving of the node's current schedule.
+
+Figure~\ref{fig:throughputImplementation} shows the average aggregated throughput, while Figure~\ref{fig:lossesImplementation} presents the average percentage of lost frames. Details of the testbed are shown in Table~\ref{tab:testbed}.
+
+CSMA/ECA$_{\text{Hys}}$ has greater throughput due to its ability to avoid collisions more efficiently than CSMA/CA. Further, Schedule Reset (or halving in this case) prevents CSMA/ECA$_{\text{Hys}}$ nodes from increasing too much the time between successful transmissions. Nevertheless, the implementation results reveal that there are other underlying factors that disrupt collision-free schedules. This is evidenced by the increasing percentage of lost frames followed by a throughput degradation in CSMA/ECA$_{\text{Hys}}$. The analysis of the factors that may disrupt collision-free schedules on real hardware implementations of CSMA/ECA$_{\text{Hys}}$ is left as a future research topic.
+
+
+	\begin{table}
+		\centering
+		\caption{PHY, MAC and other parameters for the real hardwre experiments \textcolor{red}{REVIEW}}
+		\label{tab:testbed}
+		\begin{tabular}{|c|c|}
+			\hline
+			\multicolumn{2}{|c|}{{\bfseries PHY}}\\
+			\hline
+			{\bfseries Parameter} & {\bfseries Value}\\
+			\hline
+			PHY rate & 48~Mbps\\
+			Empty slot & $9~\mu s$\\
+			DIFS & $28~\mu s$\\
+			SIFS & $10~\mu s$\\
+			IEEE 802.11g WiFi channel & 14\\
+			\hline
+			\multicolumn{2}{|c|}{{\bfseries MAC}}\\
+			\hline
+			{\bfseries Parameter} & {\bfseries Value}\\
+			\hline
+			Maximum backoff stage ($m$) & 5\\
+			Minium Contention Window ($CW_{\min}$) & 16\\
+			Maximum retransmission attempts & 6\\
+			Data payload (Bytes) & 1470\\
+			Schedule Reset $\gamma$ & 1\\
+			Schedule Reset mode & halving, dynStick\\
+			\hline
+			\multicolumn{2}{|c|}{{\bfseries TESTBED}}\\
+			\hline
+			N & 25\\
+			Distance between nodes and AP & 8~m\\
+			Arrangement of nodes & Semicircle\\
+			\hline
+		\end{tabular}
+	\end{table}
 
 	\begin{figure}[tb]
 		\centering
 		\includegraphics[width=0.7\linewidth,angle=-90]{figures/tonFigs/throughput-sat-SR-IMPLEMENTATION.eps}
-		\caption{Average aggregated throughput for a saturated network. Real hardware implementation results}
+		\caption{Average aggregated throughput for a saturated network. Real hardware implementation results (see Table~\ref{tab:testbed})}
 		\label{fig:throughputImplementation}
 	\end{figure}
 	
 	\begin{figure}[tb]
 		\centering
 		\includegraphics[width=0.7\linewidth,angle=-90]{figures/tonFigs/losses-sat-SR-IMPLEMENTATION.eps}
-		\caption{Average percentage of losses for a saturated network. Real hardware implementation results}
-		\label{fis:lossesImplementation}
+		\caption{Average percentage of losses for a saturated network. Real hardware implementation results (see Table~\ref{tab:testbed})}
+		\label{fig:lossesImplementation}
 	\end{figure}
 
 
