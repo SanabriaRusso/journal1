@@ -3,7 +3,7 @@ set xlabel "Contenders (N)"
 set ylabel "Average time between successful transmissions (secs)"
 set xrange[1:50]
 set xtics 2,4,50;
-set yrange[0.001:14]
+set yrange[0.0001:14]
 set logscale y
 #set arrow from 2,second 6 to 70,second 6 lt 0 lw 3 lc rgb 'black' nohead
 #set label 1 at 22,second 7 'Backoff stages below' center
