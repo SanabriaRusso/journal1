@@ -1,5 +1,5 @@
 #!/usr/local/bin/gnuplot
-set xlabel "Contenders"
+set xlabel "Contenders (N)"
 set xrange[1:70]
 set xtics 10,10,70
 set ylabel "Average percentage of collision slots (%)"

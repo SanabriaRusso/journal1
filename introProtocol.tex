@@ -280,16 +280,18 @@ The \emph{JFI } curves in Figure~\ref{fig:BECA} show the Jain's Fairness index f
 %	
 
 	\textcolor{red}{\subsection{Channel errors}}\label{errorEffect}
-	Failed transmissions due to channel errors are handled as collisions by CSMA/ECA$_{\text{Hys+FS}}$. This means that a few moments of operation under a noisy channel can increase the contenders's deterministic backoff to its maximum value, carrying the undesired effect of increasing the time between successful transmissions and consequent reduction in the overall system throughput.
+	Failed transmissions due to channel errors are handled as collisions by CSMA/ECA$_{\text{Hys+FS}}$. Therefore, collision-free schedules under this type of channel model are shorter. In order to accelerate the convergence to collision-free schedules after channel errors CSMA/ECA$_{\text{Hys+FS}}$ instruct nodes to \emph{stick} to the current deterministic backoff even after \emph{stickiness} number of consecutive failed transmissions. Stickiness is not a new concept to CSMA/ECA~\cite{barcelo2011tcf}, it allows for a faster convergence towards a collision-free schedule, especially when performing under heavy channel errors.
+	
+	Failed transmissions due to channel errors also means that a few moments of operation under a noisy channel can increase the contenders's deterministic backoff to its maximum value. Such event carries the undesired effects of increasing the time between successful transmissions, and a reduction in the overall system throughput due to shorter collision-free periods.
 		
 	\textcolor{red}{\subsection{Schedule Reset Mechanism}\label{schedReset}}
 	CSMA/ECA$_{\text{Hys+FS}}$ instructs nodes to keep their current backoff stage after a successful transmission (resetting it to zero only if reaching the retransmission attempt limit, see line~\ref{labelReset} in Algorithm~\ref{alg:fullECA}). This is done in order to increase the cycle length and provide a collision-free schedule for many contenders, which is desirable in dense scenarios.
 	
 	Nevertheless, having a big deterministic backoff increases the time between successful transmissions. Furthermore, if not operating in a scenario with many nodes the empty slots between transmissions are not longer negligible and degrade the overall throughput of the system. For instance, if nodes withdraw from the contention their previously used slots will now be empty. On the other hand, in scenarios with channel errors contenders rapidly end up with the largest deterministic backoff. Nodes should be aware of this issue and pursue opportunities to reduce their deterministic backoff, $B_{\text{d}}$ without sacrificing too much in collisions. 
 	
-	The \emph{Schedule Reset} mechanism for CSMA/ECA$_{\text{Hys+FS}}$ consists on finding the smallest collision-free schedule between a contender's transmissions (if any) and then change the node's deterministic backoff to fit in that schedule. Take a contender with $B_{\text{d}}=32$ as an example. By listening to the slots between its transmissions, it is possible to determine the availability of smaller (and possibly) collision-free schedules.
+	The \emph{Schedule Reset} mechanism for CSMA/ECA$_{\text{Hys+FS}}$ consists on finding the smallest collision-free schedule (if any) between a contender's transmissions and then change the node's deterministic backoff to fit in that schedule. Take a contender with $B_{\text{d}}=32$ as an example. By listening to the slots between its transmissions, it is possible to determine the availability of smaller (and possibly) collision-free schedules.
 	
-	Figure~\ref{fig:scheduleReset1} shows the slots between the transmissions of a contender with $B_{\text{d}}=32$. Starting from the left, the current $B_{\text{d}}=0$ means that the next slot will be filled with the contender's own transmission. Each following slot containing either a transmission or a collision is identified with the number one, while empty slots are marked with a zero. Notice that the highlighted empty slots appear every eight slots, suggesting that a schedule reduction from $B_{\text{d}}=32$ to $B_{\text{d}}^{*}=8$ is possible\footnote{$B_{\text{d}}=2^{0}CW_{\min}/2=8$ (see Table~\ref{tab:mac-params}). So the change is made to the backoff stage, $k$. In this case from $2$, to $k=0$. This means that any new schedule must also be a power of two.}. The schedule change is performed after the contender's next successful transmission.
+	Figure~\ref{fig:scheduleReset1} shows the slots between the transmissions of a contender with $B_{\text{d}}=32$. Starting from the left, the current $B_{\text{d}}=0$ means that the first slot will be filled with the contender's own transmission. Each following slot containing either a transmission or a collision is identified with the number one, while empty slots are marked with a zero. Notice that the highlighted empty slots appear every eight slots, suggesting that a schedule reduction from $B_{\text{d}}=32$ to $B_{\text{d}}^{*}=8$ is possible\footnote{$B_{\text{d}}=2^{0}CW_{\min}/2=8$ (see Table~\ref{tab:mac-params}). So the change is made to the backoff stage, $k$. In this case from $2$, to $k=0$. This means that any new schedule must also be a power of two.}. The schedule change is performed after the contender's next successful transmission.
 	
 	%, coupled with an increase by one in the node's \emph{stickiness}~\cite{L_MAC2}. 
 	%\footnote{Trailing waiting periods, like the SIFS, are composed of empty slots. These allow nodes to decrement their backoff counters even after a collision or successful slots. Without loss of generality, the stations in our examples and simulations decrement their respective backoff counters by one after these kind of slots (see example in Figures~\ref{fig:ECA} and~\ref{fig:ecaQoS}).}
@@ -324,9 +326,9 @@ The \emph{JFI } curves in Figure~\ref{fig:BECA} show the Jain's Fairness index f
 				$y=2^{j}CW_{\min}/2$\;
 				isItPossible $= 0$\;
 				\For{($m=y;~m<B_{\text{d}};~m+=y$)}{
-					isItPossible$~+=b[m]$\;
+					isItPossible$~+=b[m]$\;\label{filling}
 				}
-				\If{isItPossible == $0$}{
+				\If{isItPossible == $0$}{\label{testFilling}
 					change = $1$\;
 					newStage = $m$\;
 					{\bf break};
@@ -336,17 +338,17 @@ The \emph{JFI } curves in Figure~\ref{fig:BECA} show the Jain's Fairness index f
 		\If{change == $1$}{
 			Making the change\;
 			$k$ = newStage\;
-			change = $0$\;
+			change = $0$\;\label{endAssignment}
 		}
 		\vspace{0.2cm}
-		\caption{Schedule Reset Mechanism for CSMA/ECA$_{\text{Hys+FS}}$. It is called a \emph{reset} when all smaller deterministic backoff are tested. On the other hand, when $j$ in line~\ref{sets} is initialised to $j=k-1$, it is called a schedule \emph{halving}}\label{alg:schedRest}
+		\caption{Schedule Reset Mechanism for CSMA/ECA$_{\text{Hys+FS}}$. Every consecutive successful transmission increases the variable SxTx by one, while a collision resets it to zero. The algorithm is called a \emph{reset} when all smaller deterministic backoff are tested. On the other hand, when $j$ in line~\ref{sets} is initialised to $j=k-1$, it is called a schedule \emph{halving}}\label{alg:schedRest}
 	\end{algorithm}
 		
 		
 		\subsubsection{Keeping collision-free schedules}
-		Schedule Reset is described in Algorithm~\ref{alg:schedRest}. Each contender starts filling a bitmap $b$ of size $B_{\text{d}}$ with the information observed in each passing slot during $\gamma=B_{\text{d}}/C$ consecutive successful transmissions; where $C=2^{m}CW_{\min}/2$ is the biggest deterministic backoff, and $\gamma$ is referred to as the Schedule Reset \emph{threshold} from this point forward.
+		Schedule Reset is described in Algorithm~\ref{alg:schedRest}. Each contender starts filling a bitmap $b$ of size $B_{\text{d}}$ with the information observed in each passing slot during $\gamma=B_{\text{d}}/C$ consecutive successful transmissions (sxTx in Algorithm~\ref{alg:schedRest}); where $C=2^{m}CW_{\min}/2$ is the biggest deterministic backoff, and $\gamma$ is referred to as the Schedule Reset \emph{threshold} from this point forward.
 		
-		Each bit $t,~t\in\{0,\ldots ,B_{\text{d}}-1\}$ in the bitmap is the result of a bitwise OR operation between its current value and the state of the corresponding slot. This is shown in Line~\ref{bitwiseOR} in Algorithm~\ref{alg:schedRest}, where $\sigma_{i}(t)$ is a function that evaluates to $0$ if the slot corresponding to $b[t]$ is empty in iteration $i$, $i \in\{1,\ldots,\gamma\}$; or $1$ otherwise. After $\gamma$ iterations, the bitmap is evaluated. This process starts at Line~\ref{evaluations} in Algorithm~\ref{alg:schedRest}.
+		Each bit $t,~t\in\{0,\ldots ,B_{\text{d}}-1\}$ in the bitmap is the result of a bitwise OR operation between its current value and the state of the corresponding slot. This is shown in Line~\ref{bitwiseOR} in Algorithm~\ref{alg:schedRest}, where $\sigma_{i}(t)$ is a function that evaluates to $0$ if the slot corresponding to $b[t]$ is empty in iteration $i$, $i \in\{1,\ldots,\gamma\}$; or $1$ otherwise. After $\gamma$ iterations, the bitmap is evaluated (line~\ref{evaluations} in Algorithm~\ref{alg:schedRest}).
 		
 	%	After $\gamma$ iterations the bitmap is evaluated.
 		
@@ -358,16 +360,17 @@ The \emph{JFI } curves in Figure~\ref{fig:BECA} show the Jain's Fairness index f
 	%				\end{cases}
 	%	\end{equation}
 		
-		Schedule Reset tests all possible deterministic backoffs that are smaller than the current one. This is done observing the bits in the bitmap corresponding to the tested deterministic backoff. If these slots are empty, the process is stopped and the change to the new deterministic backoff is made. 
+		Schedule Reset tests all possible deterministic backoffs that are smaller than the current $B_{\text{d}}$ (lines~\ref{sets}-\ref{filling} in Algorithm~\ref{alg:schedRest}), starting with the smallest one. If the corresponding bits in the bitmap are registered as empty, the process is stopped and the change to the new deterministic backoff is made (lines~\ref{testFilling}-\ref{endAssignment} in Algorithm~\ref{alg:schedRest}). Otherwise, the process is restarted after the next successful transmission.
 		
-		Using Figure~\ref{fig:scheduleReset1} as an example, we can see that the sum $\sum\limits_{t} b[t]=0$, for $t\in\{8,16,24\}$. This means that the transmission slots corresponding to a deterministic backoff, $B^{*}_{\text{d}}=8$ are free, therefore a change of schedule is possible.
-		
+		Using Figure~\ref{fig:scheduleReset1} as an example, we can see that the sum $\sum\limits_{t} b[t]=0$, for $t\in\{8,16,24\}$. This means that the transmission slots corresponding to a deterministic backoff, $B^{*}_{\text{d}}=8$ are free, therefore a change of schedule is possible. In case of suffering a collision immediately after applying the schedule reduction, the node reverses the changes made by Schedule Reset before handling the collision.
 		
 		%In (\ref{eq:schedEval}), the set $A$ contains all possible shorter schedule lengths, e.g.: $A\in\{2^{j}CW_{\min}/2,\ldots, 2^{k-1}CW_{\min}/2\}$, for $j\in[0,\ldots,k-1]$. 
 	
-		\subsubsection{A more aggressive reduction of the schedule}
+		\subsubsection{Facing channel errors}\label{aggr}
 		
-		The default $\gamma$ ensures that the bitmap registers all the transmission slots in the network (this is true for saturated traffic), providing enough information for performing the schedule reduction without disrupting collision-free schedules. Nevertheless, this $\gamma$ can be rendered too conservative for non-saturated traffic, where contenders enter and leave the contention; or when in the presence of channel errors, where collision-free schedules are disrupted and the schedule of the contenders increases rapidly to its maximum value. 
+		the default $\gamma$ ensures that the bitmap registers all the transmission slots in the network (assuming saturated traffic and a perfect channel), providing enough information for performing the schedule reduction without disrupting collision-free schedules. 
+		
+		Nevertheless, this $\gamma$ can be rendered too conservative when in the presence of channel errors. This condition produces Schedule Reset bitmaps that do not contain enough information for successfully avoiding collisions after the schedule reduction. This is also true for any $\gamma^{*}>\gamma$.
 		
 		This effect is leveraged by setting $\gamma=1$, meaning that the bitmap is filled with the information of slots between only two consecutive transmissions. This measure increases the frequency of schedule reset attempts.
 		%Further, there is the option of doing a schedule \emph{halving}. That is, with a set $A\in\{2^{k-1}CW_{\min}/2\}$.

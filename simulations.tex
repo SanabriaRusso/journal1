@@ -13,7 +13,7 @@ This section provides the simulation parameters for testing CSMA/ECA$_{\text{Hys
 	
 	The aforementioned assumptions ensure that the simulation results are just effects of the MAC behaviour.
 	%Further, in a collision-free CSMA/ECA$_{\text{Hys+FS}}$ operation there is no need for RTS/CTS mechanisms, given that successful nodes already know their respective transmission slot. \textcolor{red}{Maybe here is where the conversation about hidden nodes should take place?}
-	If not mentioned otherwise, results are derived from 100 simulations of 100 seconds in length. Figures also show the standard deviation.
+	If not mentioned otherwise, results are derived from \textcolor{red}{20 simulations of 100 seconds in length, each one with a different seed}. Figures also show the standard deviation.
 	
 	\begin{table}
 		\centering
@@ -48,11 +48,17 @@ This section provides the simulation parameters for testing CSMA/ECA$_{\text{Hys
 	
 	To evaluate the performance under non-saturated conditions, stations need to be able to empty their MAC queues. To do so, the packet arrival rate to the MAC queue is set to $\Delta_{\text{PAR}}=1$~Mbps. These values of $\Delta_{\text{PAR}}$ have proven to produce the desired effects.
 	
-	\textcolor{red}{\subsection{Channel errors} 
-	We model channel errors by assigning a probability of a packet being corrupted by the channel, $p_e>0$. That is, in a single packet transmission there is probability $p_e$ that the transmission will not be acknowledged. If the transmission is an A-MPDU (like in the case of CSMA/ECA$_{\text{Hys+FS}}$), $p_e$ will affect each packet individually and independently. Therefore, a A-MPDU transmission will be considered a failure is all packets in the aggregation are affected by the channel error probability.}
-	
 	\subsection{Performance under clock drift}
 	Clock drift is simulated by setting a drift probability, $p_{cd}$. Each station has a probability of $p_{cd}/2$ of miscounting one slot more, and $p_{cd}/2$ of miscounting one slot less. This approach follows the one proposed by Gong et. al in~\cite{slotDrift}.
 	
+	\textcolor{red}{\subsection{Channel errors}\label{channelErrorsDef}
+	Channel errors are modelled by assigning a probability of a packet being corrupted by the channel, $p_e>0$. That is, in a single packet transmission there is probability $p_e$ that the transmission will not be acknowledged. If the transmission is an A-MPDU (like in the case of CSMA/ECA$_{\text{Hys+FS}}$), $p_e$ will affect each packet individually and independently. Therefore, an A-MPDU transmission will be considered a failure if all packets in the aggregation are affected by the channel error probability.}
+	
+	\textcolor{red}{All results are shown with stickiness equal to one (see Section~\ref{errorEffect}). That is, after a colision, CSMA/ECA$_{\text{Hys+FS}}$ nodes will use a random backofff. Nevertheless, in Section~\ref{resultsSchedRest} curves described as \emph{dynStick} temporarily increase the node's stickiness to two after a successful reduction of the schedule (using a random backoff after two consecutive collisions). This increase is done in order to converge faster to collision-free schedules when in operating with channel errors.}
+	
 	\subsection{Coexistance with CSMA/CA}\label{coexistence}
 	To test the performance of CSMA/CA and CSMA/ECA$_{\text{Hys+FS}}$ stations in the same network, simulations are set with a CSMA/CA node density of 1/4, 1/2 and 3/4 of the total.
+	
+	\textcolor{red}{\subsection{Applying Schedule Reset} 
+	A set of results under saturated conditions and channel errors applying Schedule Reset (see Section~\ref{schedReset}) are provided. Some of the results are generated with a $\gamma=1$, or \emph{aggressive} Schedule Reset (aggr. in the figures). These settings provide the highest throughput under the tested conditions, and also in the real hardware implementations such as the one shown in Section~\ref{EDCA}.
+	}

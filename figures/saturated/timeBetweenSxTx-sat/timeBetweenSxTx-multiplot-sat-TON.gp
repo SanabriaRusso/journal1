@@ -22,7 +22,7 @@ set arrow from 10,0.5 to 30,0.5 lw 1 front nohead
 set arrow from 30,0.5 to 30,0 lw 1 front nohead
 #set arrow from 40,0 to 20,0 lw 1 front nohead
 
-plot "../../new_raws/DCF-sat-maxAg.txt" u 1:7:(1.96*$8/3.16) title "CSMA/CA_{MaxAg} saturated" w yerrorbars ls 2 lw 2, "" u 1:7 notitle w l ls 2 lw 2, "../../raw/ECA-sat-maxAg.txt" u 1:7:(1.96*$8/3.16) title "CSMA/ECA_{Hys+MaxAg} saturated" w yerrorbars ls 8 lw 2, "" u 1:7 notitle w l ls 8 lw 2 ,"../../new_raws/DCF-sat.txt" u 1:7:(1.96*$8/3.16) title "CSMA/CA saturated" w yerrorbars ls 7 lw 2, "" u 1:7 notitle w l ls 7 lw 2, "../../new_raws/ECA-sat.txt" u 1:7:(1.96*$8/3.16) title "CSMA/ECA_{Hys+FS} saturated" w yerrorbars ls 6 lw 2, "" u 1:7 notitle w l ls 6 lw 2
+plot "../../new_raws/DCF-sat-maxAg.txt" u 1:7:(1.96*$8/3.16) title "CSMA/CA_{MaxAg} saturated" w yerrorbars ls 2 lw 2, "" u 1:7 notitle w l ls 2 lw 2, "../../raw/ECA-sat-maxAg.txt" u 1:7:(1.96*$8/3.16) title "CSMA/ECA_{Hys+MaxAg} saturated" w yerrorbars ls 8 lw 2, "" u 1:7 notitle w l ls 8 lw 2, "../../new_raws/ECA-sat.txt" u 1:7:(1.96*$8/3.16) title "CSMA/ECA_{Hys+FS} saturated" w yerrorbars ls 6 lw 2, "" u 1:7 notitle w l ls 6 lw 2, "../../new_raws/DCF-sat.txt" u 1:7:(1.96*$8/3.16) title "CSMA/CA saturated" w yerrorbars ls 7 lw 2, "" u 1:7 notitle w l ls 7 lw 2 
 
 #Small plot
 set size 0.35,0.25
@@ -35,6 +35,6 @@ set xlabel ""
 set ylabel ""
 unset arrow
 set grid
-plot "../../new_raws/DCF-sat-maxAg.txt" u 1:7 notitle w p ls 2 lw 2, "" u 1:7 notitle w l ls 2 lw 2, "../../raw/ECA-sat-maxAg.txt" u 1:7 notitle w p ls 8 lw 2, "" u 1:7 notitle w l ls 8 lw 2 ,"../../new_raws/DCF-sat.txt" u 1:7 notitle w p ls 7 lw 2, "" u 1:7 notitle w l ls 7 lw 2, "../../new_raws/ECA-sat.txt" u 1:7 notitle w p ls 6 lw 2, "" u 1:7 notitle w l ls 6 lw 2
+plot "../../new_raws/DCF-sat-maxAg.txt" u 1:7 notitle w p ls 2 lw 2, "" u 1:7 notitle w l ls 2 lw 2, "../../raw/ECA-sat-maxAg.txt" u 1:7 notitle w p ls 8 lw 2, "" u 1:7 notitle w l ls 8 lw 2, "../../new_raws/ECA-sat.txt" u 1:7 notitle w p ls 6 lw 2, "" u 1:7 notitle w l ls 6 lw 2, "../../new_raws/DCF-sat.txt" u 1:7 notitle w p ls 7 lw 2, "" u 1:7 notitle w l ls 7 lw 2
 
 unset multiplot
