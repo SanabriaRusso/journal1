@@ -2,9 +2,9 @@
 
 CSMA/ECA~\cite{barcelo2008lba} is a fully distributed and collision-free MAC for WLANs. It differs from CSMA/CA in that it uses a deterministic backoff, $B_{\text{d}}=CW_{\min}/2$ after successful transmissions, where $CW_{\min}$ is the minimum contention window of typical value $CW_{\min}=16$. By doing so, contenders that successfully transmitted on schedule $n$, will transmit without colliding with other successful nodes in future cycles.
 
-Collisions are handled as in CSMA/CA, which is described in Algorithm~\ref{alg:CSMA_CA}. In Algorithm~\ref{alg:CSMA_CA}, the node starts by setting the retransmissions counter and backoff stage to zero ($r\in[0,R]$ and $k\in[0,m]$ respectively, $m$ is the maximum backoff stage of typical value $m=5$, and $R$ is the retransmissions limit with typical value $R=m+1$), then generates a random backoff, $B$. When the Acknowledgement (\emph{ack}) for a sent packet is not received by the sender a collision is assumed. Upon collision, the involved nodes will double their contention window by incrementing their backoff stage in one and using a random backoff, $B\in[0,2^{k}CW_{\min}]$. This procedure is described between Line~\ref{collision} and~\ref{finalCollision} of Algorithm~\ref{alg:CSMA_CA}.
+Collisions are handled as in CSMA/CA, which is described in Algorithm~\ref{alg:CSMA_CA}. In Algorithm~\ref{alg:CSMA_CA}, the node starts by setting the retransmissions counter and backoff stage to zero ($r\in[0,R]$ and $k\in[0,m]$ respectively, $m$ is the maximum backoff stage of typical value $m=5$, and $R$ is the retransmissions limit with typical value $R=m+1$), then generates a random backoff, $B$. When the Acknowledgement (\emph{ack}) for a sent packet is not received by the sender a collision is assumed. Upon collision, the involved nodes will double their contention window by incrementing their backoff stage in one and use a random backoff, $B\in[0,2^{k}CW_{\min}]$. This procedure is described between Line~\ref{collision} and~\ref{finalCollision} of Algorithm~\ref{alg:CSMA_CA}.
 
-Algorithm~\ref{alg:CSMA_ECA} provides an explanation of CSMA/ECA deterministic backoff mechanism, which main difference with CSMA/CA (and therefore with Algorithm~\ref{alg:CSMA_CA}) relies on the selection of a deterministic backoff after a successful transmission (compare Line~\ref{randomBackoff} in Algorithm~\ref{alg:CSMA_CA} with Line~\ref{deterministicBackoff} in Algorithm~\ref{alg:CSMA_ECA}). Figure~\ref{fig:BECA-example} shows an example of CSMA/ECA dynamics with four contenders.
+Algorithm~\ref{alg:CSMA_ECA} provides an explanation of CSMA/ECA's deterministic backoff mechanism, which main difference with CSMA/CA (and therefore with Algorithm~\ref{alg:CSMA_CA}) relies on the selection of a deterministic backoff after a successful transmission (compare Line~\ref{randomBackoff} in Algorithm~\ref{alg:CSMA_CA} with Line~\ref{deterministicBackoff} in Algorithm~\ref{alg:CSMA_ECA}). Figure~\ref{fig:BECA-example} shows an example of CSMA/ECA dynamics with four contenders.
 
 \begin{algorithm}[ht!!!]
 \While{the device is on}
@@ -107,7 +107,7 @@ Collision slots being orders of magnitude larger than empty slots degrade the ne
   \label{fig:BECA}
 \end{figure}
 
-Referring to Figure~\ref{fig:BECA}, CSMA/ECA is able to achieve an aggregated throughput that goes beyond CSMA/CA up until the number of contenders ($N$) is greater than $B_{\text{d}}$ ($B_{\text{d}}=7$ in the case of the figure). Beyond this point, the network will have a mixed behavior relating to backoff mechanisms: some nodes will successfully transmit and use a deterministic backoff while others will collide due to the lack of empty slots and return to a random backoff. As more contenders join the network, CSMA/ECA performance will approximate to CSMA/CA's. \textcolor{red}{This effect is also observed in L-ZC and L-MAC, albeit at a larger number of nodes. This is becasue the virtual cicle used by these protocolos ($N$ for L-ZC and $C$ for L-MAC in Section~\ref{relatedWork}) in greater than B$_{d}$. Specifically, the virtual cycle is of size equal to $16$.}
+Referring to Figure~\ref{fig:BECA}, CSMA/ECA is able to achieve an aggregated throughput that goes beyond CSMA/CA up until the number of contenders ($N$) is greater than $B_{\text{d}}$ ($B_{\text{d}}=7$ in the case of the figure). Beyond this point, the network will have a mixed behavior relating to backoff mechanisms: some nodes will successfully transmit and use a deterministic backoff while others will collide due to the lack of empty slots and return to a random backoff. As more contenders join the network, CSMA/ECA performance will approximate to CSMA/CA's. \textcolor{red}{This effect is also observed in L-ZC and L-MAC, albeit at a larger number of nodes. This is becasue the virtual cicle used by these protocolos ($N$ for L-ZC and $C$ for L-MAC in Section~\ref{relatedWork}) in greater than B$_{d}$. Specifically, the virtual cycle is of size equal to $16$ (changing to $B_{\text{d}}=16$ would only delay CSMA/ECA's throughput degradation to $N=B_{\text{d}}$).}
 
 The \emph{JFI } curves in Figure~\ref{fig:BECA} show the Jain's Fairness index for all tested protocols. Showing a JFI equal to one suggests that the available throughput is shared evenly among all stations.
 
@@ -189,7 +189,7 @@ The \emph{JFI } curves in Figure~\ref{fig:BECA} show the Jain's Fairness index f
 	
 	In scenarios where short-term fairness and the time between consecutive transmissions are not relevant, Fair Share can be replaced by \emph{Maximum Aggregation} (MaxAg), which will significantly improve the system throughput. In Maximum Aggregation all nodes aggregate as many packets as possible at every transmission, i.e., they send $2^m$ packets in each attempt.
 
-	Figure~\ref{fig:ECA-vs-DCF-maxAgg} shows the aggregated throughput for CSMA/ECA$_{\text{Hys+FS}}$, CSMA/ECA$_{\text{Hys+MaxAg}}$, CSMA/CA using the Fair Share mechanism (CSMA/CA$_{\text{FS}}$), and CSMA/CA$_{\text{MaxAg}}$. Although CSMA/CA$_{\text{FS}}$ and CSMA/CA$_{\text{MaxAg}}$ perform aggregation, collisions degrade the aggregated throughput as more contenders attempt transmission. On the other hand, CSMA/ECA$_{\text{Hys+FS}}$ is able to build a collision-free schedule and takes advantage of the aggregation provided by Fair Share, which opposed to just using CSMA/ECA$_{\text{Hys+MaxAg}}$, it is fair (see Figure~\ref{fig:fairness-with-maximum-aggregation}).
+	Figure~\ref{fig:ECA-vs-DCF-maxAgg} shows the aggregated throughput for CSMA/ECA$_{\text{Hys+FS}}$, CSMA/ECA$_{\text{Hys+MaxAg}}$, CSMA/CA using the Fair Share mechanism (CSMA/CA$_{\text{FS}}$), and CSMA/CA$_{\text{MaxAg}}$. JFIs are shown below. Although CSMA/CA$_{\text{FS}}$ and CSMA/CA$_{\text{MaxAg}}$ perform aggregation, collisions degrade the aggregated throughput as more contenders attempt transmission. On the other hand, CSMA/ECA$_{\text{Hys+FS}}$ is able to build a collision-free schedule and takes advantage of the aggregation provided by Fair Share, which opposed to just using CSMA/ECA$_{\text{Hys+MaxAg}}$, it is fair.
 	
 	\begin{figure}[tb]
 	\centering
@@ -212,12 +212,12 @@ The \emph{JFI } curves in Figure~\ref{fig:BECA} show the Jain's Fairness index f
 		\item Longer periods between transmission attempts: given that each transmission takes longer, the time between transmission attempts also increases. This may specially affect delay-sensitive applications.
 	\end{itemize}
 
-	\begin{figure}[tb]
-	\centering
-		\includegraphics[width=0.7\linewidth,angle=-90]{figures/fairness-max-Ag/fairness-maxAg-combined-TON.eps}
-		\caption{Fairness comparision when using maximum aggregation}
-		\label{fig:fairness-with-maximum-aggregation}
-	\end{figure}
+	%\begin{figure}[tb]
+%	\centering
+%		\includegraphics[width=0.7\linewidth,angle=-90]{figures/fairness-max-Ag/fairness-maxAg-combined-TON.eps}
+%		\caption{Fairness comparision when using maximum aggregation}
+%		\label{fig:fairness-with-maximum-aggregation}
+%	\end{figure}
 	
 	Since we consider that fairness and a short inter-transmission time are even more important than raw throughput for the next generation of WLANs, we keep CSMA/ECA$_{\text{Hys+FS}}$ as the reference protocol.
 	

@@ -1,4 +1,14 @@
 \section{Results}\label{results}
+	\begin{figure*}[tb]
+	\centering
+		\subcaptionbox{Throughput under saturated conditions\label{fig:throughput-sat}}{\includegraphics[width=0.33\linewidth,angle=-90]{figures/saturated/throughput-saturated-w-BOS/throughput-saturated-w-BOS-TON.eps}}\hfill
+		\subcaptionbox{Average percentage of collision slots: the fraction of time slots containing collisions\label{fig:collisions-sat}}{\includegraphics[width=0.33\linewidth,angle=-90]{figures/saturated/collisions-saturated/collisions-saturated-TON.eps}}\\
+		\subcaptionbox{Evolution of the fraction of collision slots in a scenario with 70 saturated stations\label{fig:collisions-evolution}}{\includegraphics[width=0.33\linewidth,angle=-90]{figures/saturated/slots/Pc-evolution-TON.eps}}\hfill
+		\subcaptionbox{Average time between successful transmissions: averaging over all stations\label{fig:serviceTime-sat}}{\includegraphics[width=0.33\linewidth,angle=-90]{figures/saturated/timeBetweenSxTx-sat/timeBetweenSxTx-multiplot-sat-TON.eps}}\\
+		\caption{Saturated traffic results}
+		\label{fig:satTest}
+	\end{figure*}
+
 
 	\subsection{Saturated nodes}\label{resultsSaturated}
 	In CSMA/CA, a large number of saturated nodes will normally be related to a high collision probability. This effect is in part the result of resetting the backoff stage after a successful transmission and the generation of a new random backoff. However, this scenario provides an advantageous condition to CSMA/ECA$_{\text{Hys+FS}}$ nodes. In saturation, CSMA/ECA$_{\text{Hys+FS}}$ nodes build a collision-free schedule and stick to their deterministic backoff as long as they transmit successfully, effectively eliminating collisions.
@@ -7,27 +17,53 @@
 	\\
 	\subsubsection{Throughput}
 	CSMA/ECA$_{\text{Hys+FS}}$ nodes are able to build a collision-free schedule, use the channel more efficiently, and experience a throughput increase as seen in Figure~\ref{fig:throughput-sat}. Hysteresis allows the allocation of more contenders by increasing the length of the collision-free schedule, while Fair Share ensures an even distribution of the available throughput. This is reflected by the average backoff stage, which value increases with the number of contenders. In contrast, CSMA/CA throughput keeps decreasing due to an augmented number of collisions as the number of nodes increases (see Figure~\ref{fig:collisions-sat}). Further, Figure~\ref{fig:collisions-evolution} shows the fraction of collision slots for CSMA/ECA$_{\text{Hys+FS}}$ and CSMA/CA as simulation time passes. In the figure, is appreciated how the fraction of collision slots keeps decreasing once CSMA/ECA$_{\text{Hys+FS}}$ reaches the collision-free schedule.
+
+
+%	\begin{figure*}
+%		\captionsetup{justification=raggedright}
+%		\centering
+%		\begin{minipage}[t]{0.45\textwidth}
+%			\includegraphics[width=0.7\linewidth,angle=-90]{figures/saturated/throughput-saturated-w-BOS/throughput-saturated-w-BOS-TON.eps}
+%			\caption{Throughput under saturated conditions}
+%			\label{fig:throughput-sat}
+%		\end{minipage}\hfill
+%		\begin{minipage}[t]{0.45\textwidth}
+%			\includegraphics[width=0.7\linewidth,angle=-90]{figures/saturated/collisions-saturated/collisions-saturated-TON.eps}
+%			\caption{Average percentage of collision slots: the fraction of time slots containing collisions}
+%			\label{fig:collisions-sat}
+%		\end{minipage}\\
+%		\begin{minipage}[t]{0.45\textwidth}
+%			\includegraphics[width=0.7\linewidth,angle=-90]{figures/saturated/slots/Pc-evolution-TON.eps}
+%			\caption{Evolution of the fraction of collision slots in a scenario with 70 saturated stations}
+%			\label{fig:collisions-evolution}
+%		\end{minipage}\hfill
+%		\begin{minipage}[t]{0.45\textwidth}
+%			\includegraphics[width=0.7\linewidth,angle=-90]{figures/saturated/timeBetweenSxTx-sat/timeBetweenSxTx-multiplot-sat-TON.eps}
+%			\caption{Average time between successful transmissions: averaging over all stations}
+%			\label{fig:serviceTime-sat}
+%		\end{minipage}\hfill
+%	\end{figure*}
 	
-	\begin{figure}[tb]
-	\centering
-		\includegraphics[width=0.7\linewidth,angle=-90]{figures/saturated/throughput-saturated-w-BOS/throughput-saturated-w-BOS-TON.eps}
-		\caption{Throughput under saturated conditions}
-		\label{fig:throughput-sat}
-	\end{figure}
-	
-	\begin{figure}[tb]
-	\centering
-		\includegraphics[width=0.7\linewidth,angle=-90]{figures/saturated/collisions-saturated/collisions-saturated-TON.eps}
-		\caption{Average percentage of collision slots: the fraction of time slots containing collisions.}
-		\label{fig:collisions-sat}
-	\end{figure}
-	
-	\begin{figure}[tb]
-	\centering
-		\includegraphics[width=0.7\linewidth,angle=-90]{figures/saturated/slots/Pc-evolution-TON.eps}
-		\caption{Evolution of the fraction of collision slots in a scenario with 70 saturated stations.}
-		\label{fig:collisions-evolution}
-	\end{figure}
+%	\begin{figure}[tb]
+%	\centering
+%		\includegraphics[width=0.7\linewidth,angle=-90]{figures/saturated/throughput-saturated-w-BOS/throughput-saturated-w-BOS-TON.eps}
+%		\caption{Throughput under saturated conditions}
+%		\label{fig:throughput-sat}
+%	\end{figure}
+%	
+%	\begin{figure}[tb]
+%	\centering
+%		\includegraphics[width=0.7\linewidth,angle=-90]{figures/saturated/collisions-saturated/collisions-saturated-TON.eps}
+%		\caption{Average percentage of collision slots: the fraction of time slots containing collisions.}
+%		\label{fig:collisions-sat}
+%	\end{figure}
+%	
+%	\begin{figure}[tb]
+%	\centering
+%		\includegraphics[width=0.7\linewidth,angle=-90]{figures/saturated/slots/Pc-evolution-TON.eps}
+%		\caption{Evolution of the fraction of collision slots in a scenario with 70 saturated stations.}
+%		\label{fig:collisions-evolution}
+%	\end{figure}
 	
 	\subsubsection{Effect of clock drift over the achieved throughput in saturation}\label{performanceClockDrift}
 	Figure~\ref{fig:clockDrift} shows the network aggregated throughput with 16 saturated stations and an increasing clock drift probability.
@@ -48,40 +84,83 @@
 	\subsubsection{Time between successful transmissions}\label{timeBetweenSxTx}
 	It is related to the elapsed time between the contention for transmission and the reception of an ACK.
 
-	\begin{figure}[tb]
-		\centering
-		\includegraphics[width=0.7\linewidth,angle=-90]{figures/saturated/timeBetweenSxTx-sat/timeBetweenSxTx-multiplot-sat-TON.eps}
-		\caption{Average time between successful transmissions: averaging over all stations}
-		\label{fig:serviceTime-sat}
-	\end{figure}
+%	\begin{figure}[tb]
+%		\centering
+%		\includegraphics[width=0.7\linewidth,angle=-90]{figures/saturated/timeBetweenSxTx-sat/timeBetweenSxTx-multiplot-sat-TON.eps}
+%		\caption{Average time between successful transmissions: averaging over all stations}
+%		\label{fig:serviceTime-sat}
+%	\end{figure}
 	
 	In Figure~\ref{fig:serviceTime-sat} all tests with maximum aggregation, namely CSMA/CA$_{\text{MaxAg}}$ and CSMA/ECA$_{\text{Hys+MaxAg}}$, have an increased average time between successful transmissions. This is due to the multiple packets that are sent in each attempt. CSMA/CA$_{\text{MaxAg}}$, though, has an increased value due to collisions also taking longer channel time.
 	
 	Although CSMA/ECA$_{\text{Hys+FS}}$ has an increased average time between successful transmissions due to Fair Share, it has a lower metric when compared with the maximum aggregation curves in Figure~\ref{fig:serviceTime-sat}.
 
 
+%	################################################################################################################
+
+
 	\subsection{Non-saturated nodes}\label{resultsUnsaturated}
+	
+	
+	\begin{figure*}[tb]
+	\centering
+		\subcaptionbox{Throughput in non-saturation conditions\label{fig:throughputUnsat}}{\includegraphics[width=0.33\linewidth,angle=-90]{figures/unsaturated/throughput-unsaturated/throughput-unsaturated-w-BOS-TON.eps}}\hfill
+		\subcaptionbox{Average percentage of collision slots: the fraction of time slots containing collisions in non-saturated conditions\label{fig:collisions-unsat}}{	\includegraphics[width=0.33\linewidth,angle=-90]{figures/unsaturated/collision-unsaturated/collisions-unsaturated-TON.eps}}\\
+		\subcaptionbox{Average system delay: averaging over all stations\label{fig:serviceTime-unsat}}{\includegraphics[width=0.33\linewidth,angle=-90]{figures/unsaturated/queueingDelay/queueingDelay-TON.eps}}\hfill
+		\subcaptionbox{Average time between successful transmissions in non-saturated conditions: averaging over all stations\label{fig:timeBetweenSxTx-multiplot-unsat}}{\includegraphics[width=0.33\linewidth,angle=-90]{figures/unsaturated/timeBetweenSxTx-unsat/timeBetweenSxTx-multiplot-unsat-TON.eps}}\\
+		\caption{Non-saturated traffic results}
+		\label{fig:unsatTest}
+	\end{figure*}
+
+	
 	Emptying the MAC queue in CSMA/ECA$_{\text{Hys+FS}}$ means that nodes will reset their backoff stage and use a random backoff when a new packet arrives at the queue, breaking the collision-free schedule (if any) for CSMA/ECA$_{\text{Hys+FS}}$ contenders. The following show the impact over throughput, delay and time between successful transmissions when using CSMA/CA and CSMA/ECA$_{\text{Hys+FS}}$ in non-saturated conditions.\\
 	
 	\subsubsection{Throughput}
 	
-   	\begin{figure}[tb]
-		\centering
-		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/throughput-unsaturated/throughput-unsaturated-w-BOS-TON.eps}
-		\caption{Throughput in non-saturation conditions}
-		\label{fig:throughputUnsat}
-	\end{figure}
+%   	\begin{figure}[tb]
+%		\centering
+%		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/throughput-unsaturated/throughput-unsaturated-w-BOS-TON.eps}
+%		\caption{Throughput in non-saturation conditions}
+%		\label{fig:throughputUnsat}
+%	\end{figure}
 	
 	In Figure~\ref{fig:throughputUnsat}, the aggregated throughput increases linearly for the \emph{CSMA/CA non-saturated} curve until saturation is reached at around 22 nodes, where the throughput begins to degrade. The \emph{CSMA/ECA$_{\text{Hys+FS}}$ non-saturated} curve has a similar behavior, entering saturation at around 60 nodes. Further, at around 30 nodes we see an increase in the average backoff stage for CSMA/ECA$_{\text{Hys+FS}}$ contenders which suggests an increment in collisions. This effect is shown in Figure~\ref{fig:collisions-unsat} and Figure~\ref{fig:droppedDueToRET}, where at around 35 nodes CSMA/ECA$_{\text{Hys+FS}}$ contenders start colliding and dropping packets. 
 	
 	\textcolor{red}{As indicated by Figure~\ref{fig:collisions-unsat}, when $20<N\leq 35$ CSMA/ECA$_{\text{Hys+FS}}$ nodes suffer from an increasing number of  collisions. This is due to nodes entering the contention with a random backoff every time a new packet arrives at their empty MAC queues. Beyond 35 contenders, the MAC queue of CSMA/ECA$_{\text{Hys+FS}}$ nodes starts to fill up, as appreciated in Figure~\ref{fig:MacQ}, gradually allowing the construction of longer collision-free schedules due to CSMA/ECA$_{\text{Hys+FS}}$ nodes getting saturated}. This allows CSMA/ECA$_{\text{Hys+FS}}$ to outperform CSMA/CA.\\
 		
-   	\begin{figure}[tb]
-		\centering
-		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/collision-unsaturated/collisions-unsaturated-TON.eps}
-		\caption{Average percentage of collision slots: the fraction of time slots containing collisions in non-saturated conditions}
-		\label{fig:collisions-unsat}
-	\end{figure}	
+%   	\begin{figure}[tb]
+%		\centering
+%		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/collision-unsaturated/collisions-unsaturated-TON.eps}
+%		\caption{Average percentage of collision slots: the fraction of time slots containing collisions in non-saturated conditions}
+%		\label{fig:collisions-unsat}
+%	\end{figure}	
+	
+	
+	\subsubsection{Delay}
+	
+%	\begin{figure}[tb]
+%		\centering
+%		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/queueingDelay/queueingDelay-TON.eps}
+%		\caption{Average system delay: averaging over all stations}
+%		\label{fig:serviceTime-unsat}
+%	\end{figure}	
+	
+	This metric refers to the elapsed time between the injection of a packet into the station's MAC queue and the reception of an ACK for such packet. 
+	
+	In Figure~\ref{fig:serviceTime-unsat}, a rapid increase in the delay for CSMA/CA nodes is appreciated at the saturation point (around 20 contenders), whereas CSMA/ECA$_{\text{Hys+FS}}$'s delay is still low. 
+	
+	Further, with CSMA/ECA$_{\text{Hys+FS}}$ the percentage of blocked packets from the MAC queue is lower than CSMA/CA or CSMA/CA$_{\text{MaxAg}}$ (see Figure~\ref{fig:blocked-packets}). This is due to the construction of a collision-free schedule which ensures that nodes transmit frequently (Hysteresis) and Fair Share which reduces the average delay given that more packets are transmitted and acknowledged with a single ACK.
+	
+	As CSMA/ECA$_{\text{Hys+FS}}$ nodes get saturated, the delay increases due to longer queueing and contention time (see the number of packets in the MAC queue for CSMA/ECA$_{\text{Hys+FS}}$ nodes in Figure~\ref{fig:MacQ} and how it is related to the increase in delay shown in Figure~\ref{fig:serviceTime-unsat}).
+	
+%	\begin{figure}[tb]
+%		\centering
+%		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/timeBetweenSxTx-unsat/timeBetweenSxTx-multiplot-unsat-TON.eps}
+%		\caption{Average time between successful transmissions in non-saturated conditions: averaging over all stations}
+%		\label{fig:timeBetweenSxTx-multiplot-unsat}
+%	\end{figure}	
+	
+	Figure~\ref{fig:timeBetweenSxTx-multiplot-unsat} shows the average time between successful transmissions. It is possible to see from the figure that when the saturation point is approached the average time between successful transmissions increases, resembling Figure~\ref{fig:serviceTime-sat}. Moreover, this effect is related to an increase in collisions: colliding nodes should begin a new contention for a retransmission, which may result in a successful transmission or another collision, the latter further increasing the average time between successful transmissions.
 	
    	\begin{figure}[tb]
 		\centering
@@ -97,39 +176,12 @@
 		\label{fig:MacQ}
 	\end{figure}
 	
-	
-	\subsubsection{Delay}
-	
-	\begin{figure}[tb]
-		\centering
-		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/queueingDelay/queueingDelay-TON.eps}
-		\caption{Average system delay: averaging over all stations}
-		\label{fig:serviceTime-unsat}
-	\end{figure}
-	
 	\begin{figure}[tb]
 		\centering
 		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/blockingProb-unsat/blocking-unsaturated-TON.eps}
 		\caption{Average fraction of blocked packets. When the MAC queue is full, packets comming from the uppers layers must be discarded or blocked}
 		\label{fig:blocked-packets}
-	\end{figure}	
-	
-	This metric refers to the elapsed time between the injection of a packet into the station's MAC queue and the reception of an ACK for such packet. 
-	
-	In Figure~\ref{fig:serviceTime-unsat}, a rapid increase in the delay for CSMA/CA nodes is appreciated at the saturation point (around 20 contenders), whereas CSMA/ECA$_{\text{Hys+FS}}$'s delay is still low. 
-	
-	Further, with CSMA/ECA$_{\text{Hys+FS}}$ the percentage of blocked packets from the MAC queue is lower than CSMA/CA or CSMA/CA$_{\text{MaxAg}}$ (see Figure~\ref{fig:blocked-packets}). This is due to the construction of a collision-free schedule which ensures that nodes transmit frequently (Hysteresis) and Fair Share which reduces the average delay given that more packets are transmitted and acknowledged with a single ACK.
-	
-	As CSMA/ECA$_{\text{Hys+FS}}$ nodes get saturated, the delay increases due to longer queueing and contention time (see the number of packets in the MAC queue for CSMA/ECA$_{\text{Hys+FS}}$ nodes in Figure~\ref{fig:MacQ} and how it is related to the increase in delay shown in Figure~\ref{fig:serviceTime-unsat}).
-	
-	\begin{figure}[tb]
-		\centering
-		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/timeBetweenSxTx-unsat/timeBetweenSxTx-multiplot-unsat-TON.eps}
-		\caption{Average time between successful transmissions in non-saturated conditions: averaging over all stations}
-		\label{fig:timeBetweenSxTx-multiplot-unsat}
-	\end{figure}	
-	
-	Figure~\ref{fig:timeBetweenSxTx-multiplot-unsat} shows the average time between successful transmissions. It is possible to see from the figure that when the saturation point is approached the average time between successful transmissions increases, resembling Figure~\ref{fig:serviceTime-sat}. Moreover, this effect is related to an increase in collisions: colliding nodes should begin a new contention for a retransmission, which may result in a successful transmission or another collision, the latter further increasing the average time between successful transmissions.
+	\end{figure}
 	
 	%\\	
 	\subsection{Coexistence with CSMA/CA}\label{coexistance-w-csmaca}
