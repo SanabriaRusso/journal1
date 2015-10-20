@@ -120,16 +120,16 @@ The \emph{JFI } curves in Figure~\ref{fig:BECA} show the Jain's Fairness index f
 	
 	This unfairness issue is solved by instructing nodes at backoff stage $k$ to transmit $2^{k}$ packets on each attempt, thus proportionally compensating those nodes at higher backoff stages. This additional extension to CSMA/ECA is called \emph{Fair Share}. CSMA/ECA with Hysteresis and Fair Share will be referred to as CSMA/ECA$_{\text{Hys+FS}}$ in order to distinguish it from what was described until this point.
 	
-	The idea of allowing the transmission of more packets to stations that transmit less often was initially proposed by Fang et al. in~\cite{L_MAC}. It was later adapted to CSMA/ECA$_{\text{Hys}}$ and named Fair Share in~\cite{research2standards}. Figure~\ref{fig:fairness} shows the JFI for CSMA/CA as well as for CSMA/ECA$_{\text{Hys+FS}}$.
+	The idea of allowing the transmission of more packets to stations that transmit less often was initially proposed by Fang et al. in~\cite{L_MAC}. It was later adapted to CSMA/ECA$_{\text{Hys}}$ and named Fair Share in~\cite{research2standards}. Figure~\ref{fig:BECA} shows the JFI for CSMA/CA as well as for CSMA/ECA$_{\text{Hys+FS}}$.
 	
-	\begin{figure}[tb]
-	\centering
-		\includegraphics[width=0.7\linewidth, angle=-90]{figures/fairness-combined/fairness-combined-TON.eps}
-		\caption{Fairness comparison with nodes under saturation (simulation parameters can be found in Section~\ref{simulations})}
-		\label{fig:fairness}
-	\end{figure}
+%	\begin{figure}[tb]
+%	\centering
+%		\includegraphics[width=0.7\linewidth, angle=-90]{figures/fairness-combined/fairness-combined-TON.eps}
+%		\caption{Fairness comparison with nodes under saturation (simulation parameters can be found in Section~\ref{simulations})}
+%		\label{fig:fairness}
+%	\end{figure}
 	
-	In Figure~\ref{fig:fairness}, the only curve deviating from JFI = 1 is \emph{CSMA/ECA with Hysteresis}, suggesting an uneven partition of the channel access time among contenders (which is fixed with Fair Share).
+	In Figure~\ref{fig:BECA}, the only curve deviating from JFI = 1 is CSMA/ECA with Hysteresis (\emph{CSMA/ECA$_{\text{Hys}}$}), suggesting an uneven partition of the channel access time among contenders (which is fixed with Fair Share).
 	
 	\begin{figure*}[tb]
 	\centering
@@ -140,7 +140,7 @@ The \emph{JFI } curves in Figure~\ref{fig:BECA} show the Jain's Fairness index f
 	
 	Algorithm~\ref{alg:fullECA} shows an implementation of CSMA/ECA$_{\text{Hys+FS}}$, while an example of CSMA/ECA$_{\text{Hys+FS}}$ with four contenders is shown in  Figure~\ref{fig:ECA+Hyst}. In the figure the first outline indicates a collision between STA-3 and STA-4, which will provoke an increment on both station's backoff stage ($k\leftarrow k+1$). Once STA-4's random backoff expires, CSMA/ECA$_{\text{Hys+FS}}$ instructs the station to transmit $2^{k}$ packets, and then use a deterministic backoff, $B_{\text{d}}=CW(k)/2$. The same behavior is followed by STA 3.
 	
-	With Hysteresis and Fair Share, CSMA/ECA$_{\text{Hys+FS}}$ is able to achieve greater throughput than CSMA/CA and for many more contenders, as shown in Figure~\ref{fig:ECA+H+F-throughput} extracted from~\cite{research2standards}. In the figure, the \emph{CSMA/ECA$_{\text{Hys+FS}}$} curve shows a greater throughput because collisions are eliminated and Fair Share allows nodes to send $2^{k}$ packets upon each transmission. This throughput increase is the result of aggregation via Fair Share, which also carries the effect of raising the average time between successful transmissions (see Section~\ref{timeBetweenSxTx}), which may affect delay-sensitive traffic, like gaming or live video/voice/tv streaming. \textcolor{red}{Channel errors or unsaturated traffic conditions will disrupt any collision-free schedule, generate collisions and push all stations's backoff stages to the maximum value very quickly (contributing to the delay increase). This issue is leveraged with Schedule Reset mechanims, presented in Section~\ref{schedReset}.}
+	With Hysteresis and Fair Share, CSMA/ECA$_{\text{Hys+FS}}$ is able to achieve greater throughput than CSMA/CA and for many more contenders, as shown also in Figure~\ref{fig:BECA}. In the figure, the \emph{CSMA/ECA$_{\text{Hys+FS}}$} curve shows a greater throughput because collisions are eliminated and Fair Share allows nodes to send $2^{k}$ packets upon each transmission. This throughput increase is the result of aggregation via Fair Share, which also carries the effect of raising the average time between successful transmissions (see Section~\ref{timeBetweenSxTx}), which may affect delay-sensitive traffic, like gaming or live video/voice/tv streaming. \textcolor{red}{Channel errors or unsaturated traffic conditions will disrupt any collision-free schedule, generate collisions and push all stations's backoff stages to the maximum value very quickly (contributing to the delay increase). This issue is leveraged with Schedule Reset mechanims, presented in Section~\ref{schedReset}.}
 
 	\begin{algorithm}[tb]
 	\While{the device is on}
@@ -191,12 +191,12 @@ The \emph{JFI } curves in Figure~\ref{fig:BECA} show the Jain's Fairness index f
 
 	Figure~\ref{fig:ECA-vs-DCF-maxAgg} shows the aggregated throughput for CSMA/ECA$_{\text{Hys+FS}}$, CSMA/ECA$_{\text{Hys+MaxAg}}$, CSMA/CA using the Fair Share mechanism (CSMA/CA$_{\text{FS}}$), and CSMA/CA$_{\text{MaxAg}}$. JFIs are shown below. Although CSMA/CA$_{\text{FS}}$ and CSMA/CA$_{\text{MaxAg}}$ perform aggregation, collisions degrade the aggregated throughput as more contenders attempt transmission. On the other hand, CSMA/ECA$_{\text{Hys+FS}}$ is able to build a collision-free schedule and takes advantage of the aggregation provided by Fair Share, which opposed to just using CSMA/ECA$_{\text{Hys+MaxAg}}$, it is fair.
 	
-	\begin{figure}[tb]
-	\centering
-		\includegraphics[width=0.7\linewidth,angle=-90]{figures/throughput-combined/throughput-combined-TON.eps}
-		\caption{Throughput comparison~\cite{research2standards} (simulation parameters can be found in Section~\ref{simulations})}
-		\label{fig:ECA+H+F-throughput}
-	\end{figure}
+%	\begin{figure}[tb]
+%	\centering
+%		\includegraphics[width=0.7\linewidth,angle=-90]{figures/throughput-combined/throughput-combined-TON.eps}
+%		\caption{Throughput comparison~\cite{research2standards} (simulation parameters can be found in Section~\ref{simulations})}
+%		\label{fig:ECA+H+F-throughput}
+%	\end{figure}
 	
 	\begin{figure}[tb]
 	\centering

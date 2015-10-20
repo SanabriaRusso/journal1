@@ -1,14 +1,19 @@
 \section{Results}\label{results}
 	\begin{figure*}[tb]
-	\centering
-		\subcaptionbox{Throughput under saturated conditions\label{fig:throughput-sat}}{\includegraphics[width=0.33\linewidth,angle=-90]{figures/saturated/throughput-saturated-w-BOS/throughput-saturated-w-BOS-TON.eps}}\hfill
-		\subcaptionbox{Average percentage of collision slots: the fraction of time slots containing collisions\label{fig:collisions-sat}}{\includegraphics[width=0.33\linewidth,angle=-90]{figures/saturated/collisions-saturated/collisions-saturated-TON.eps}}\\
-		\subcaptionbox{Evolution of the fraction of collision slots in a scenario with 70 saturated stations\label{fig:collisions-evolution}}{\includegraphics[width=0.33\linewidth,angle=-90]{figures/saturated/slots/Pc-evolution-TON.eps}}\hfill
-		\subcaptionbox{Average time between successful transmissions: averaging over all stations\label{fig:serviceTime-sat}}{\includegraphics[width=0.33\linewidth,angle=-90]{figures/saturated/timeBetweenSxTx-sat/timeBetweenSxTx-multiplot-sat-TON.eps}}\\
-		\caption{Saturated traffic results}
-		\label{fig:satTest}
+		\centering
+		\includegraphics[width=0.5\linewidth,angle=-90]{figures/tonFigs/saturation-combined.eps}
+		\caption{Saturation traffic results: a) Throughput under saturated conditions; b) Average percentage of collision slots: fraction of time slots containing collisions; c) Evolution of the fraction of collision slots in a scenario with 70 saturated stations; d) Average time between successful transmissions (sx tx)}
+		\label{fig:satResults}
 	\end{figure*}
-
+	%\begin{figure*}[tb]
+%	\centering
+%		\subcaptionbox{Throughput under saturated conditions\label{fig:throughput-sat}}{\includegraphics[width=0.33\linewidth,angle=-90]{figures/saturated/throughput-saturated-w-BOS/throughput-saturated-w-BOS-TON.eps}}\hfill
+%		\subcaptionbox{Average percentage of collision slots: the fraction of time slots containing collisions\label{fig:collisions-sat}}{\includegraphics[width=0.33\linewidth,angle=-90]{figures/saturated/collisions-saturated/collisions-saturated-TON.eps}}\\
+%		\subcaptionbox{Evolution of the fraction of collision slots in a scenario with 70 saturated stations\label{fig:collisions-evolution}}{\includegraphics[width=0.33\linewidth,angle=-90]{figures/saturated/slots/Pc-evolution-TON.eps}}\hfill
+%		\subcaptionbox{Average time between successful transmissions: averaging over all stations\label{fig:serviceTime-sat}}{\includegraphics[width=0.33\linewidth,angle=-90]{figures/saturated/timeBetweenSxTx-sat/timeBetweenSxTx-multiplot-sat-TON.eps}}\\
+%		\caption{Saturated traffic results}
+%		\label{fig:satTest}
+%	\end{figure*}
 
 	\subsection{Saturated nodes}\label{resultsSaturated}
 	In CSMA/CA, a large number of saturated nodes will normally be related to a high collision probability. This effect is in part the result of resetting the backoff stage after a successful transmission and the generation of a new random backoff. However, this scenario provides an advantageous condition to CSMA/ECA$_{\text{Hys+FS}}$ nodes. In saturation, CSMA/ECA$_{\text{Hys+FS}}$ nodes build a collision-free schedule and stick to their deterministic backoff as long as they transmit successfully, effectively eliminating collisions.
@@ -16,7 +21,7 @@
 	This section aims at overviewing the throughput of CSMA/CA and CSMA/ECA$_{\text{Hys+FS}}$ in saturation, as well as the collision probability, the average time between successful transmissions and the effect of clock drift over the throughput.
 	\\
 	\subsubsection{Throughput}
-	CSMA/ECA$_{\text{Hys+FS}}$ nodes are able to build a collision-free schedule, use the channel more efficiently, and experience a throughput increase as seen in Figure~\ref{fig:throughput-sat}. Hysteresis allows the allocation of more contenders by increasing the length of the collision-free schedule, while Fair Share ensures an even distribution of the available throughput. This is reflected by the average backoff stage, which value increases with the number of contenders. In contrast, CSMA/CA throughput keeps decreasing due to an augmented number of collisions as the number of nodes increases (see Figure~\ref{fig:collisions-sat}). Further, Figure~\ref{fig:collisions-evolution} shows the fraction of collision slots for CSMA/ECA$_{\text{Hys+FS}}$ and CSMA/CA as simulation time passes. In the figure, is appreciated how the fraction of collision slots keeps decreasing once CSMA/ECA$_{\text{Hys+FS}}$ reaches the collision-free schedule.
+	CSMA/ECA$_{\text{Hys+FS}}$ nodes are able to build a collision-free schedule, use the channel more efficiently, and experience a throughput increase as seen in Figure~\ref{fig:satResults}a. Hysteresis allows the allocation of more contenders by increasing the length of the collision-free schedule, while Fair Share ensures an even distribution of the available throughput. This is reflected by the average backoff stage, which value increases with the number of contenders. In contrast, CSMA/CA throughput keeps decreasing due to an augmented number of collisions as the number of nodes increases (see Figure~\ref{fig:satResults}b). Further, Figure~\ref{fig:satResults}c shows the fraction of collision slots for CSMA/ECA$_{\text{Hys+FS}}$ and CSMA/CA as simulation time passes. In the figure, is appreciated how the fraction of collision slots keeps decreasing once CSMA/ECA$_{\text{Hys+FS}}$ reaches the collision-free schedule.
 
 
 %	\begin{figure*}
@@ -91,9 +96,9 @@
 %		\label{fig:serviceTime-sat}
 %	\end{figure}
 	
-	In Figure~\ref{fig:serviceTime-sat} all tests with maximum aggregation, namely CSMA/CA$_{\text{MaxAg}}$ and CSMA/ECA$_{\text{Hys+MaxAg}}$, have an increased average time between successful transmissions. This is due to the multiple packets that are sent in each attempt. CSMA/CA$_{\text{MaxAg}}$, though, has an increased value due to collisions also taking longer channel time.
+	In Figure~\ref{fig:satResults}d all tests with maximum aggregation, namely CSMA/CA$_{\text{MaxAg}}$ and CSMA/ECA$_{\text{Hys+MaxAg}}$, have an increased average time between successful transmissions. This is due to the multiple packets that are sent in each attempt. CSMA/CA$_{\text{MaxAg}}$, though, has an increased value due to collisions also taking longer channel time.
 	
-	Although CSMA/ECA$_{\text{Hys+FS}}$ has an increased average time between successful transmissions due to Fair Share, it has a lower metric when compared with the maximum aggregation curves in Figure~\ref{fig:serviceTime-sat}.
+	Although CSMA/ECA$_{\text{Hys+FS}}$ has an increased average time between successful transmissions due to Fair Share, it has a lower metric when compared with the maximum aggregation curves in Figure~\ref{fig:satResults}d.
 
 
 %	################################################################################################################
@@ -101,16 +106,22 @@
 
 	\subsection{Non-saturated nodes}\label{resultsUnsaturated}
 	
-	
 	\begin{figure*}[tb]
-	\centering
-		\subcaptionbox{Throughput in non-saturation conditions\label{fig:throughputUnsat}}{\includegraphics[width=0.33\linewidth,angle=-90]{figures/unsaturated/throughput-unsaturated/throughput-unsaturated-w-BOS-TON.eps}}\hfill
-		\subcaptionbox{Average percentage of collision slots: the fraction of time slots containing collisions in non-saturated conditions\label{fig:collisions-unsat}}{	\includegraphics[width=0.33\linewidth,angle=-90]{figures/unsaturated/collision-unsaturated/collisions-unsaturated-TON.eps}}\\
-		\subcaptionbox{Average system delay: averaging over all stations\label{fig:serviceTime-unsat}}{\includegraphics[width=0.33\linewidth,angle=-90]{figures/unsaturated/queueingDelay/queueingDelay-TON.eps}}\hfill
-		\subcaptionbox{Average time between successful transmissions in non-saturated conditions: averaging over all stations\label{fig:timeBetweenSxTx-multiplot-unsat}}{\includegraphics[width=0.33\linewidth,angle=-90]{figures/unsaturated/timeBetweenSxTx-unsat/timeBetweenSxTx-multiplot-unsat-TON.eps}}\\
-		\caption{Non-saturated traffic results}
-		\label{fig:unsatTest}
+		\centering
+		\includegraphics[width=0.5\linewidth,angle=-90]{figures/tonFigs/nonsaturation-combined.eps}
+		\caption{Saturation traffic results: a) Throughput; b) Average percentage of collision slots: the fraction of time slots containing collisions; c) Average time between successful transmissions; d) Average fraction of dropped packets; e) Average system delay; f) Average number of packets in the MAC queue of a node}
+		\label{fig:unsatResults}
 	\end{figure*}
+	
+%	\begin{figure*}[tb]
+%	\centering
+%		\subcaptionbox{Throughput in non-saturation conditions\label{fig:throughputUnsat}}{\includegraphics[width=0.33\linewidth,angle=-90]{figures/unsaturated/throughput-unsaturated/throughput-unsaturated-w-BOS-TON.eps}}\hfill
+%		\subcaptionbox{Average percentage of collision slots: the fraction of time slots containing collisions in non-saturated conditions\label{fig:collisions-unsat}}{	\includegraphics[width=0.33\linewidth,angle=-90]{figures/unsaturated/collision-unsaturated/collisions-unsaturated-TON.eps}}\\
+%		\subcaptionbox{Average system delay: averaging over all stations\label{fig:serviceTime-unsat}}{\includegraphics[width=0.33\linewidth,angle=-90]{figures/unsaturated/queueingDelay/queueingDelay-TON.eps}}\hfill
+%		\subcaptionbox{Average time between successful transmissions in non-saturated conditions: averaging over all stations\label{fig:timeBetweenSxTx-multiplot-unsat}}{\includegraphics[width=0.33\linewidth,angle=-90]{figures/unsaturated/timeBetweenSxTx-unsat/timeBetweenSxTx-multiplot-unsat-TON.eps}}\\
+%		\caption{Non-saturated traffic results}
+%		\label{fig:unsatTest}
+%	\end{figure*}
 
 	
 	Emptying the MAC queue in CSMA/ECA$_{\text{Hys+FS}}$ means that nodes will reset their backoff stage and use a random backoff when a new packet arrives at the queue, breaking the collision-free schedule (if any) for CSMA/ECA$_{\text{Hys+FS}}$ contenders. The following show the impact over throughput, delay and time between successful transmissions when using CSMA/CA and CSMA/ECA$_{\text{Hys+FS}}$ in non-saturated conditions.\\
@@ -124,9 +135,9 @@
 %		\label{fig:throughputUnsat}
 %	\end{figure}
 	
-	In Figure~\ref{fig:throughputUnsat}, the aggregated throughput increases linearly for the \emph{CSMA/CA non-saturated} curve until saturation is reached at around 22 nodes, where the throughput begins to degrade. The \emph{CSMA/ECA$_{\text{Hys+FS}}$ non-saturated} curve has a similar behavior, entering saturation at around 60 nodes. Further, at around 30 nodes we see an increase in the average backoff stage for CSMA/ECA$_{\text{Hys+FS}}$ contenders which suggests an increment in collisions. This effect is shown in Figure~\ref{fig:collisions-unsat} and Figure~\ref{fig:droppedDueToRET}, where at around 35 nodes CSMA/ECA$_{\text{Hys+FS}}$ contenders start colliding and dropping packets. 
+	In Figure~\ref{fig:unsatResults}a, the aggregated throughput increases linearly for the \emph{CSMA/CA non-saturated} curve until saturation is reached at around 22 nodes, where the throughput begins to degrade. The \emph{CSMA/ECA$_{\text{Hys+FS}}$ non-saturated} curve has a similar behavior, entering saturation at around 60 nodes. Further, at around 30 nodes we see an increase in the average backoff stage for CSMA/ECA$_{\text{Hys+FS}}$ contenders which suggests an increment in collisions. This effect is shown in Figure~\ref{fig:unsatResults}b and Figure~\ref{fig:unsatResults}d, where at around 35 nodes CSMA/ECA$_{\text{Hys+FS}}$ contenders start colliding and dropping packets. 
 	
-	\textcolor{red}{As indicated by Figure~\ref{fig:collisions-unsat}, when $20<N\leq 35$ CSMA/ECA$_{\text{Hys+FS}}$ nodes suffer from an increasing number of  collisions. This is due to nodes entering the contention with a random backoff every time a new packet arrives at their empty MAC queues. Beyond 35 contenders, the MAC queue of CSMA/ECA$_{\text{Hys+FS}}$ nodes starts to fill up, as appreciated in Figure~\ref{fig:MacQ}, gradually allowing the construction of longer collision-free schedules due to CSMA/ECA$_{\text{Hys+FS}}$ nodes getting saturated}. This allows CSMA/ECA$_{\text{Hys+FS}}$ to outperform CSMA/CA.\\
+	\textcolor{red}{As indicated by Figure~\ref{fig:unsatResults}b, when $20<N\leq 35$ CSMA/ECA$_{\text{Hys+FS}}$ nodes suffer from an increasing number of  collisions. This is due to nodes entering the contention with a random backoff every time a new packet arrives at their empty MAC queues. Beyond 35 contenders, the MAC queue of CSMA/ECA$_{\text{Hys+FS}}$ nodes starts to fill up, as appreciated in Figure~\ref{fig:unsatResults}f, gradually allowing the construction of longer collision-free schedules due to CSMA/ECA$_{\text{Hys+FS}}$ nodes getting saturated}. This allows CSMA/ECA$_{\text{Hys+FS}}$ to outperform CSMA/CA.\\
 		
 %   	\begin{figure}[tb]
 %		\centering
@@ -147,11 +158,11 @@
 	
 	This metric refers to the elapsed time between the injection of a packet into the station's MAC queue and the reception of an ACK for such packet. 
 	
-	In Figure~\ref{fig:serviceTime-unsat}, a rapid increase in the delay for CSMA/CA nodes is appreciated at the saturation point (around 20 contenders), whereas CSMA/ECA$_{\text{Hys+FS}}$'s delay is still low. 
+	In Figure~\ref{fig:unsatResults}e, a rapid increase in the delay for CSMA/CA nodes is appreciated at the saturation point (around 20 contenders), whereas CSMA/ECA$_{\text{Hys+FS}}$'s delay is still low. 
 	
 	Further, with CSMA/ECA$_{\text{Hys+FS}}$ the percentage of blocked packets from the MAC queue is lower than CSMA/CA or CSMA/CA$_{\text{MaxAg}}$ (see Figure~\ref{fig:blocked-packets}). This is due to the construction of a collision-free schedule which ensures that nodes transmit frequently (Hysteresis) and Fair Share which reduces the average delay given that more packets are transmitted and acknowledged with a single ACK.
 	
-	As CSMA/ECA$_{\text{Hys+FS}}$ nodes get saturated, the delay increases due to longer queueing and contention time (see the number of packets in the MAC queue for CSMA/ECA$_{\text{Hys+FS}}$ nodes in Figure~\ref{fig:MacQ} and how it is related to the increase in delay shown in Figure~\ref{fig:serviceTime-unsat}).
+	As CSMA/ECA$_{\text{Hys+FS}}$ nodes get saturated, the delay increases due to longer queueing and contention time (see the number of packets in the MAC queue for CSMA/ECA$_{\text{Hys+FS}}$ nodes in Figure~\ref{fig:unsatResults}f and how it is related to the increase in delay shown in Figure~\ref{fig:unsatResults}e).
 	
 %	\begin{figure}[tb]
 %		\centering
@@ -160,21 +171,21 @@
 %		\label{fig:timeBetweenSxTx-multiplot-unsat}
 %	\end{figure}	
 	
-	Figure~\ref{fig:timeBetweenSxTx-multiplot-unsat} shows the average time between successful transmissions. It is possible to see from the figure that when the saturation point is approached the average time between successful transmissions increases, resembling Figure~\ref{fig:serviceTime-sat}. Moreover, this effect is related to an increase in collisions: colliding nodes should begin a new contention for a retransmission, which may result in a successful transmission or another collision, the latter further increasing the average time between successful transmissions.
+	Figure~\ref{fig:unsatResults}c shows the average time between successful transmissions. It is possible to see from the figure that when the saturation point is approached the average time between successful transmissions increases, resembling Figure~\ref{fig:satResults}d. Moreover, this effect is related to an increase in collisions: colliding nodes should begin a new contention for a retransmission, which may result in a successful transmission or another collision, the latter further increasing the average time between successful transmissions.
 	
-   	\begin{figure}[tb]
-		\centering
-		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/droppedPackets/droppedPacketsDueRET-TON.eps}
-		\caption{Percentage of droppped packets due to reaching the retransmission threshold. CSMA/ECA$_{\text{Hys+FS}}$ has an increased metric because the number of dropped packets is determined by Fair Share, i.e.: drops $2^{k}$ packets, where $k$ is the current backoff stage of the node}
-		\label{fig:droppedDueToRET}
-	\end{figure}
-	
-	 \begin{figure}[tb]
-		\centering				
-		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/queueSize/queueSize-multiplot-TON.eps}
-		\caption{Average number of packets in the MAC queue of a node}
-		\label{fig:MacQ}
-	\end{figure}
+%   	\begin{figure}[tb]
+%		\centering
+%		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/droppedPackets/droppedPacketsDueRET-TON.eps}
+%		\caption{Percentage of droppped packets due to reaching the retransmission threshold. CSMA/ECA$_{\text{Hys+FS}}$ has an increased metric because the number of dropped packets is determined by Fair Share, i.e.: drops $2^{k}$ packets, where $k$ is the current backoff stage of the node}
+%		\label{fig:droppedDueToRET}
+%	\end{figure}
+%	
+%	 \begin{figure}[tb]
+%		\centering				
+%		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/queueSize/queueSize-multiplot-TON.eps}
+%		\caption{Average number of packets in the MAC queue of a node}
+%		\label{fig:MacQ}
+%	\end{figure}
 	
 	\begin{figure}[tb]
 		\centering
@@ -235,7 +246,7 @@
 	\textcolor{red}{Still referring to Figure~\ref{fig:mixThroughput-sat-perProtocol-TON}, for $N^{*}>12$ periods of collision-free operation and the aggregation performed with Fair Share allows CSMA/ECA$_{\text{Hys+FS}}$ to have larger channel time than CSMA/CA nodes, which throughput degrades even more than in CSMA/CA-only networks.}
 	
 	\textcolor{red}{\subsection{Saturation, channel errors and Schedule Reset}\label{resultsSchedRest}}
-	\textcolor{red}{Figure~\ref{fig:throughput-sat-SR} shows the average aggregated throughput of a non-saturated network with a channel error probability, $p_e=0.1$ (see Section~\ref{channelErrorsDef}). We can see that the highest throughput, corresponding to CSMA/ECA$_{\text{Hys+FS}}$ is lower than the one observed in a perfect channel (Figure~\ref{fig:throughput-sat}). Furthermore, curves with Schedule Reset (SR) seem to have lower aggregated throughput. This is because the backoff stage, and therefore the level of aggregation done by Fair Share, is constantly reduced.}
+	\textcolor{red}{Figure~\ref{fig:throughput-sat-SR} shows the average aggregated throughput of a non-saturated network with a channel error probability, $p_e=0.1$ (see Section~\ref{channelErrorsDef}). We can see that the highest throughput, corresponding to CSMA/ECA$_{\text{Hys+FS}}$ is lower than the one observed in a perfect channel (Figure~\ref{fig:satResults}a). Furthermore, curves with Schedule Reset (SR) seem to have lower aggregated throughput. This is because the backoff stage, and therefore the level of aggregation done by Fair Share, is constantly reduced.}
 	
 	\textcolor{red}{Still assessing Figure~\ref{fig:throughput-sat-SR} and focusing on the SR curves, we can see that both \emph{SR aggr. halv. dynStick} curves (with and without Fair Share) have higher aggregated throughput than the rest. This Schedule Reset configuration shows higher aggregated throughput because it reduces the time between successful transmissions (see Figure~\ref{fig:timeBetSxTx-sat-SR}) and mantains collision-free schedules for longer periods of time thanks to the increase in the node's stickiness.}
 	
