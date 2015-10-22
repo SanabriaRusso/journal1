@@ -14,7 +14,6 @@ set size 1,0.75
 set multiplot layout 2,3 columnsfirst title "" margins screen MP_LEFT, MP_RIGHT, MP_BOTTOM, MP_TOP spacing MP_GAP
 
 #1,1
-unset xlabel
 set title "a)"
 load "../unsaturated/throughput-unsaturated/throughput-unsaturated-w-BOS-TON.gp"
 

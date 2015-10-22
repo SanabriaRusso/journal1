@@ -14,5 +14,5 @@ set origin 0,0
 set ylabel "Avg. num. of packets in MAC queue"
 
 
-plot "~/Dropbox/PhD/NeTS/git/journal1/figures/new_raws/DCF-unsat.txt" u 1:33:(1.96*$34/3.16) title "CSMA/CA " w yerrorbars ls 7 lw 1, "" u 1:33 notitle w l ls 7 lw 1, "~/Dropbox/PhD/NeTS/git/journal1/figures/new_raws/ECA-unsat.txt" u 1:33:(1.96*$34/3.16) title "CSMA/ECA_{Hys+FS} " w yerrorbars ls 6 lw 1, "" u 1:33 notitle w l ls 6 lw 1
+plot "~/Dropbox/PhD/NeTS/git/journal1/figures/new_raws/DCF-unsat.txt" every 2 u  1:33:(1.96*$34/3.16) title "CSMA/CA " w yerrorbars ls 7 lw 1, "" every 2 u  1:33 notitle w l ls 7 lw 1, "~/Dropbox/PhD/NeTS/git/journal1/figures/new_raws/ECA-unsat.txt" every 2 u  1:33:(1.96*$34/3.16) title "CSMA/ECA_{Hys+FS} " w yerrorbars ls 6 lw 1, "" every 2 u  1:33 notitle w l ls 6 lw 1
 

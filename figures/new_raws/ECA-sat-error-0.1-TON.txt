@@ -21,6 +21,30 @@
 #120 BKCollisionsECA        #122 BECollisionsECA            #124 VICollisionsECA
 #126 VOCollisionsEDCA       #128 lastCollision              #130 avgQueuingDelayBK
 #132 avgQueuingDelayBE      #134 avgQueuingDelayVI          #136 avgQueuingDelayVO
+1 33306855 76181.3591044423 33306855 76181.3591044423 0 0 0 0 0 0 3 0 4.8796955e-05 1.43264764875213e-06 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0 0.001626661 4.77523599312118e-05 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 1.38777878078145e-17 1 0 0 0 33306855 76181.3591044423 0 0 0 0 0 0 0 0 0 0 33306855 76181.3591044423 33306855 76181.3591044423 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.001626661 4.77523599312118e-05 0 0 0 0 0 0 0 0 0 0 0 0 0 0 4.8796955e-05 1.43264764875213e-06 nan nan nan nan nan nan 9.4058075 3.56506906131407 50.27929 0.0960793573042623 0 0 0 0 0 0 
+#1 Nodes,                 #2 AvgThroughput,               #4 totalBKThroughput, 
+#6 totalBEThroughput,       #8 totalVIThroughput,           #10 totalVOThroughput,
+#12 totalCollisions,        #14 totalBKCollisions,          #16 totalBECollisions,
+#18 totalVICollisions,      #20 TotalVOCollisions,          #22 totalInternalCollisions,    
+#24 totalBKIntCol,          #26 totalBEIntCol,              #28 totalVIIntCol,
+#30 totalVOIntCol,          #32 overallFairness,            #34 BKFairness,
+#36 BEFairness,             #38 VIFairness,                 #40 VOFairness,
+#42 avgTimeBtSxTxBK,        #44 avgTimeBtSxTxBE,            #46 avgTimeBtSxTxVI,
+#48 avgTimeBtSxTxVO,        #50 qEmptyBK,                   #52 qEmptyBE,
+#54 qEmptyVI,               #56 qEmptyVO                    #58 totalDropped,
+#60 droppedBK,              #62 droppedBE                   #64 droppedVI,
+#66 droppedVO               #68 channelErrors               #70 stickiness
+#72 totalThroughputUnsat    #74 totalThroughputSat          #76 totalThroughputEDCA
+#78 totalBKthroughputEDCA   #80 totalBEthroughputEDCA       #82 totalVIthroughputEDCA
+#84 totalVOthroughputEDCA   #86 totalThroughputECA          #88 totalBKthroughputECA
+#90 totalBEthroughputECA    #92 totalVIthroughputECA        #94 totalVOthroughputECA
+#96 avgTimeBtSxTxBkEDCA     #98 avgTimeBtSxTxBeEDCA         #100 avgTimeBtSxTxViEDCA
+#102 avgTimeBtSxTxVoEDCA    #104 avgTimeBtSxTxBkECA         #106 avgTimeBtSxTxBeECA
+#108 avgTimeBtSxTxViECA     #110 avgTimeBtSxTxVoECA         #112 BKCollisionsEDCA
+#114 BECollisionsEDCA       #116 VICollisionsEDCA           #118 VOCollisionsEDCA
+#120 BKCollisionsECA        #122 BECollisionsECA            #124 VICollisionsECA
+#126 VOCollisionsEDCA       #128 lastCollision              #130 avgQueuingDelayBK
+#132 avgQueuingDelayBE      #134 avgQueuingDelayVI          #136 avgQueuingDelayVO
 5 44892380 697636.762649446 44892380 697636.762649446 0 0 0 0 0 0 11.7 1.48660687473185 0.00021650265 7.37298552706263e-05 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.99999955 4.97493718567616e-07 0.99999955 4.97493718567616e-07 0 0 0 0 0 0 0.006531732 0.00142000377238795 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 1.38777878078145e-17 1 0 0 0 44892380 697636.762649446 0 0 0 0 0 0 0 0 0 0 44892380 697636.762649446 44892380 697636.762649446 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.006531732 0.00142000377238795 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.00021650265 7.37298552706263e-05 nan nan nan nan nan nan 39.0174775 24.5362279999404 0 0 0 0 0 0 0 0 
 10 47138435 824771.479426271 47138435 824771.479426271 0 0 0 0 0 0 19.8 1.9131126469709 0.00056896225 0.000234240280241225 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.9999978 9.27361849547505e-07 0.9999978 9.27361849547505e-07 0 0 0 0 0 0 0.01520009 0.00403434883951549 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 1.38777878078145e-17 1 0 0 0 47138435 824771.479426271 0 0 0 0 0 0 0 0 0 0 47138435 824771.479426271 47138435 824771.479426271 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.01520009 0.00403434883951549 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.00056896225 0.000234240280241225 nan nan nan nan nan nan 48.248905 21.2713133579353 0 0 0 0 0 0 0 0 
 15 49020955 596558.181969705 49020955 596558.181969705 0 0 0 0 0 0 28.6 1.65529453572468 0.0012745038 0.000275302626400222 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.9999976 8.60232526701896e-07 0.9999976 8.60232526701896e-07 0 0 0 0 0 0 0.029911125 0.0045717101988069 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0.3 0.1 0.3 0 0 0 0 0 0 0.1 1.38777878078145e-17 1 0 0 0 49020955 596558.181969705 0 0 0 0 0 0 0 0 0 0 49020955 596558.181969705 49020955 596558.181969705 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.029911125 0.0045717101988069 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0012745038 0.000275302626400222 nan nan nan nan nan nan 45.17421985 24.4304788811331 0 0 0 0 0 0 0 0 

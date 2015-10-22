@@ -1,6 +1,6 @@
 \section{Carrier Sense Multiple Access with Enhanced Collision Avoidance (CSMA/ECA)}\label{introProtocol}
 
-CSMA/ECA~\cite{barcelo2008lba} is a fully distributed and collision-free MAC for WLANs. It differs from CSMA/CA in that it uses a deterministic backoff, $B_{\text{d}}=CW_{\min}/2$ after successful transmissions, where $CW_{\min}$ is the minimum contention window of typical value $CW_{\min}=16$. By doing so, contenders that successfully transmitted on schedule $n$, will transmit without colliding with other successful nodes in future cycles.
+CSMA/ECA~\cite{barcelo2008lba} is a fully distributed and collision-free MAC for WLANs. It differs from CSMA/CA in that it uses a deterministic backoff, $B_{\text{d}}=CW_{\min}/2$ after successful transmissions, where $CW_{\min}$ is the minimum contention window of typical value $CW_{\min}=16$. By doing so, contenders that successfully transmitted on schedule $n$, will transmit without colliding with other successful nodes in future cycles~\cite{HE}.
 
 Collisions are handled as in CSMA/CA, which is described in Algorithm~\ref{alg:CSMA_CA}. In Algorithm~\ref{alg:CSMA_CA}, the node starts by setting the retransmissions counter and backoff stage to zero ($r\in[0,R]$ and $k\in[0,m]$ respectively, $m$ is the maximum backoff stage of typical value $m=5$, and $R$ is the retransmissions limit with typical value $R=m+1$), then generates a random backoff, $B$. When the Acknowledgement (\emph{ack}) for a sent packet is not received by the sender a collision is assumed. Upon collision, the involved nodes will double their contention window by incrementing their backoff stage in one and use a random backoff, $B\in[0,2^{k}CW_{\min}]$. This procedure is described between Line~\ref{collision} and~\ref{finalCollision} of Algorithm~\ref{alg:CSMA_CA}.
 
@@ -107,7 +107,7 @@ Collision slots being orders of magnitude larger than empty slots degrade the ne
   \label{fig:BECA}
 \end{figure}
 
-Referring to Figure~\ref{fig:BECA}, CSMA/ECA is able to achieve an aggregated throughput that goes beyond CSMA/CA up until the number of contenders ($N$) is greater than $B_{\text{d}}$ ($B_{\text{d}}=7$ in the case of the figure). Beyond this point, the network will have a mixed behavior relating to backoff mechanisms: some nodes will successfully transmit and use a deterministic backoff while others will collide due to the lack of empty slots and return to a random backoff. As more contenders join the network, CSMA/ECA performance will approximate to CSMA/CA's. \textcolor{red}{This effect is also observed in L-ZC and L-MAC, albeit at a larger number of nodes. This is becasue the virtual cicle used by these protocolos ($N$ for L-ZC and $C$ for L-MAC in Section~\ref{relatedWork}) in greater than B$_{d}$. Specifically, the virtual cycle is of size equal to $16$ (changing to $B_{\text{d}}=16$ would only delay CSMA/ECA's throughput degradation to $N=B_{\text{d}}$).}
+Referring to Figure~\ref{fig:BECA}, CSMA/ECA is able to achieve an aggregated throughput that goes beyond CSMA/CA up until the number of contenders ($N$) is greater than $B_{\text{d}}$ ($B_{\text{d}}=8$ in the case of the figure). Beyond this point, the network will have a mixed behavior relating to backoff mechanisms: some nodes will successfully transmit and use a deterministic backoff while others will collide due to the lack of empty slots and return to a random backoff. As more contenders join the network, CSMA/ECA performance will approximate to CSMA/CA's. \textcolor{red}{This effect is also observed in L-ZC and L-MAC. It happens becasue the virtual cicle used by these protocolos ($M$ for L-ZC and $C$ for L-MAC in Section~\ref{relatedWork}) in lower than the number of contenders, $N$.}
 
 The \emph{JFI } curves in Figure~\ref{fig:BECA} show the Jain's Fairness index for all tested protocols. Showing a JFI equal to one suggests that the available throughput is shared evenly among all stations.
 
@@ -138,9 +138,11 @@ The \emph{JFI } curves in Figure~\ref{fig:BECA} show the Jain's Fairness index f
 		\label{fig:ECA+Hyst}
 	\end{figure*}
 	
-	Algorithm~\ref{alg:fullECA} shows an implementation of CSMA/ECA$_{\text{Hys+FS}}$, while an example of CSMA/ECA$_{\text{Hys+FS}}$ with four contenders is shown in  Figure~\ref{fig:ECA+Hyst}. In the figure the first outline indicates a collision between STA-3 and STA-4, which will provoke an increment on both station's backoff stage ($k\leftarrow k+1$). Once STA-4's random backoff expires, CSMA/ECA$_{\text{Hys+FS}}$ instructs the station to transmit $2^{k}$ packets, and then use a deterministic backoff, $B_{\text{d}}=CW(k)/2$. The same behavior is followed by STA 3.
+	Algorithm~\ref{alg:fullECA} describes CSMA/ECA$_{\text{Hys+FS}}$, while an example of CSMA/ECA$_{\text{Hys+FS}}$ with four contenders is shown in  Figure~\ref{fig:ECA+Hyst}. In the figure the first outline indicates a collision between STA-3 and STA-4, which will provoke an increment on both station's backoff stage ($k\leftarrow k+1$). Once STA-4's random backoff expires, CSMA/ECA$_{\text{Hys+FS}}$ instructs the station to transmit $2^{k}$ packets, and then use a deterministic backoff, $B_{\text{d}}=CW(k)/2$. The same behavior is followed by STA 3.
 	
-	With Hysteresis and Fair Share, CSMA/ECA$_{\text{Hys+FS}}$ is able to achieve greater throughput than CSMA/CA and for many more contenders, as shown also in Figure~\ref{fig:BECA}. In the figure, the \emph{CSMA/ECA$_{\text{Hys+FS}}$} curve shows a greater throughput because collisions are eliminated and Fair Share allows nodes to send $2^{k}$ packets upon each transmission. This throughput increase is the result of aggregation via Fair Share, which also carries the effect of raising the average time between successful transmissions (see Section~\ref{timeBetweenSxTx}), which may affect delay-sensitive traffic, like gaming or live video/voice/tv streaming. \textcolor{red}{Channel errors or unsaturated traffic conditions will disrupt any collision-free schedule, generate collisions and push all stations's backoff stages to the maximum value very quickly (contributing to the delay increase). This issue is leveraged with Schedule Reset mechanims, presented in Section~\ref{schedReset}.}
+	With Hysteresis and Fair Share, CSMA/ECA$_{\text{Hys+FS}}$ is able to achieve greater throughput than CSMA/CA and for many more contenders, as shown also in Figure~\ref{fig:BECA}. In the figure, the \emph{CSMA/ECA$_{\text{Hys+FS}}$} curve shows a greater throughput because collisions are eliminated and Fair Share allows nodes to send $2^{k}$ packets upon each transmission. This throughput increase is the result of aggregation via Fair Share, which also carries the effect of raising the average time between successful transmissions (see Section~\ref{timeBetweenSxTx}), which may affect delay-sensitive traffic, like gaming or live video/voice/tv streaming. 
+	
+	\textcolor{red}{Channel errors, hidden-nodes, or unsaturated traffic conditions will disrupt any collision-free schedule, generate collisions and push all stations's backoff stages to the maximum value very quickly (contributing to the delay increase). This issue is leveraged with the Schedule Reset mechanim, introduced in Section~\ref{schedReset}.}
 
 	\begin{algorithm}[tb]
 	\While{the device is on}
@@ -271,9 +273,9 @@ The \emph{JFI } curves in Figure~\ref{fig:BECA} show the Jain's Fairness index f
 	\end{figure}
 	
 	\subsection{Clock drift issue in descentralized collision-free MAC protocols}\label{clockDrift-issue}
-	CSMA/ECA relies on stations being able to correctly count empty slots and consequently attempt transmissions in the appropriate slot according to the backoff timer. Failure to do so may be caused by clock imperfections inside the Wireless Network Interface Cards (WNIC), which is commonly referred to as \emph{clock drift}. As pointed out in~\cite{slotDrift}, clock drift is a common issue that degrades the throughput in distributed collision-free MAC protocols like the ones reviewed in Sect.~\ref{relatedWork}.
+	CSMA/ECA relies on stations being able to correctly count empty slots and consequently attempt transmissions in the appropriate slot according to the backoff timer. Failure to do so may be caused by clock imperfections inside the Wireless Network Interface Cards (WNIC), which is commonly referred to as \emph{clock drift}. As pointed out in~\cite{slotDrift}, clock drift is a common issue that degrades the throughput in distributed collision-free MAC protocols like the ones reviewed in Section~\ref{relatedWork}.
 	
-	While miscounting empty slots have no significant effect on CSMA/CA's throughput~\cite{slotDrift}, it has a direct impact on CSMA/ECA. In a collision-free schedule with saturated CSMA/ECA contenders, a station miscounting empty slots will \emph{drift} to a possibly busy slot, collide and force a re-convergence (if possible) to a collision-free schedule (see Sect.~\ref{performanceClockDrift}).
+	While miscounting empty slots have no significant effect on CSMA/CA's throughput~\cite{slotDrift}, it has a direct impact on CSMA/ECA. In a collision-free schedule with saturated CSMA/ECA contenders, a station miscounting empty slots will \emph{drift} to a possibly busy slot, collide and force a re-convergence (if possible) to a collision-free schedule (see Section~\ref{performanceClockDrift}).
 	
 %	\textcolor{red}{\subsection{Real hardware implementation} 
 %	Replacing the firmware of commercial WLAN cards with the Open Firmware for WiFi Networks, OpenFWWF~\cite{OpenFWWF}, allows the modification of time-sensitive operations in the MAC, like the backoff procedure. In Section~\ref{EDCA} we provide details regarding the tesbed, the firmware used and present results of real experiments using CSMA/ECA.}
@@ -282,12 +284,17 @@ The \emph{JFI } curves in Figure~\ref{fig:BECA} show the Jain's Fairness index f
 	\textcolor{red}{\subsection{Channel errors}}\label{errorEffect}
 	Failed transmissions due to channel errors are handled as collisions by CSMA/ECA$_{\text{Hys+FS}}$. Therefore, collision-free schedules under this type of channel model are shorter. In order to accelerate the convergence to collision-free schedules after channel errors CSMA/ECA$_{\text{Hys+FS}}$ instruct nodes to \emph{stick} to the current deterministic backoff even after \emph{stickiness} number of consecutive failed transmissions. Stickiness is not a new concept to CSMA/ECA~\cite{barcelo2011tcf}, it allows for a faster convergence towards a collision-free schedule, especially when performing under heavy channel errors.
 	
-	Failed transmissions due to channel errors also means that a few moments of operation under a noisy channel can increase the contenders's deterministic backoff to its maximum value. Such event carries the undesired effects of increasing the time between successful transmissions, and a reduction in the overall system throughput due to shorter collision-free periods.
+	Failed transmissions due to channel errors also means that a few moments of operation under a noisy channel can increase the contenders's deterministic backoff to its maximum value. Such event carries the undesired effects of increasing the time between successful transmissions and reducing the overall system throughput due to shorter collision-free periods.
+		
+	\textcolor{red}{\subsection{Hidden terminals}}\label{hidden}
+	This type of nodes posses an incomplete view of the network. Therefore, they disrupt any collision-free operation in CSMA/ECA$_{\text{Hys+FS}}$ by attempting transmissions while the channel is busy.
+	
+	For CSMA/ECA$_{\text{Hys+FS}}$, as for other reservation MAC protocols for CSMA (see Section~\ref{relatedWork},~\cite{HE,L_MAC}), hidden terminals affects the performance as channel errors do. That is, increasing the number of collisions and reducing the periods of collision-free operation.
 		
 	\textcolor{red}{\subsection{Schedule Reset Mechanism}\label{schedReset}}
 	CSMA/ECA$_{\text{Hys+FS}}$ instructs nodes to keep their current backoff stage after a successful transmission (resetting it to zero only if reaching the retransmission attempt limit, see line~\ref{labelReset} in Algorithm~\ref{alg:fullECA}). This is done in order to increase the cycle length and provide a collision-free schedule for many contenders, which is desirable in dense scenarios.
 	
-	Nevertheless, having a big deterministic backoff increases the time between successful transmissions. Furthermore, if not operating in a scenario with many nodes the empty slots between transmissions are not longer negligible and degrade the overall throughput of the system. For instance, if nodes withdraw from the contention their previously used slots will now be empty. On the other hand, in scenarios with channel errors contenders rapidly end up with the largest deterministic backoff. Nodes should be aware of this issue and pursue opportunities to reduce their deterministic backoff, $B_{\text{d}}$ without sacrificing too much in collisions. 
+	Nevertheless, having a big deterministic backoff increases the time between successful transmissions. Furthermore, if not operating in a scenario with many nodes, the empty slots between transmissions are not longer negligible and degrade the overall throughput of the system. For instance, if nodes withdraw from the contention their previously used slots will now be empty. On the other hand, in scenarios with channel errors contenders rapidly end up with the largest deterministic backoff. Nodes should be aware of this issue and pursue opportunities to reduce their deterministic backoff, $B_{\text{d}}$ without sacrificing too much in collisions. 
 	
 	The \emph{Schedule Reset} mechanism for CSMA/ECA$_{\text{Hys+FS}}$ consists on finding the smallest collision-free schedule (if any) between a contender's transmissions and then change the node's deterministic backoff to fit in that schedule. Take a contender with $B_{\text{d}}=32$ as an example. By listening to the slots between its transmissions, it is possible to determine the availability of smaller (and possibly) collision-free schedules.
 	
@@ -345,7 +352,7 @@ The \emph{JFI } curves in Figure~\ref{fig:BECA} show the Jain's Fairness index f
 	\end{algorithm}
 		
 		
-		\subsubsection{Keeping collision-free schedules}
+		\subsubsection{A conservative schedule reduction}
 		Schedule Reset is described in Algorithm~\ref{alg:schedRest}. Each contender starts filling a bitmap $b$ of size $B_{\text{d}}$ with the information observed in each passing slot during $\gamma=B_{\text{d}}/C$ consecutive successful transmissions (sxTx in Algorithm~\ref{alg:schedRest}); where $C=2^{m}CW_{\min}/2$ is the biggest deterministic backoff, and $\gamma$ is referred to as the Schedule Reset \emph{threshold} from this point forward.
 		
 		Each bit $t,~t\in\{0,\ldots ,B_{\text{d}}-1\}$ in the bitmap is the result of a bitwise OR operation between its current value and the state of the corresponding slot. This is shown in Line~\ref{bitwiseOR} in Algorithm~\ref{alg:schedRest}, where $\sigma_{i}(t)$ is a function that evaluates to $0$ if the slot corresponding to $b[t]$ is empty in iteration $i$, $i \in\{1,\ldots,\gamma\}$; or $1$ otherwise. After $\gamma$ iterations, the bitmap is evaluated (line~\ref{evaluations} in Algorithm~\ref{alg:schedRest}).
@@ -362,20 +369,17 @@ The \emph{JFI } curves in Figure~\ref{fig:BECA} show the Jain's Fairness index f
 		
 		Schedule Reset tests all possible deterministic backoffs that are smaller than the current $B_{\text{d}}$ (lines~\ref{sets}-\ref{filling} in Algorithm~\ref{alg:schedRest}), starting with the smallest one. If the corresponding bits in the bitmap are registered as empty, the process is stopped and the change to the new deterministic backoff is made (lines~\ref{testFilling}-\ref{endAssignment} in Algorithm~\ref{alg:schedRest}). Otherwise, the process is restarted after the next successful transmission.
 		
-		Using Figure~\ref{fig:scheduleReset1} as an example, we can see that the sum $\sum\limits_{t} b[t]=0$, for $t\in\{8,16,24\}$. This means that the transmission slots corresponding to a deterministic backoff, $B^{*}_{\text{d}}=8$ are free, therefore a change of schedule is possible. In case of suffering a collision immediately after applying the schedule reduction, the node reverses the changes made by Schedule Reset before handling the collision.
+		Using Figure~\ref{fig:scheduleReset1} as an example, we can see that $\sum\limits_{t} b[t]=0$, for $t\in\{8,16,24\}$. This means that the transmission slots corresponding to a deterministic backoff, $B^{*}_{\text{d}}=8$ are free, therefore a change of schedule is possible. In case of suffering a collision immediately after applying the schedule reduction, the node reverses the changes made by Schedule Reset before handling the collision.
 		
 		%In (\ref{eq:schedEval}), the set $A$ contains all possible shorter schedule lengths, e.g.: $A\in\{2^{j}CW_{\min}/2,\ldots, 2^{k-1}CW_{\min}/2\}$, for $j\in[0,\ldots,k-1]$. 
 	
-		\subsubsection{Facing channel errors}\label{aggr}
+		\subsubsection{Aggressiveness to face channel errors}\label{aggr}
 		
 		the default $\gamma$ ensures that the bitmap registers all the transmission slots in the network (assuming saturated traffic and a perfect channel), providing enough information for performing the schedule reduction without disrupting collision-free schedules. 
 		
 		Nevertheless, this $\gamma$ can be rendered too conservative when in the presence of channel errors. This condition produces Schedule Reset bitmaps that do not contain enough information for successfully avoiding collisions after the schedule reduction. This is also true for any $\gamma^{*}>\gamma$.
 		
-		This effect is leveraged by setting $\gamma=1$, meaning that the bitmap is filled with the information of slots between only two consecutive transmissions. This measure increases the frequency of schedule reset attempts.
-		%Further, there is the option of doing a schedule \emph{halving}. That is, with a set $A\in\{2^{k-1}CW_{\min}/2\}$.
-	%	
-	%	Schedule Reset can also be configured to increase the node's \emph{stickiness} after a successful reduction of the schedule. Stickiness is not a new concept to CSMA/ECA~\cite{barcelo2011tcf}. It simply instructs the contender to \emph{stick} to the deterministic backoff even in the event of \emph{stickiness} number of consecutive failed transmissions. This allows for a faster convergence towards a collision-free schedule, especially when performing under heavy channel errors. 
+		This effect is leveraged by setting $\gamma=1$, meaning that the bitmap is filled with the information of slots between only two consecutive transmissions. This measure increases the frequency of schedule reset attempts. Furthermore, incrementing the node's stickiness after a successful reduction of the schedule allows for a faster convergence towards a collision-free schedule, especially when performing under heavy channel errors. 
 	%	
 	
 	\subsection{Backwards compatibilty and coexistence}

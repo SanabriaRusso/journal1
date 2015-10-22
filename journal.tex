@@ -94,7 +94,7 @@ L. Sanabria-Russo (\href{mailto:luis.sanabria@upf.edu}{luis.sanabria@upf.edu}) ,
 
 \boldmath Collisions are a main cause of throughput degradation in WLANs. The current contention mechanism used in IEEE 802.11 networks is called Carrier Sense Multiple Access with Collision Avoidance (CSMA/CA). It uses a Binary Exponential Backoff (BEB) technique to randomise each contender attempt of transmitting, effectively reducing the collision probability. Nevertheless, CSMA/CA relies on a random backoff that while effective and fully distributed, in principle is unable to completely eliminate collisions, therefore degrading the network throughput as more contenders attempt to share the channel. Carrier Sense Multiple Access with Enhanced Collision Avoidance (CSMA/ECA) is able to create a collision-free schedule in a fully distributed manner using a deterministic backoff after successful transmissions. Hysteresis and Fair Share are two extensions of CSMA/ECA to support a large number of contenders in a collision-free schedule. CSMA/ECA offers better throughput than CSMA/CA and short-term throughput fairness.
 
-\textcolor{red}{This work describes CSMA/ECA and its extensions. Additionally, it provides the first evaluation results of CSMA/ECA with non-saturated traffic, channel errors, and its performance when coexisting with CSMA/CA nodes. Furthermore, it describes the effects of imperfect clocks over CSMA/ECA and present a mechanism to leverage the impact of channel errors over collision-free schedules. Finally, experimental results on throughput and lost packets from a CSMA/ECA implementation using commercial hardware and open-source firmware are presented.}
+\textcolor{red}{This work describes CSMA/ECA and its extensions. Additionally, it provides the first evaluation results of CSMA/ECA with non-saturated traffic, channel errors, and its performance when coexisting with CSMA/CA nodes. Furthermore, it describes the effects of imperfect clocks over CSMA/ECA and present a mechanism to leverage the impact of channel errors over collision-free schedules. Finally, experimental results on throughput and lost frames from a CSMA/ECA implementation using commercial hardware and open-source firmware are presented.}
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -119,15 +119,15 @@ This paper fills those gaps by extending~\cite{research2standards}, and consolid
 
 \begin{itemize}
 	\item First results on the achievable throughput and delay of CSMA/ECA with Hysteresis and Fair Share under non-saturated traffic conditions for very large number of nodes.
-	\item The impact of imperfect clocks on CSMA/ECA with Hysteresis and Fair Share's deterministic backoff and its consequences on the achieved performance.
-	\textcolor{red}{\item The effect of channel errors over collision-free schedules and how to solve the issue of converging rapidly to the biggest cycle length with the Schedule Reset mechanism.}
+	\item \textcolor{red}{The impact of imperfect clocks and channel errors on CSMA/ECA with Hysteresis and Fair Share's deterministic backoff and its consequences on the achieved performance.}
+	\textcolor{red}{\item Introduce the Schedule Reset mechanism for reducing the schedule length in case of users withdrawing from the contention (non-saturated traffic), or when its value is increased due to channel errors.}
 	\item Formulation of the throughput bounds for CSMA/ECA with Hysteresis and Fair Share.
 	\item Coexistence and backwards compatibility with CSMA/CA nodes under different traffic conditions.
 	\item First implementation of CSMA/ECA with Hysteresis in real hardware and the experimental results in a crowded WLAN testbed.
 \end{itemize}
 
 %Results show that CSMA/ECA with Hysteresis and Fair Share is capable of accommodating many users in collision-free schedules. Further, the coexistence tests show that the average aggregated throughput of a mixed network is higher than that observed in CSMA/CA-only networks, as well as a high resilience to clock-drifts.
-\textcolor{red}{Results, derived from a modified version of the COST~\cite{COST} simulator, show that CSMA/ECA with Hysteresis and Fair Share is capable of accommodating many users in collision-free schedules. Further, as tests in a mixed network with different proportions of CSMA/CA and CSMA/ECA nodes show, the aggregated throughput is higher than the observed in CSMA/CA-only networks without significant sacrifice from legacy stations.}
+\textcolor{red}{Results, derived from a modified version of the COST~\cite{COST} simulator, show that CSMA/ECA with Hysteresis and Fair Share is capable of accommodating many users in collision-free schedules. Further, as tests in a mixed network with different proportions of CSMA/CA and CSMA/ECA nodes show, the aggregated throughput is higher than the observed in CSMA/CA-only networks.}
 
 Beyond simulations results, the implementation of CSMA/ECA prototypes\cite{ECA-DEMO-INFOCOM14, sanabria2013prototyping, BECA-test,CF-MAC} show that the construction of collision-free schedules using a deterministic backoff after successful transmissions is possible and results in a throughput increase by reducing the number of corrupted frames. \textcolor{red}{We then present the first real hardware implementation of CSMA/ECA with Hysteresis using the open firmware OpenFWWF~\cite{OpenFWWF}. Results show that CSMA/ECA is able of providing higher throughput and lower losses than CSMA/CA for the same number of contenders.}
 
@@ -143,7 +143,7 @@ An overview of similar distributed and collision-free MAC protocols for WLANs is
 
 
 \section{Conclusions}\label{conclusions}
-CSMA/ECA$_{\text{Hys+FS}}$ is able to construct a collision-free schedule with many contenders. Taking advantage of this condition, the cumulative throughput experienced by CSMA/ECA$_{\text{Hys+FS}}$ nodes goes beyond the achievable by CSMA/CA for any number of nodes. All of these while preserving throughput fairness. Further, as non-saturated CSMA/ECA$_{\text{Hys+FS}}$ networks get crowded the cumulative throughput keeps increasing up to the saturation point, contrary to the throughput degradation seen in CSMA/CA networks.
+CSMA/ECA$_{\text{Hys+FS}}$ is able to construct a collision-free schedule with many contenders. Taking advantage of this condition, the cumulative throughput experienced by CSMA/ECA$_{\text{Hys+FS}}$ nodes goes beyond the achievable by CSMA/CA for any number of nodes. All of these while preserving throughput f	airness. Further, as non-saturated CSMA/ECA$_{\text{Hys+FS}}$ networks get crowded the cumulative throughput keeps increasing up to the saturation point, contrary to the throughput degradation seen in CSMA/CA networks.
 
 As CSMA/ECA$_{\text{Hys+FS}}$ is thought to be the next MAC for WLANs, coexistence with CSMA/CA nodes is paramount. Results show that coexistence is not an issue for any proportion of CSMA/ECA$_{\text{Hys+FS}}$/CSMA/CA users. Moreover, when the network is composed with a majority of CSMA/ECA$_{\text{Hys+FS}}$ nodes, the cumulative throughput increases from CSMA/CA's.
 

@@ -12,4 +12,4 @@ set xtics 0,4e4,8e4
 #set size 0.85,0.85
 #set term postscript enhanced color dashed
 #set out "Pc-evolution-TON.eps"
-plot "~/Dropbox/PhD/NeTS/git/journal1/figures/saturated/slots/DCF-70stas.txt" u 2:5:(1.96*$6/3.16) title "CSMA/CA" w yerrorbars ls 7 lw 1 axes x1y2, "~/Dropbox/PhD/NeTS/git/journal1/figures/saturated/slots/ECA-70stas.txt" u 2:5:(1.96*$6/3.16) title "CSMA/ECA_{Hys+FS}" w yerrorbars ls 6 lw 1 axes x1y2
+plot "~/Dropbox/PhD/NeTS/git/journal1/figures/saturated/slots/DCF-70stas.txt"  u 2:5 title "CSMA/CA" w p ls 7 lw 1 axes x1y2, "~/Dropbox/PhD/NeTS/git/journal1/figures/saturated/slots/ECA-70stas.txt"  u 2:5 title "CSMA/ECA_{Hys+FS}" w p ls 6 lw 1 axes x1y2
