@@ -1,0 +1,94 @@
+\documentclass[]{article}
+\usepackage{amsmath}
+\usepackage{fullpage}
+\usepackage{color}
+\usepackage[a4paper]{geometry}
+
+\begin{document}
+
+\title{Draft 1: Response letter}
+  \author{
+      \IEEEauthorblockN{Luis Sanabria-Russo, Jaume Barcelo, Boris Bellalta, Francesco Gringoli}}
+
+\date{\today}
+\maketitle
+\emph{Authors sincerely appreciate the time spent reading the contribution. Your insight propelled new considerations and discoveries that resulted in an original study. Thank you. \\\\This short latter provides the authors's responses to all the reviewers's comments.}
+
+\section{Reviewer 1}
+	\subsection{Regarding ``Abstract"}
+		Changes from \emph{``totally distributed"} to fully distributed were made throughout the document.
+	
+	\subsection{Regarding ``Introduction"}
+		\begin{itemize}
+			\item {\bfseries What would be useful in the Introduction to specifically mention, is whether the proposed CSMA solution performs well when co-existing [perhaps with more greedy?] legacy CSMA/CA clients. The authors mention that throughput improves in co-existance scenarios, but it should be clear that it is not at the cost of better throughput for the nodes that are operating using the authors' proposed CSMA solution. This leaves less room for reader drifts.}
+		\end{itemize}
+		
+		\textcolor{red}{PENDING: the explanations is clear, but waiting for reviews to incorporate it to the introduction}
+		
+		\begin{itemize}
+			\item {\bf series An implementation is crucial as well as the use of a measurement-based simulation environment. Good work. Mention in the introduction that the simulation is based on the COST simulation environment for greater credibility.}
+		\end{itemize}
+		
+		We included a reference to the COST simulator and incorporated a completely new hardware implementation Section.
+		
+	\subsection{Regarding ``Related Work"}
+		\begin{itemize}
+			\item {\bfseries When stating the size $N$ of  collision slots, and that solutions that adopt such policies do not take care of situations where the number of nodes $M > N$, please give an example value for $N$. What number of M are we looking at? And is it reasonable to make the argument that $M > N$? If $N$ is large as it is, then the concern is not that $M > N$, but really can we service that many nodes? (at least not [reasonably] today) Perhaps a simple footnote could help clarify this.}
+		\end{itemize}
+		
+		An example of number of slots in a schedule, $N$ can be $8$ slots. That is, collision-free schedules can be built with no more than $M=8$ contenders. When $M>N$ collisions will reappear, contributing to the observed overall throughput degradation. 
+		
+		Nevertheless, this is not the only case of throughput degradation. As Reviewer 1 mentions, when $M$ is very big, say 200 contenders, and assuming $N>M$, the transmission duration of each contender in the collision-free schedule will also contribute to an increase in the time between successful transmissions of each node, hence the throughput degradation.
+		
+	\subsection{Regarding ``Section III"}
+		\begin{itemize}
+			\item {\bf It would be useful if the authors include a table with a list of important notations. Would help with readability.}
+		\end{itemize}
+		\textcolor{red}{Should we add? Or should we explain that THERE IS NO SPACE! :)}
+
+		\begin{itemize}
+			\item {\bfseries Section III.B, the aggregation process should be explained in more detail. Is the aggregation here similar to that used in 802.11n, where the level of aggregation depends on the transmission rate? How are packets aggregated? It is then mentioned in Section III.C that the packet is an MPDU and other details that indicate this protocol is applied for 802.11n+. Please clarify these details before then.}
+		\end{itemize}
+		
+		We added a reference that Fair Share is an A-MPDU aggregation, furthermore, we included reference to the calculation of a transmission duration using Fair Share. 		
+		
+		\begin{itemize}
+			\item {\bfseries It is not clear in Section III.C what the authors mean by the "inferior" backoff stage. Please clarify or replace with a more descriptive word. Perhaps: subsequent, later, following, etc.}
+		\end{itemize}
+		
+		We extended the explanation everywhere this could cause confusion. 
+		
+	\section{Regarding ``Simulation"}
+		\begin{itemize}
+			\item {\bfseries The component lines in Figure 9 are not clear. They overlap. Perhaps in all graphs, align the legends with the order of their corresponding results. For example, the first legend item corresponds to the largest result (as in Figure 10). Also, this reader suggests to add a major line to separate the two parts of Figure 9 for more clarity --- this applies to other figures too. Also, more discussion on the values for the average backoff stage. What do large/small values mean? What kind of best pattern are we looking for? Results aren't as intuitive as other metrics.}
+		\end{itemize}
+		
+		We completely regenerated the figures. All the legends follow the order of appearance of the curves in the Figure. We chose to group related figures together to save space.
+		
+		We included a complete Section presenting Schedule Reset. This mechanism aims at reducing the collision-free schedule length (therefore the backoff stage in CSMA/ECA). This is particularly important for CSMA/ECA with channel errors and/or non-saturated traffic conditions where the backoff stage increases rapidly to the maximum value, augmenting the time between successful transmissions.
+		
+		On a side node, Schedule Reset reacts to channel observations. It is not designed to provide the optimal backoff stage, but to force nodes to reduce the schedule length when possible.
+		
+		\begin{itemize}
+			\item {\bf A little more detail on the peak values at around 35 nodes for the proposed solution. In Figure 15 and 16, it appears as if 35 nodes would be the worst-case scenario for a network to remain in. Some explanation on how the dropped packets (or collision slot) increase is a temporary result before the network re-calibrates and that values in the long-run look more like the values for other N values.}
+		\end{itemize}
+		
+		We provided an extended explanation for this case. Basically, when $20 < N \leq 35$ there are not enough transmissions to saturate the network. We can see that the Average number of packets in the MAC queue for CSMA/ECA is zero around these values of $N$ (due to the aggregation performed by Fair Share). This translates in CSMA/ECA nodes entering the contention with a random backoff, emptying their MAC queues very fast, and then withdrawing from the contention until other packet arrives at the MAC queue. 
+		
+		The use of the random backoff increases the number of collisions, which in turn increases the number of transmissions that reach the retransmission limit. As CSMA/ECA$_{\text{Hys+FS}}$ drops as many as $2^{k_{c}}$ packets, where $k_{c}$ is the backoff stage at the first transmission attempt, CSMA/ECA$_{\text{Hys+FS}}$ shows higher percentage of dropped packets than CSMA/CA for the aforementioned values of $N$.
+		
+		For $N>35$ nodes get saturated and collision-free operation is achieved.
+		
+		\begin{itemize}
+			\item {\bfseries This reader appreciates the level of thought and detail that was put into presenting these graphs. I think the authors could improve on the explanation of the results, as there are quite a bit of very interesting results and graphs presented. The explanation is quite good as is, but it often reads as a teaser, with a need for a little more detail to close the loop.}
+		\end{itemize}
+		
+		We put extra effort in trying to enhance our explanations. Hopefully there are clearer now.
+		
+	\section{Regarding ``Other"}
+		\begin{itemize}
+			\item {\bf The authors did not discuss the impact of such things as hidden terminals on system performance (such as those discussed as early as [3]). Can the authors give insights on why that is the case? Perhaps a discussion outlining how this problem is out of scope, how it would possibly not impact performance results, how it is covered in other works... Some discussion to this avail. However, if space is a limitation, I would prefer the authors focus on deeper discussion of the results, rather than this discussion. Some mention or brief insight though would be appreciated.}
+		\end{itemize}
+
+
+\end{document}

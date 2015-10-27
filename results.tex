@@ -147,7 +147,7 @@
 	
 	\textcolor{red}{As indicated by Figure~\ref{fig:unsatResults}b, when $20<N\leq 35$ CSMA/ECA$_{\text{Hys+FS}}$ nodes suffer from an increasing number of  collisions. This is due to nodes emptying their MAC queue quicker due to Fair Share, as shown in Figure~\ref{fig:unsatResults}f and re-entering the contention with a random backoff every time a new packet arrives.} 
 	
-	\textcolor{red}{This increase in collisions may also cause the dropping of packets due to reaching the maximum retransmission limit. As CSMA/ECA$_{\text{Hys+FS}}$ sends more packets during the same simulation time, it shows a higher fraction of dropped packets in Figure~\ref{fig:unsatResults}d.}
+	\textcolor{red}{This increase in collisions may also cause the dropping of packets due to reaching the maximum retransmission limit. As CSMA/ECA$_{\text{Hys+FS}}$ drops more packets after reaching the retransmission limit (see line~\ref{discard} in Algorithm~\ref{alg:fullECA}), it shows a higher fraction of dropped packets in Figure~\ref{fig:unsatResults}d.}
 	
 	Beyond 35 contenders, the MAC queue of CSMA/ECA$_{\text{Hys+FS}}$ nodes starts to fill up, gradually allowing longer periods of collision-free operation due to CSMA/ECA$_{\text{Hys+FS}}$ nodes getting saturated. This allows CSMA/ECA$_{\text{Hys+FS}}$ to outperform CSMA/CA.\\
 		

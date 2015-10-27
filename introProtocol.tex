@@ -147,7 +147,7 @@ The \emph{JFI } curves in Figure~\ref{fig:BECA} show the Jain's Fairness index f
 	\begin{algorithm}[tb]
 	\While{the device is on}
 	{
-	  $r \leftarrow 0$ ; $k \leftarrow 0$\;
+	  $r \leftarrow 0$ ; $k \leftarrow 0$ ; $k_{c} \leftarrow k$\label{emptyQueue}\;
 	  $b \leftarrow \mathcal{U}[0,2^k\rm{CW}_{min}-1]$\;
 	  \While{there is a packet to transmit}{
 	    %\tcc{Initialize $a$.}
@@ -170,18 +170,20 @@ The \emph{JFI } curves in Figure~\ref{fig:BECA} show the Jain's Fairness index f
 	    \eIf{success}{
 	      %\tcc{Random backoff.}
 	      \colorbox{yellow}{$B_{d} \leftarrow (2^{k}\rm{CW}_{min})/2-1$;}\label{backoffExample}\\
-		$B \leftarrow B_{d}$;\\
+		$B \leftarrow B_{d}$\;
 	    }
 	    {
-	      Discard packet\;
-	      $k \leftarrow 0$\; \label{labelReset}
+	      Discard $2^{k_{c}}$ packets\label{discard}\;
+%	      $k \leftarrow 0$\;
 	      $B \leftarrow \mathcal{U}[0, 2^k \rm{CW}_{min}-1]$\;
 	    }
+	
+	$k_{c} \leftarrow k$\;
 	  }
 	  Wait until there is a packet to transmit\;
 	}	
 	\vspace{0.2cm}
-	\caption{CSMA/ECA$_{\text{Hys+FS}}$}
+	\caption{CSMA/ECA$_{\text{Hys+FS}}$: $k_{c}$ refers to the contention backoff stage, that is, the backoff stage with which a contention for transmission is started. After $R$ attempts, Fair Share instructs the node to drop $2^{k_{c}}$ packets.}
 	\label{alg:fullECA}
 	\end{algorithm}
 
@@ -292,7 +294,7 @@ The \emph{JFI } curves in Figure~\ref{fig:BECA} show the Jain's Fairness index f
 	For CSMA/ECA$_{\text{Hys+FS}}$, as for other reservation MAC protocols for CSMA (see Section~\ref{relatedWork},~\cite{HE,L_MAC}), hidden terminals affects the performance as channel errors do. That is, increasing the number of collisions and reducing the periods of collision-free operation.
 		
 	\textcolor{red}{\subsection{Schedule Reset Mechanism}\label{schedReset}}
-	CSMA/ECA$_{\text{Hys+FS}}$ instructs nodes to keep their current backoff stage after a successful transmission (resetting it to zero only if reaching the retransmission attempt limit, see line~\ref{labelReset} in Algorithm~\ref{alg:fullECA}). This is done in order to increase the cycle length and provide a collision-free schedule for many contenders, which is desirable in dense scenarios.
+	CSMA/ECA$_{\text{Hys+FS}}$ instructs nodes to keep their current backoff stage after a successful transmission (resetting it to zero only if the node empties its MAC queue, see line~\ref{emptyQueue} in Algorithm~\ref{alg:fullECA}). This is done in order to increase the cycle length and provide a collision-free schedule for many contenders, which is desirable in dense scenarios.
 	
 	Nevertheless, having a big deterministic backoff increases the time between successful transmissions. Furthermore, if not operating in a scenario with many nodes, the empty slots between transmissions are not longer negligible and degrade the overall throughput of the system. For instance, if nodes withdraw from the contention their previously used slots will now be empty. On the other hand, in scenarios with channel errors contenders rapidly end up with the largest deterministic backoff. Nodes should be aware of this issue and pursue opportunities to reduce their deterministic backoff, $B_{\text{d}}$ without sacrificing too much in collisions. 
 	
