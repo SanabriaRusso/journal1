@@ -1,10 +1,11 @@
 #!/usr/local/bin/gnuplot
+set key spacing 1.5 
 set xlabel "Contenders (N)"
 set ylabel "Aggregated Throughput (Mbps)"
 set y2label "Average backoff stage (BOS)"
 set xrange[1:50]
 set xtics 10,10,50
-set yrange[-20:105]
+set yrange[-20:115]
 set ytics 0,20,60
 set y2range[-1.6:33]
 set y2tics 0,5,5

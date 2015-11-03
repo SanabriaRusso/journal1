@@ -5,7 +5,7 @@
 #set out "queueSize-multiplot-TON.eps"
 #set size 0.75,0.75
 
-set yrange[0:1300]
+set yrange[0:1400]
 set ytics 0,200,1000
 set xtics 10,10,70
 set size 0.75,0.75

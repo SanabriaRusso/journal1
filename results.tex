@@ -114,13 +114,6 @@
 
 	\subsection{Non-saturated nodes}\label{resultsUnsaturated}
 	
-	\begin{figure*}[tb]
-		\centering
-		\includegraphics[width=0.5\linewidth,angle=-90]{figures/tonFigs/nonsaturation-combined.eps}
-		\caption{Simulation results under non-saturated traffic: a) Throughput; b) Average percentage of collision slots: the fraction of time slots containing collisions; c) Average time between successful transmissions; d) Average fraction of dropped packets; e) Average system delay; f) Average number of packets in the MAC queue of a node}
-		\label{fig:unsatResults}
-	\end{figure*}
-	
 %	\begin{figure*}[tb]
 %	\centering
 %		\subcaptionbox{Throughput in non-saturation conditions\label{fig:throughputUnsat}}{\includegraphics[width=0.33\linewidth,angle=-90]{figures/unsaturated/throughput-unsaturated/throughput-unsaturated-w-BOS-TON.eps}}\hfill
@@ -151,6 +144,20 @@
 	
 	Beyond 35 contenders, the MAC queue of CSMA/ECA$_{\text{Hys+FS}}$ nodes starts to fill up, gradually allowing longer periods of collision-free operation due to CSMA/ECA$_{\text{Hys+FS}}$ nodes getting saturated. This allows CSMA/ECA$_{\text{Hys+FS}}$ to outperform CSMA/CA.\\
 		
+	\begin{figure}[htb!]
+		\centering
+		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/blockingProb-unsat/blocking-unsaturated-TON.eps}
+		\caption{Average fraction of blocked packets. When the MAC queue is full, packets comming from the uppers are discarded (or blocked) at the entrance of the buffer}
+		\label{fig:blocked-packets}
+	\end{figure}	
+	
+	\begin{figure*}[tb]
+		\centering
+		\includegraphics[width=0.5\linewidth,angle=-90]{figures/tonFigs/nonsaturation-combined.eps}
+		\caption{Simulation results under non-saturated traffic: a) Throughput; b) Average percentage of collision slots: the fraction of time slots containing collisions; c) Average time between successful transmissions; d) Average fraction of dropped packets; e) Average system delay; f) Average number of packets in the MAC queue of a node}
+		\label{fig:unsatResults}
+	\end{figure*}
+		
 %   	\begin{figure}[tb]
 %		\centering
 %		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/collision-unsaturated/collisions-unsaturated-TON.eps}
@@ -167,13 +174,6 @@
 %		\caption{Average system delay: averaging over all stations}
 %		\label{fig:serviceTime-unsat}
 %	\end{figure}
-
-	\begin{figure}[tb]
-		\centering
-		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/blockingProb-unsat/blocking-unsaturated-TON.eps}
-		\caption{Average fraction of blocked packets. When the MAC queue is full, packets comming from the uppers are discarded (or blocked) at the entrance of the buffer}
-		\label{fig:blocked-packets}
-	\end{figure}	
 	
 	This metric refers to the elapsed time between the injection of a packet into the station's MAC queue and the reception of an ACK for such packet. 
 	
@@ -214,7 +214,7 @@
 	\begin{figure*}[tb]
 		\centering
 		\includegraphics[width=0.5\linewidth,angle=-90]{figures/tonFigs/coexistence-combined.eps}
-		\caption{Coexistence results: a) Network throughput when composed by various proportions of CSMA/CA and CSMA/ECA$_{\text{Hys+FS}}$ nodes; b) Average percentage of collision slots for the tested mixed network setups proportions; c) Network throughput when composed by various proportions of non-saturated CSMA/CA and CSMA/ECA$_{\text{Hys+FS}}$ nodes; d) Average percentage of collision slots for the tested mixed network setups proportions in non-saturated conditions; e) Average station throughput per MAC protocol in a saturated mixed network}
+	\caption{Coexistence results: a) Network throughput when composed by various proportions of saturated CSMA/CA and CSMA/ECA$_{\text{Hys+FS}}$ nodes; b) Average percentage of collision slots for the tested saturated mixed network setups proportions; c) Network throughput when composed by various proportions of non-saturated CSMA/CA and CSMA/ECA$_{\text{Hys+FS}}$ nodes; d) Average percentage of collision slots for the tested mixed network setups proportions in non-saturated conditions; e) Average station throughput per MAC protocol in a saturated mixed network}
 		\label{fig:coexResults}
 	\end{figure*}
 	
@@ -265,7 +265,7 @@
 	
 	\textcolor{red}{Figure~\ref{fig:coexResults}e shows the average throughput for CSMA/CA and CSMA/ECA$_{\text{Hys+FS}}$ stations in a saturated mixed setup (half the contenders using CSMA/CA). It is possible to see that for a low total number contenders ($N^{*}\leq 12$) CSMA/CA stations attain greater throughput than in a CSMA/CA-only network. Again, this is because in the mixed network setup the other $N^{*}/2$ contenders with CSMA/ECA$_{\text{Hys+FS}}$ use a deterministic backoff, leaving many empty slots between transmissions.} 
 	
-	\textcolor{red}{Still referring to Figure~\ref{fig:coexResults}e, for $N^{*}>12$ periods of collision-free operation and the aggregation performed with Fair Share allows CSMA/ECA$_{\text{Hys+FS}}$ to have larger channel time than CSMA/CA nodes, which throughput degrades even more than in CSMA/CA-only. These results suggests that a switch to CSMA/ECA$_{\text{Hys+FS}}$ can be beneficial for networks with high number of contenders are expected.}
+	\textcolor{red}{Still referring to Figure~\ref{fig:coexResults}e, for $N^{*}>12$ periods of collision-free operation and the aggregation performed with Fair Share allows CSMA/ECA$_{\text{Hys+FS}}$ to have larger channel time than CSMA/CA nodes, which throughput degrades even more than in CSMA/CA-only. These results suggests that a switch to CSMA/ECA$_{\text{Hys+FS}}$ can be beneficial for networks with high number of contenders.}
 	
 	
 	%####################################################################################

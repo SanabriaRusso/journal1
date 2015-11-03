@@ -3,7 +3,7 @@ set xlabel "Contenders (N)"
 set ylabel "Avg. time bet. sx tx (secs)"
 set xrange[2:70]
 set xtics 10,10,70;
-set yrange[0.0001:100]
+set yrange[0.0001:1000]
 set logscale y
 #set arrow from 2,second 6 to 70,second 6 lt 0 lw 3 lc rgb 'black' nohead
 #set label 1 at 22,second 7 'Backoff stages below' center

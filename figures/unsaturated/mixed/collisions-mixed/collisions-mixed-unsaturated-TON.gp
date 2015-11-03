@@ -3,7 +3,7 @@ set xlabel "Contenders (N)"
 set xrange[2:68]
 set xtics 4,10,68
 set ylabel "Average percentage of collision slots (%)"
-set yrange[-5:55]
+set yrange[-5:65]
 set ytics 0,10,40
 #set size 0.75,0.75
 #set term postscript enhanced color dashed

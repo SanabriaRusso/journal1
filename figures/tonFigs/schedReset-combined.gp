@@ -13,8 +13,8 @@ if(!exists("MP_GAP")) MP_GAP = 0.1
 #Canvas size and ratio
 #set size ratio 0.5 
 set size 1,1
-
-set multiplot layout 2,2 columnsfirst title "" margins screen MP_LEFT, MP_RIGHT, MP_BOTTOM, MP_TOP spacing MP_GAP
+set key spacing 1.5
+set multiplot layout 2,2 columnsfirst title "" margins MP_LEFT, MP_RIGHT, MP_BOTTOM, MP_TOP spacing MP_GAP
 unset xlabel
 
 #1,1

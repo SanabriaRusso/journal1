@@ -10,8 +10,9 @@ if(!exists("MP_TOP")) MP_TOP = .7
 if(!exists("MP_GAP")) MP_GAP = .09
 
 set size 1,0.75
+set key spacing 1.5 
 
-set multiplot layout 2,3 columnsfirst title "" margins screen MP_LEFT, MP_RIGHT, MP_BOTTOM, MP_TOP spacing MP_GAP
+set multiplot layout 2,3 columnsfirst title "" margins MP_LEFT, MP_RIGHT, MP_BOTTOM, MP_TOP spacing MP_GAP
 
 #1,1
 set title "a)"

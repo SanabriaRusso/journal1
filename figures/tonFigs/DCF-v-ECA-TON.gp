@@ -1,10 +1,11 @@
 #!/usr/local/bin/gnuplot
 set y2label "Jain's Fairness Index (JFI)"
+set key spacing 2.4
 set y2tics 0,1,1
 set y2range[0:12]
 set xrange[1:50]
 set xtics 2,4,50
-set yrange[-20:100]
+set yrange[-20:110]
 set ytics 10,10,60
 set ylabel "Aggregated Throughput (Mbps)"
 set label 1 at 14, second 2.5 'JFIs below' center

@@ -1,6 +1,6 @@
 \section{Carrier Sense Multiple Access with Enhanced Collision Avoidance (CSMA/ECA)}\label{introProtocol}
 
-CSMA/ECA~\cite{barcelo2008lba} is a fully distributed and collision-free MAC for WLANs. It differs from CSMA/CA in that it uses a deterministic backoff, $B_{\text{d}}=CW_{\min}/2-1$ after successful transmissions, where $CW_{\min}$ is the minimum contention window of typical value $CW_{\min}=16$. By doing so, contenders that successfully transmitted on schedule $n$, will transmit without colliding with other successful nodes in future cycles~\cite{HE}.
+CSMA/ECA~\cite{barcelo2008lba} is a fully distributed and collision-free MAC for WLANs. It differs from CSMA/CA in that it uses a deterministic backoff, $B_{\text{d}}=\lceil CW_{\min}/2\rceil-1$ after successful transmissions, where $CW_{\min}$ is the minimum contention window of typical value $CW_{\min}=16$. By doing so, contenders that successfully transmitted on schedule $n$, will transmit without colliding with other successful nodes in future cycles~\cite{HE}.
 
 Collisions are handled as in CSMA/CA, which is described in Algorithm~\ref{alg:CSMA_CA}. In Algorithm~\ref{alg:CSMA_CA}, the node starts by setting the retransmissions counter and backoff stage to zero ($r\in[0,R]$ and $k\in[0,m]$ respectively, with $m$ the maximum backoff stage, and $R=m+1$ the retransmissions limit. The typical value for $m$ is $5$), then generates a random backoff, $B$. When the Acknowledgement (\emph{ack}) for a sent packet is not received by the sender a collision is assumed. Upon collision, the involved nodes will double their contention window by incrementing their backoff stage in one and use a random backoff, $B\in[0,2^{k}CW_{\min}-1]$. This procedure is described between Line~\ref{collision} and~\ref{finalCollision} of Algorithm~\ref{alg:CSMA_CA}.
 
@@ -72,7 +72,7 @@ Algorithm~\ref{alg:CSMA_ECA} provides an explanation of CSMA/ECA's deterministic
     \colorbox{yellow}{$k \leftarrow 0$;}\\
     \eIf{success}{
       %\tcc{Random backoff.}
-      \colorbox{yellow}{$B_{d} \leftarrow (2^{k}{\rm{CW}_{min}})/2-1$\;}\label{deterministicBackoff}\\
+      \colorbox{yellow}{$B_{d} \leftarrow \lceil 2^{k}{\rm{CW}_{min}}/2\rceil-1$\;}\label{deterministicBackoff}\\
 	 $B \leftarrow B_{d}$\;
     }
     {
@@ -114,7 +114,7 @@ The \emph{JFI } curves in Figure~\ref{fig:BECA} show the Jain's Fairness index f
 	\subsection{Supporting many more contenders}\label{moreContenders}
 	As was mentioned before, CSMA/ECA is only able to build a collision-free schedule if the number of contenders $N$, is less or equal than $B_{\text{d}}+1$. When $N > B_{\text{d}}+1$, collisions reappear. 
 	
-	To be able to attain a collision-free schedule even when the number of contenders exceeds $B_{\text{d}}+1$, we introduce \emph{Hysteresis}. Hysteresis is a property of the protocol that instructs nodes not to reset their backoff stage ($k$) after successful transmissions, but to use a deterministic backoff $B_{\text{d}}=CW(k)/2 -1$, where $CW(k)=2^{k}CW_{\min}$. This measure allows the adaptation of the schedule length, admitting many more contenders in a collision-free schedule. This idea of a schedule is significantly different from the virtual schedule required by the protocols described in Section~\ref{relatedWork}, that is, CSMA/ECA with Hysteresis does not require a previous knowledge of the number of contenders, the result of previous transmissions or the start/end of the schedule, easing its implementation in real hardware.
+	To be able to attain a collision-free schedule even when the number of contenders exceeds $B_{\text{d}}+1$, we introduce \emph{Hysteresis}. Hysteresis is a property of the protocol that instructs nodes not to reset their backoff stage ($k$) after successful transmissions, but to use a deterministic backoff $B_{\text{d}}=\lceil CW(k)/2\rceil -1$, where $CW(k)=2^{k}CW_{\min}$. This measure allows the adaptation of the schedule length, admitting many more contenders in a collision-free schedule. This idea of a schedule is significantly different from the virtual schedule required by the protocols described in Section~\ref{relatedWork}, that is, CSMA/ECA with Hysteresis does not require a previous knowledge of the number of contenders, the result of previous transmissions or the start/end of the schedule, easing its implementation in real hardware.
 	
 	Hysteresis enables CSMA/ECA nodes to have different schedules ($B_{\text{d}}$), carrying the undesired effect of unevenly dividing the channel time among contenders (i.e., some nodes will have to wait more in order to attempt transmissions).
 	
@@ -138,7 +138,39 @@ The \emph{JFI } curves in Figure~\ref{fig:BECA} show the Jain's Fairness index f
 		\label{fig:ECA+Hyst}
 	\end{figure*}
 	
-	Algorithm~\ref{alg:fullECA} describes CSMA/ECA$_{\text{Hys+FS}}$, while an example of CSMA/ECA$_{\text{Hys+FS}}$ with four contenders is shown in  Figure~\ref{fig:ECA+Hyst}. In the figure the first outline indicates a collision between STA-3 and STA-4, which will provoke an increment on both station's backoff stage ($k\leftarrow k+1$). Once STA-4's random backoff expires, CSMA/ECA$_{\text{Hys+FS}}$ instructs the station to transmit $2^{k}$ packets, and then use a deterministic backoff, $B_{\text{d}}=CW(k)/2-1$. The same behaviour is followed by STA 3.
+	\begin{table}
+		\centering
+		\caption{CSMA/ECA Notation}
+		\label{tab:glossary}
+		\begin{tabular}{|p{0.3\linewidth}|p{0.6\linewidth}|}
+			\hline
+			{\bfseries Notation} & {\bfseries Description}\\
+			\hline
+			$k$ & Backoff stage\\
+			\hline
+			$m$ & Maximum backoff stage\\
+			\hline
+			$B$ & Random backoff\\
+			\hline
+			$B_{\text{d}}$ & Deterministic backoff\\
+			\hline
+			$CW_{\min}$ & Minimum Contention Window\\
+			\hline
+			CSMA/ECA$_{\text{Hys}}$ & CSMA/ECA with Hysteresis\\
+			\hline
+			CSMA/ECA$_{\text{Hys+FS}}$ & CSMA/ECA with Hysteresis and Fair Share\\
+			\hline
+			CSMA/ECA$_{\text{Hys+MaxAg}}$ & CSMA/ECA with Hysteresis and Maximum Aggregation\\
+			\hline
+			CSMA/CA$_{\text{FS}}$ & CSMA/CA with Fair Share\\
+			\hline
+			CSMA/ECA$_{\text{MaxAg}}$ & CSMA/CA with Maximum Aggregation\\
+			\hline
+		\end{tabular}
+	\end{table}
+	
+	
+	Algorithm~\ref{alg:fullECA} describes CSMA/ECA$_{\text{Hys+FS}}$, Table~\ref{tab:glossary} provides a short list of notations used throughout the text, while an example of CSMA/ECA$_{\text{Hys+FS}}$ with four contenders is shown in  Figure~\ref{fig:ECA+Hyst}. In the figure the first outline indicates a collision between STA-3 and STA-4, which will provoke an increment on both station's backoff stage ($k\leftarrow k+1$). Once STA-4's random backoff expires, CSMA/ECA$_{\text{Hys+FS}}$ instructs the station to transmit $2^{k}$ packets, and then use a deterministic backoff, $B_{\text{d}}=\lceil CW(k)/2\rceil-1$. The same behaviour is followed by STA 3.
 	
 	With Hysteresis and Fair Share, CSMA/ECA$_{\text{Hys+FS}}$ is able to achieve greater throughput than CSMA/CA and for many more contenders, as shown also in Figure~\ref{fig:BECA}. In the figure, the \emph{CSMA/ECA$_{\text{Hys+FS}}$} curve shows a greater throughput because collisions are eliminated and Fair Share allows nodes to send $2^{k}$ packets upon each transmission. This throughput increase is the result of aggregation via Fair Share. It carries the negative effect of raising the average time between successful transmissions (see Section~\ref{timeBetweenSxTx}), which may affect delay-sensitive traffic, like gaming or live video/voice/tv streaming. 
 	
@@ -169,7 +201,7 @@ The \emph{JFI } curves in Figure~\ref{fig:BECA} show the Jain's Fairness index f
 	    %$s \leftarrow 0$\;
 	    \eIf{success}{
 	      %\tcc{Random backoff.}
-	      \colorbox{yellow}{$B_{d} \leftarrow (2^{k}\rm{CW}_{min})/2-1$;}\label{backoffExample}\\
+	      \colorbox{yellow}{$B_{d} \leftarrow \lceil 2^{k}\rm{CW}_{min}/2\rceil-1$;}\label{backoffExample}\\
 		$B \leftarrow B_{d}$\;
 	    }
 	    {
@@ -186,10 +218,11 @@ The \emph{JFI } curves in Figure~\ref{fig:BECA} show the Jain's Fairness index f
 	\caption{CSMA/ECA$_{\text{Hys+FS}}$: $k_{c}$ refers to the contention backoff stage, that is, the backoff stage with which a contention for transmission is started. After $R$ retransmission attempts, Fair Share instructs the node to drop $2^{k_{c}}$ packets.}
 	\label{alg:fullECA}
 	\end{algorithm}
-
-
+	
 	\subsection{The effects of Aggregation}\label{effects-of-aggregation}
-	Fair Share is an \textcolor{red}{A-MPDU} aggregation mechanism~\cite{A-MPDU} that coupled with the collision-free schedule built by CSMA/ECA$_{\text{Hys}}$ is able to provide short-term fairness. However, it also improves the throughput since the aggregation process makes the packet transmission more efficient by reducing overheads. The downside of Fair Share is that it may increase the time between two consecutive transmissions from the same node, which may affect negatively delay-sensitive applications such as gaming or high definition real-time video. \textcolor{red}{An example of the duration of a transmission, $T(l_{k})$, is provided by (\ref{eq:Ts}) in the following Section~\ref{ECA-bounds}.}
+	Fair Share is an \textcolor{red}{A-MPDU} aggregation mechanism~\cite{A-MPDU} that coupled with the collision-free schedule built by CSMA/ECA$_{\text{Hys}}$ is able to provide short-term fairness. However, it also improves the throughput since the aggregation process makes the packet transmission more efficient by reducing overheads. Furthermore, the level of aggregation provided by Fair Share depends only on the buffer occupancy.
+	
+	The downside of Fair Share is that it may increase the time between two consecutive transmissions from the same node, which may affect negatively delay-sensitive applications such as gaming or high definition real-time video. \textcolor{red}{An example of the duration of a transmission, $T(l_{k})$, is provided by (\ref{eq:Ts}) in the following Section~\ref{ECA-bounds}}.
 	
 	In scenarios where short-term fairness and the time between consecutive transmissions are not relevant, Fair Share can be replaced by \emph{Maximum Aggregation} (MaxAg), which will significantly improve the system throughput. In Maximum Aggregation all nodes aggregate as many packets as possible at every transmission, i.e., they send $2^m$ packets in each attempt.
 
@@ -289,9 +322,13 @@ The \emph{JFI } curves in Figure~\ref{fig:BECA} show the Jain's Fairness index f
 	Failed transmissions due to channel errors also means that a few moments of operation under a noisy channel can increase the contenders's deterministic backoff to its maximum value. Such event carries the undesired effects of increasing the time between successful transmissions and reducing the overall system throughput due to fewer collision-free periods of operation.
 		
 	\textcolor{red}{\subsection{Hidden terminals}}\label{hidden}
-	This type of nodes posses an incomplete view of the network. Therefore, they disrupt any collision-free operation in CSMA/ECA$_{\text{Hys+FS}}$ by attempting transmissions while the channel is busy.
+	One key characteristic of IEEE 802.11 devices is that their carrier sense range is at least two times greater than their data range~\cite{tuningCarrierSense}. In this situation, it could be expected that the impact of hidden nodes is low, as a given transmission can be only interfered by other transmissions from very distant nodes with energy levels not higher than the noise floor, which can be easily ignored. However, in specific deployments, where obstacles play also an important role on the propagation effects, hidden nodes may appear, causing asynchronous packet collisions~\cite{throughputUnderHiddenTerm}.
 	
-	For CSMA/ECA$_{\text{Hys+FS}}$, as for other reservation MAC protocols for CSMA (see Section~\ref{relatedWork},~\cite{HE,L_MAC}), hidden terminals affects the performance as channel errors do. That is, increasing the number of collisions and reducing the periods of collision-free operation.
+	In the case of CSMA/ECA$_{\text{Hys+FS}}$ WLANs, the same negative effects as in IEEE 802.11 WLANs are expected. In addition, collisions with hidden terminals will cause nodes to leave from any collision-free schedule, as channel errors do, thus continuously disrupting any attempt of collision-free operation.
+	
+	%This type of node has an incomplete view of the network. Therefore, they disrupt any collision-free operation in CSMA/ECA$_{\text{Hys+FS}}$ by attempting transmissions while the channel is busy.
+%	
+%	For CSMA/ECA$_{\text{Hys+FS}}$, as for other reservation MAC protocols for CSMA (see Section~\ref{relatedWork},~\cite{HE,L_MAC}), hidden terminals affects the performance as channel errors do. That is, increasing the number of collisions and reducing the periods of collision-free operation.
 		
 	\textcolor{red}{\subsection{Schedule Reset Mechanism}\label{schedReset}}
 	CSMA/ECA$_{\text{Hys+FS}}$ instructs nodes to keep their current backoff stage after a successful transmission (resetting it to zero only if the node empties its MAC queue, see line~\ref{emptyQueue} in Algorithm~\ref{alg:fullECA}). This is done in order to increase the cycle length and provide a collision-free schedule for many contenders, which is desirable in dense scenarios.
@@ -332,7 +369,7 @@ The \emph{JFI } curves in Figure~\ref{fig:BECA} show the Jain's Fairness index f
 			Analising\;
 			sxTx = $0$\;
 			\For{($j=0;~j<k;~j++$)}{\label{sets}
-				$y=2^{j}CW_{\min}/2$\;
+				$y=ceil(2^{j}CW_{\min}/2)$\;
 				isItPossible $= 0$\;
 				\For{($m=y;~m<B_{\text{d}};~m+=y$)}{
 					isItPossible$~+=b[m]$\;\label{filling}
@@ -355,7 +392,7 @@ The \emph{JFI } curves in Figure~\ref{fig:BECA} show the Jain's Fairness index f
 		
 		
 		\subsubsection{A conservative schedule reduction}
-		Schedule Reset is described in Algorithm~\ref{alg:schedRest}. Each contender starts filling a bitmap $b$ of size $B_{\text{d}}+1$ with the information observed in each passing slot during $\gamma=\lceil C/B_{\text{d}}\rceil$ consecutive successful transmissions (sxTx in Algorithm~\ref{alg:schedRest}); where $C=2^{m}CW_{\min}/2-1$ is the biggest deterministic backoff, and $\gamma$ is referred to as the Schedule Reset \emph{threshold} from this point forward.
+		Schedule Reset is described in Algorithm~\ref{alg:schedRest}. Each contender starts filling a bitmap $b$ of size $B_{\text{d}}+1$ with the information observed in each passing slot during $\gamma=\lceil C/B_{\text{d}}\rceil$ consecutive successful transmissions (sxTx in Algorithm~\ref{alg:schedRest}); where $C=\lceil 2^{m}CW_{\min}/2\rceil-1$ is the biggest deterministic backoff, and $\gamma$ is referred to as the Schedule Reset \emph{threshold} from this point forward.
 		
 		Each bit $t,~t\in\{0,\ldots ,B_{\text{d}}\}$ in the bitmap is the result of a bitwise OR operation between its current value and the state of the corresponding slot. This is shown in Line~\ref{bitwiseOR} in Algorithm~\ref{alg:schedRest}, where $\sigma_{i}(t)$ is a function that evaluates to $0$ if the slot corresponding to $b[t]$ is empty in iteration $i$, $i \in\{1,\ldots,\gamma\}$; or $1$ otherwise. After $\gamma$ iterations, the bitmap is evaluated (line~\ref{evaluations} in Algorithm~\ref{alg:schedRest}).
 		

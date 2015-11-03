@@ -1,6 +1,7 @@
 #!/usr/local/bin/gnuplot
 set xlabel "Contenders (N)"
 set ylabel "Aggregated Throughput (Mbps)"
+set key spacing 2.4
 set xrange [1:50]
 set xtics 2,4,50
 set yrange[10:95]

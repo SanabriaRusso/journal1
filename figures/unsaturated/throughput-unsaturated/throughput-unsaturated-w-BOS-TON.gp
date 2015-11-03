@@ -3,7 +3,7 @@ set xlabel "Contenders (N)"
 set ylabel "Aggregated Throughput (Mbps)"
 set xrange[2:70]
 set xtics 10,10,70;
-set yrange[-30:100]
+set yrange[-30:119]
 set ytics 0,20,60
 set y2range[-1.6:33]
 set y2tics 0,5,5

@@ -1,4 +1,5 @@
 #!/usr/local/bin/gnuplot
+set key spacing 2.4
 set xlabel "Contenders (N)"
 set xtics 10,10,70
 set ylabel "Average percentage of blocked packets (%)"

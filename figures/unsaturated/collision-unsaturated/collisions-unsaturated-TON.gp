@@ -4,7 +4,7 @@ set xrange[1:70]
 set xtics 10,10,70
 set ylabel "Average (%) of collision slots"
 set format y "%2.0f"
-set yrange[0:40]
+set yrange[0:45]
 set ytics 0,10,40
 #set size 0.75,0.75
 #set term postscript enhanced color dashed

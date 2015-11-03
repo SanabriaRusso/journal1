@@ -1,4 +1,5 @@
 #!/usr/local/bin/gnuplot
+set key spacing 2.5
 set xrange[1:50]
 set xtics 2,4,50
 set xlabel "Contenders (N)"
@@ -7,7 +8,7 @@ set key top center maxrows 5
 set y2label "Jain's Fairness Index (JFI)"
 set y2range[0:10]
 set y2tics 0,1,1
-set yrange[-10:95]
+set yrange[-10:100]
 set ytics 10,10,70
 set label 1 at 14, second 2.2 'JFIs below' center
 set arrow from 1,10 to 50, 10 lt 0 lw 3 lc rgb 'black' nohead
