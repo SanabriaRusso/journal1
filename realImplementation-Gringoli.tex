@@ -1,8 +1,8 @@
-\textcolor{red}{\section{Real hardware implementation}\label{EDCA}}
+\textcolor{black}{\section{Real hardware implementation}\label{EDCA}}
 
 We confirmed the simulations results experimentally with a testbed of real prototypes. This phase was mandatory in order to check whether the behaviour of the system is still correct in the presence of real phenomena, like excessive channel errors, or technical limitations of the hardware like imperfect node synchronisation; and to verify the implementation feasibility of CSMA/ECA$_{\text{Hys}}$ and the Schedule Reset mechanism with a real time horizon.
 
-As CSMA/ECA$_{\text{Hys}}$ works with the standard 802.11 PHY, we do not need the flexibility offered by complex development kits based on FPGAs like the WARP boards~\cite{amiri2007warp}. Any architecture that allows a customisation of the channel access delay would fit our requirements. For this reason we chose a widely available 802.11b/g WNIC from Broadcom. Like many other cards, its behaviour is ruled by a firmware code that controls the underlying hardware (including the radio, carrier sense and FIFOs) in real time. In particular we used the BRCM4318KBFG PCI card as it is supported by the OpenFWWF~\cite{OpenFWWF} open-source firmware, an alternative to the original code from the manufacturer that has been recently considered as development platform in several research projects~\cite{WMP,gringolitmc14,gringoliccr14,berger14,CF-MAC}. 
+As CSMA/ECA$_{\text{Hys}}$ works with the standard 802.11 PHY, we do not need the flexibility offered by complex development kits based on FPGAs like the WARP boards~\cite{amiri2007warp}. Any architecture that allows a customisation of the channel access delay{black} would fit our requirements. For this reason we chose a widely available 802.11b/g WNIC from Broadcom. Like many other cards, its behaviour is ruled by a firmware code that controls the underlying hardware (including the radio, carrier sense and FIFOs) in real time. In particular we used the BRCM4318KBFG PCI card as it is supported by the OpenFWWF~\cite{OpenFWWF} open-source firmware, an alternative to the original code from the manufacturer that has been recently considered as development platform in several research projects~\cite{WMP,gringolitmc14,gringoliccr14,berger14,CF-MAC}. 
 
 Thanks to the extremely low price of this card (refurbished devices are widely available for less than $\$10$ each), it is possible to run experiments with very large testbeds. We used 25 PC-Engines Alix 2d2 nodes running Linux kernel 2.6.32 as stations and a more powerful computer with the same kernel as Access Point (AP), all nodes being equipped with the aforementioned WNIC.
 
@@ -87,18 +87,18 @@ Nevertheless, the implementation results reveal that there are other underlying 
 %	\end{figure}
 
 
-%\textcolor{red}{\it maybe we could add a figure to explain of the bitmap is filled}
+%\textcolor{black}{\it maybe we could add a figure to explain of the bitmap is filled}
 %
-%\textcolor{red}{The new section should assume that the implementation has already been done. Further, it should overview:}
+%\textcolor{black}{The new section should assume that the implementation has already been done. Further, it should overview:}
 %
-%\textcolor{red}{\begin{itemize}
+%\textcolor{black}{\begin{itemize}
 %	\item Why do we need it?
 %	\item Are there other alternatives?
 %	\item How does it do what it does? (I think the explanation of the CF-MAC paper should suffice).
 %	\item You can refer to the firmware implementation as CSMA/ECA$_{\text{Hys}}$ with Schedule Halving and dynamic Stickiness. I will define it before this section.
 %\end{itemize}}
 %
-%\textcolor{red}{Obviously this will be a first revision. I leave the rest of the section untouched, we will erase/modify it later. Thanks in advance.}
+%\textcolor{black}{Obviously this will be a first revision. I leave the rest of the section untouched, we will erase/modify it later. Thanks in advance.}
 %
 %The implementation of CSMA/ECA$_{\text{Hys+FS}}$ should be carried out at a firmware level due to the tight timing constrains related to the backoff procedure. There are several alternatives to modify the backoff operation in WNICs, either using open firmware like OpenFWWF~\cite{OpenFWWF} or through Field Programmable Gate Arrays (FPGA).
 %

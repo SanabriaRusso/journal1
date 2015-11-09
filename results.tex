@@ -1,3 +1,4 @@
+
 \section{Results}\label{results}
 	\begin{figure*}[tb]
 		\centering
@@ -138,18 +139,11 @@
 	
 	In Figure~\ref{fig:unsatResults}a, the aggregated throughput increases linearly for the \emph{CSMA/CA} curve until saturation is reached at around 22 nodes, where the throughput begins to degrade. The \emph{CSMA/ECA$_{\text{Hys+FS}}$} curve has a similar behavior, entering saturation at around 60 nodes. Further, at around 30 nodes we see an increase in the average backoff stage for CSMA/ECA$_{\text{Hys+FS}}$ contenders which suggests an increment in collisions. This effect is shown in Figure~\ref{fig:unsatResults}b and Figure~\ref{fig:unsatResults}d, where at around 35 nodes CSMA/ECA$_{\text{Hys+FS}}$ contenders start colliding and dropping packets. 
 	
-	\textcolor{red}{As indicated by Figure~\ref{fig:unsatResults}b, when $20<N\leq 35$ CSMA/ECA$_{\text{Hys+FS}}$ nodes suffer from an increasing number of  collisions. This is due to nodes emptying their MAC queue quicker due to Fair Share, as shown in Figure~\ref{fig:unsatResults}f and re-entering the contention with a random backoff every time a new packet arrives.} 
+	\textcolor{black}{As indicated by Figure~\ref{fig:unsatResults}b, when $20<N\leq 35$ CSMA/ECA$_{\text{Hys+FS}}$ nodes suffer from an increasing number of  collisions. This is due to nodes emptying their MAC queue quicker due to Fair Share, as shown in Figure~\ref{fig:unsatResults}f and re-entering the contention with a random backoff every time a new packet arrives.} 
 	
-	\textcolor{red}{This increase in collisions may also cause the dropping of packets due to reaching the maximum retransmission limit. As CSMA/ECA$_{\text{Hys+FS}}$ drops more packets after reaching the retransmission limit (see line~\ref{discard} in Algorithm~\ref{alg:fullECA}), it shows a higher fraction of dropped packets in Figure~\ref{fig:unsatResults}d.}
+	\textcolor{black}{This increase in collisions may also cause the dropping of packets due to reaching the maximum retransmission limit. As CSMA/ECA$_{\text{Hys+FS}}$ drops more packets after reaching such limit (see line~\ref{discard} in Algorithm~\ref{alg:fullECA}), it shows a higher fraction of dropped packets in Figure~\ref{fig:unsatResults}d.}
 	
 	Beyond 35 contenders, the MAC queue of CSMA/ECA$_{\text{Hys+FS}}$ nodes starts to fill up, gradually allowing longer periods of collision-free operation due to CSMA/ECA$_{\text{Hys+FS}}$ nodes getting saturated. This allows CSMA/ECA$_{\text{Hys+FS}}$ to outperform CSMA/CA.\\
-		
-	\begin{figure}[htb!]
-		\centering
-		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/blockingProb-unsat/blocking-unsaturated-TON.eps}
-		\caption{Average fraction of blocked packets. When the MAC queue is full, packets comming from the uppers are discarded (or blocked) at the entrance of the buffer}
-		\label{fig:blocked-packets}
-	\end{figure}	
 	
 	\begin{figure*}[tb]
 		\centering
@@ -179,7 +173,7 @@
 	
 	In Figure~\ref{fig:unsatResults}e, a rapid increase in the delay for CSMA/CA nodes is appreciated at the saturation point (around 20 contenders), whereas CSMA/ECA$_{\text{Hys+FS}}$'s delay is still low. 
 	
-	\textcolor{red}{Further, with CSMA/ECA$_{\text{Hys+FS}}$ the percentage of blocked packets from the MAC queue is lower than CSMA/CA or CSMA/CA$_{\text{MaxAg}}$ (see Figure~\ref{fig:blocked-packets}). This is due to the construction of collision-free schedules which ensure that large A-MPDU transmissions do not suffer from collisions.}
+	\textcolor{black}{Further, with CSMA/ECA$_{\text{Hys+FS}}$ the percentage of blocked packets from the MAC queue is lower than CSMA/CA or CSMA/CA$_{\text{MaxAg}}$ (see Figure~\ref{fig:blocked-packets}). This is due to the construction of collision-free schedules which ensure that large A-MPDU transmissions do not suffer from collisions.}
 	
 	As CSMA/ECA$_{\text{Hys+FS}}$ nodes get saturated, the delay increases due to longer queueing and contention time (see the number of packets in the MAC queue for CSMA/ECA$_{\text{Hys+FS}}$ nodes in Figure~\ref{fig:unsatResults}f and how it is related to the increase in delay shown in Figure~\ref{fig:unsatResults}e).
 	
@@ -191,6 +185,13 @@
 %	\end{figure}	
 	
 	Figure~\ref{fig:unsatResults}c shows the average time between successful transmissions. It is possible to see from the figure that when CSMA/ECA$_{\text{Hys+FS}}$ approaches the saturation point the average time between successful transmissions increases, resembling Figure~\ref{fig:satResults}d. 
+	
+	\begin{figure}[tb]
+		\centering
+		\includegraphics[width=0.7\linewidth,angle=-90]{figures/unsaturated/blockingProb-unsat/blocking-unsaturated-TON.eps}
+		\caption{Average fraction of blocked packets. When the MAC queue is full, packets comming from the uppers are discarded (or blocked) at the entrance of the buffer}
+		\label{fig:blocked-packets}
+	\end{figure}	
 	
 	%Moreover, this effect is related to an increase in collisions: colliding nodes should begin a new contention for a retransmission, which may result in a successful transmission or another collision, the latter further increasing the average time between successful transmissions.
 	
@@ -263,14 +264,14 @@
 	
 	As shown in Figure~\ref{fig:coexResults}a and Figure~\ref{fig:coexResults}c, at a lower proportion of CSMA/CA nodes ($1/4$) the average aggregated throughput is the greatest among the tested mixed network setups. This is because collisions trigger Hysteresis and Fair Share in CSMA/ECA$_{\text{Hys+FS}}$ nodes, lowering the number of times these nodes enter in a contention and reducing the overall collision probability when compared to an only CSMA/CA network (see Figure~\ref{fig:coexResults}b, Figure~\ref{fig:coexResults}d and Figure~\ref{fig:coexResults}e). As the proportion of CSMA/CA nodes increases, the network throughput approximates to CSMA/CA.
 	
-	\textcolor{red}{Figure~\ref{fig:coexResults}e shows the average throughput for CSMA/CA and CSMA/ECA$_{\text{Hys+FS}}$ stations in a saturated mixed setup (half the contenders using CSMA/CA). It is possible to see that for a low total number contenders ($N^{*}\leq 12$) CSMA/CA stations attain greater throughput than in a CSMA/CA-only network. Again, this is because in the mixed network setup the other $N^{*}/2$ contenders with CSMA/ECA$_{\text{Hys+FS}}$ use a deterministic backoff, leaving many empty slots between transmissions.} 
+	\textcolor{black}{Figure~\ref{fig:coexResults}e shows the average throughput for CSMA/CA and CSMA/ECA$_{\text{Hys+FS}}$ stations in a saturated mixed setup (half the contenders using CSMA/CA). It is possible to see that for a low total number contenders ($N^{*}\leq 12$) CSMA/CA stations attain greater throughput than in a CSMA/CA-only network. Again, this is because in the mixed network setup the other $N^{*}/2$ contenders with CSMA/ECA$_{\text{Hys+FS}}$ use a deterministic backoff, leaving many empty slots between transmissions.} 
 	
-	\textcolor{red}{Still referring to Figure~\ref{fig:coexResults}e, for $N^{*}>12$ periods of collision-free operation and the aggregation performed with Fair Share allows CSMA/ECA$_{\text{Hys+FS}}$ to have larger channel time than CSMA/CA nodes, which throughput degrades even more than in CSMA/CA-only. These results suggests that a switch to CSMA/ECA$_{\text{Hys+FS}}$ can be beneficial for networks with high number of contenders.}
+	\textcolor{black}{Still referring to Figure~\ref{fig:coexResults}e, for $N^{*}>12$ periods of collision-free operation and the aggregation performed with Fair Share allows CSMA/ECA$_{\text{Hys+FS}}$ to have larger channel time than CSMA/CA nodes, which throughput degrades even more than in CSMA/CA-only. These results suggests that a switch to CSMA/ECA$_{\text{Hys+FS}}$ can be beneficial for networks with high number of contenders.}
 	
 	
 	%####################################################################################
 	
-	\textcolor{red}{\subsection{Channel errors and Schedule Reset}\label{resultsSchedRest}}
+	\textcolor{black}{\subsection{Channel errors and Schedule Reset}\label{resultsSchedRest}}
 	
 	\begin{figure*}[tb]
 		\centering
@@ -279,13 +280,13 @@
 		\label{fig:SchedResetResults}
 	\end{figure*}
 	
-	\textcolor{red}{Figure~\ref{fig:SchedResetResults}a shows the average aggregated throughput of a saturated network with a channel error probability, $p_e=0.1$ (see Section~\ref{channelErrorsDef}). We can see that the highest throughput, corresponding to CSMA/ECA$_{\text{Hys+FS}}$ is lower than the one observed in a perfect channel (Figure~\ref{fig:satResults}a). Furthermore, curves with Schedule Reset (SR) seem to have lower aggregated throughput. This is because the backoff stage, and therefore the level of aggregation done by Fair Share, is repeatedly reduced.}
+	\textcolor{black}{Figure~\ref{fig:SchedResetResults}a shows the average aggregated throughput of a saturated network with a channel error probability, $p_e=0.1$ (see Section~\ref{channelErrorsDef}). We can see that the highest throughput, corresponding to CSMA/ECA$_{\text{Hys+FS}}$ is lower than the one observed in a perfect channel (Figure~\ref{fig:satResults}a). Furthermore, curves with Schedule Reset (SR) seem to have lower aggregated throughput. This is because the backoff stage, and therefore the level of aggregation done by Fair Share, is repeatedly reduced.}
 	
-	\textcolor{red}{Still assessing Figure~\ref{fig:SchedResetResults}a and focusing on the SR curves, we can see that both aggressive schedule halving with dynamic stickiness (\emph{SR aggr. halv. dynStick}) curves (with and without Fair Share) have higher aggregated throughput than the rest (for a description of aggressive schedule halving and dynamic stickiness, refer to Algorithm~\ref{alg:schedRest} and Section~\ref{aggr}). This Schedule Reset configuration reduces the time between successful transmissions (see Figure~\ref{fig:SchedResetResults}c) and mantains collision-free operation for longer periods of time thanks to the increase in the node's stickiness.}
+	\textcolor{black}{Still assessing Figure~\ref{fig:SchedResetResults}a and focusing on the SR curves, we can see that both aggressive schedule halving with dynamic stickiness (\emph{SR aggr. halv. dynStick}) curves (with and without Fair Share) have higher aggregated throughput than the rest (for a description of aggressive schedule halving and dynamic stickiness, refer to Algorithm~\ref{alg:schedRest} and Section~\ref{aggr}). This Schedule Reset configuration reduces the time between successful transmissions (see Figure~\ref{fig:SchedResetResults}c) and mantains collision-free operation for longer periods of time thanks to the increase in the node's stickiness.}
 	
-	\textcolor{red}{Figure~\ref{fig:SchedResetResults}c shows the average time between successful transmissions for the same network setup. Even-though CSMA/ECA$_{\text{Hys+FS}}$ still has a higher metric than CSMA/CA due to the aggregation done by Fair Share, Schedule Reset is able of reducing this metric by almost $43\%$.}
+	\textcolor{black}{Figure~\ref{fig:SchedResetResults}c shows the average time between successful transmissions for the same network setup. Even-though CSMA/ECA$_{\text{Hys+FS}}$ still has a higher metric than CSMA/CA due to the aggregation done by Fair Share, Schedule Reset is able of reducing this metric by almost $43\%$.}
 	
-	\textcolor{red}{Figure~\ref{fig:SchedResetResults}b and Figure~\ref{fig:SchedResetResults}d show the aggregated througput and time between successful transmissions, respectively for a non-saturated network with the same $p_e=0.1$. Since under non-saturated conditions CSMA/ECA$_{\text{Hys+FS}}$ nodes reset their schedule every time they empty their MAC queues, Schedule Reset's benefits are not relevant. Nevertheless, a reduction in the time between successful transmissions is observed for Schedule Reset curves in Figure~\ref{fig:SchedResetResults}d}.
+	\textcolor{black}{Figure~\ref{fig:SchedResetResults}b and Figure~\ref{fig:SchedResetResults}d show the aggregated througput and time between successful transmissions, respectively for a non-saturated network with the same $p_e=0.1$. Since under non-saturated conditions CSMA/ECA$_{\text{Hys+FS}}$ nodes reset their schedule every time they empty their MAC queues, Schedule Reset's benefits are not relevant. Nevertheless, a reduction in the time between successful transmissions is observed for Schedule Reset curves in Figure~\ref{fig:SchedResetResults}d}.
 	
 	
 	

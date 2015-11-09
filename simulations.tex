@@ -1,5 +1,5 @@
 \section{Simulation Scenario}\label{simulations}
-This section provides the simulation parameters for testing CSMA/ECA$_{\text{Hys+FS}}$ under two different traffic conditions, namely saturated and non-saturated. \textcolor{red}{We also provide details on how channel errors are modelled and what are its effects over the transmissions. Further, the simulation of the clock drift effect, Schedule Reset parameters, and the coexistence with CSMA/CA are also subjects to be addressed in this section.}
+This section provides the simulation parameters for testing CSMA/ECA$_{\text{Hys+FS}}$ under two different traffic conditions, namely saturated and non-saturated. \textcolor{black}{We also provide details on how channel errors are modelled and what are its effects over the transmissions. Further, the simulation of the clock drift effect, Schedule Reset parameters, and the coexistence with CSMA/CA are also subjects to be addressed in this section.}
 
 	\subsection{Scenario details}
 	Results are obtained by running multiple simulations over a modified version of the COST simulator~\cite{COST}, available at~\cite{sim:parameters-TON}. PHY and MAC parameters are detailed in Table~\ref{tab:mac-params}. Some assumptions were made in order to test the performance at the MAC layer:
@@ -12,8 +12,8 @@ This section provides the simulation parameters for testing CSMA/ECA$_{\text{Hys
 	\end{itemize}
 	
 	The aforementioned assumptions ensure that the simulation results are just effects of the MAC behaviour.
-	%Further, in a collision-free CSMA/ECA$_{\text{Hys+FS}}$ operation there is no need for RTS/CTS mechanisms, given that successful nodes already know their respective transmission slot. \textcolor{red}{Maybe here is where the conversation about hidden nodes should take place?}
-	If not mentioned otherwise, results are derived from \textcolor{red}{20 simulations of 100 seconds in length, each one with a different seed}. Figures also show the standard deviation.
+	%Further, in a collision-free CSMA/ECA$_{\text{Hys+FS}}$ operation there is no need for RTS/CTS mechanisms, given that successful nodes already know their respective transmission slot. \textcolor{black}{Maybe here is where the conversation about hidden nodes should take place?}
+	If not mentioned otherwise, results are derived from \textcolor{black}{20 simulations of 100 seconds in length, each one with a different seed}. Figures also show the standard deviation.
 	
 	\begin{table}
 		\centering
@@ -51,14 +51,14 @@ This section provides the simulation parameters for testing CSMA/ECA$_{\text{Hys
 	\subsection{Performance under clock drift}
 	Clock drift is simulated by setting a drift probability, $p_{cd}$. Each station has a probability of $p_{cd}/2$ of miscounting one slot more, and $p_{cd}/2$ of miscounting one slot less. This approach follows the one proposed by Gong et. al in~\cite{slotDrift}.
 	
-	\textcolor{red}{\subsection{Channel errors}\label{channelErrorsDef}
-	Channel errors are modelled by assigning a probability of a packet being corrupted by the channel, $p_e>0$. That is, in a single packet transmission there is probability $p_e$ that the transmission will not be acknowledged. If the transmission is an A-MPDU (like in the case of CSMA/ECA$_{\text{Hys+FS}}$), $p_e$ will affect each MPDU individually and independently. Therefore, an A-MPDU transmission will be considered a complete failure only if all frames in the aggregation are affected by the channel error probability.}
+	\textcolor{black}{\subsection{Channel errors}\label{channelErrorsDef}
+	Channel errors are modelled by assigning a probability of a packet being corrupted by the channel, $p_e>0$. That is, in a single packet transmission there is probability $p_e$ that the transmission will not be acknowledged. If the transmission is an A-MPDU (like in the case of CSMA/ECA$_{\text{Hys+FS}}$), $p_e$ will affect each MPDU individually and independently. Therefore, an A-MPDU transmission will be considered a complete failure only if all frames in the aggregation are a{black}ffected by the channel error probability.}
 	
-	\textcolor{red}{All results are shown with stickiness equal to one (see Section~\ref{errorEffect}). That is, after a colision, CSMA/ECA$_{\text{Hys+FS}}$ nodes will use a random backofff. Nevertheless, in Section~\ref{resultsSchedRest} curves described as \emph{dynStick} temporarily increase the node's stickiness to two after a successful reduction of the schedule (using a random backoff after two consecutive collisions). This increase is done in order to converge faster to collision-free schedules when in operating with channel errors.}
+	\textcolor{black}{All results are shown with stickiness equal to one (see Section~\ref{errorEffect}). That is, after a colision, CSMA/ECA$_{\text{Hys+FS}}$ nodes will use a random backofff. Nevertheless, in Section~\ref{resultsSchedRest} curves described as \emph{dynStick} temporarily increase the node's stickiness to two after a successful reduction of the schedule (using a random backoff after two consecutive collisions). This increase is done in order to converge faster to collision-free schedules when operating with channel errors.}
 	
 	\subsection{Coexistance with CSMA/CA}\label{coexistence}
 	To test the performance of CSMA/CA and CSMA/ECA$_{\text{Hys+FS}}$ stations in the same network, simulations are set with a CSMA/CA node density of 1/4, 1/2 and 3/4 of the total.
 	
-	\textcolor{red}{\subsection{Applying Schedule Reset} 
-	A set of results under saturated conditions and channel errors applying Schedule Reset (see Section~\ref{schedReset}) are provided. Some of the results are generated with a $\gamma=1$, or \emph{aggressive} Schedule Reset (aggr. in the figures). These settings provide the highest throughput under the tested conditions, and also in the real hardware implementations such as the one shown in Section~\ref{EDCA}.
+	\textcolor{black}{\subsection{Applying Schedule Reset} 
+	A set of results under saturated conditions and channel errors applying Schedule Reset (see Section~\ref{schedReset}) are provided. Some of the results are generated with a $\gamma=1$, or \emph{aggressive} Schedule Reset (indicated as \emph{aggr.} in the figures). These settings provide the highest throughput under the tested conditions, and also in the real hardware implementations such as the one shown in Section~\ref{EDCA}.
 	}

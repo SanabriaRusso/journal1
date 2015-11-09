@@ -1,5 +1,6 @@
 \documentclass[]{article}
 \usepackage{amsmath}
+\usepackage{mathtools}
 \usepackage{fullpage}
 \usepackage{graphicx}
 \usepackage{color}
@@ -7,20 +8,20 @@
 
 \begin{document}
 
-\title{Draft 2: Response letter}
+\title{Response letter}
   \author{Luis Sanabria-Russo, Jaume Barcelo, Boris Bellalta, Francesco Gringoli}
 
 \date{\today}
 \maketitle
-\emph{Authors sincerely appreciate the time spent reading our work. Your insight propelled new considerations and discoveries that resulted in an original study. Thank you. \\\\This short latter presents our responses to all the reviewers's comments. Additionnally, it provides an overview of the new contributions included in the paper. Authors kindly suggest to read it through, as some answers built on previous explanations. Again, thank you very much.\\}
+\emph{Authors sincerely appreciate the time spent reading our work. Your insight propelled new considerations and discoveries that contributed to futher improve the paper. Thank you. \\\\This latter presents our responses to all the reviewers's comments. Additionnally, it provides an overview of the new contributions included in the paper. Authors kindly suggest to read it through, as some answers built on previous explanations. Again, thank you very much.\\}
 
-In this new version of our proposal we have included the following:
+In this new version of the paper, the more relevant additions are:
 \begin{itemize}
 	\item Completely redrawn set of figures with clearer explanations.
 	\item A throughput comparison with similar reservation-like collision-free MAC protocols for IEEE 802.11 networks.
 	\item Analysis of the impact of channel errors over CSMA/ECA$_{\text{Hys+FS}}$'s deterministic backoff.
-	\item Propose a mechanism for reducing the length of collision-free schedules in CSMA/ECA$_{\text{Hys+FS}}$.
-	\item Perform the first experiments of a real hardware implementation of CSMA/ECA with Hysteresis.
+	\item A new mechanism for reducing the length of collision-free schedules in CSMA/ECA$_{\text{Hys+FS}}$.
+	\item The first experimental results of a real hardware implementation of CSMA/ECA with Hysteresis.
 \end{itemize}
 
 \section*{Including a new author}
@@ -48,7 +49,7 @@ The authors appreciate your contribution in enhancing the readability of the wor
 			\label{fig:coex}
 		\end{figure}
 		
-		We appreciate the observation. CSMA/CA nodes are in fact very greedy. Nevertheless, in an example mixed scenario where half the nodes run CSMA/CA and half CSMA/ECA$_{\text{Hys+FS}}$, we observe a throughput enhancement for CSMA/CA when compared against a CSMA/CA-only network. This is now referred in the document in the following way:\\
+		We appreciate the observation. CSMA/CA nodes are in fact very greedy. Nevertheless, in an mixed scenario example where half the nodes run CSMA/CA and half CSMA/ECA$_{\text{Hys+FS}}$, we observe a throughput enhancement for CSMA/CA when compared against a CSMA/CA-only network. This is now referred in the document in the following way:\\
 		
 		`\emph{As tests in a mixed network with different proportions of CSMA/CA and CSMA/ECA nodes show, the aggregated throughput is higher than the observed in CSMA/CA-only networks. Furthermore, at low number of total contenders CSMA/CA's throughput is actually improved, while it is degraded in crowded scenarios. This constitutes a motivation for a change towards CSMA/ECA.}'\\
 		
@@ -62,7 +63,7 @@ The authors appreciate your contribution in enhancing the readability of the wor
 			\item {\bfseries An implementation is crucial as well as the use of a measurement-based simulation environment. Good work. Mention in the introduction that the simulation is based on the COST simulation environment for greater credibility.}
 		\end{itemize}
 		
-		We included a reference to the COST simulator and incorporated a completely new hardware implementation Section.
+		We included a reference to a new customization of the COST simulator and incorporated a completely new hardware implementation Section.
 		
 	\subsection{Regarding ``Related Work"}
 		\begin{itemize}
@@ -71,30 +72,30 @@ The authors appreciate your contribution in enhancing the readability of the wor
 		
 		IEEE 8011.ax Task Group suggest simulation scenarios with $10's$ to $100's$ of stations for a single Access Point (AP). Based on the current minimum Contention Window (CW$_{\min}=16$) we can safely take an example of number of slots in a schedule, $N$ to be $16$ or $8$ slots. That is, collision-free schedules can be built with no more than $M\leq N$ contenders. When $M>N$ collisions will reappear, contributing to the observed overall throughput degradation. 
 		
-		It is clear that a flexible or adjustable schedule is needed for collision-free operation with many contenders, as it is proposed in this work. Nevertheless, when $M$ is very big, say 200 contenders, and assuming $M\leq N$, the process of converging to a collision-free schedule will provoke many collisions, further degrading the overall throughput as the number of contenders increases. Besides, the increased time between successful transmissions will also degrade the average throughput of each node.
+		It is clear that a flexible or adjustable schedule is needed for collision-free operation with many contenders, as it is proposed in this work. Nevertheless, when $M$ is very big, say 200 contenders, and assuming $M\leq N$, the process of converging to a collision-free schedule will provoke some collisions, further degrading the overall throughput as the number of contenders increases. Besides, the increased time between successful transmissions will also degrade the average throughput of each node, but still keeping it higher than a CSMA/CA node.
 
 	\subsection{Regarding ``Section III"}
 		\begin{itemize}
 			\item {\bf It would be useful if the authors include a table with a list of important notations. Would help with readability.}
 		\end{itemize}
 
-		We now include a short table with useful notation regarding backoff procedure variables and different CSMA/ECA configurations.
+		We now include a short table (Table I in the paper) with useful notation regarding backoff procedure variables and different CSMA/ECA configurations.
 
 		\begin{itemize}
 			\item {\bfseries Section III.B, the aggregation process should be explained in more detail. Is the aggregation here similar to that used in 802.11n, where the level of aggregation depends on the transmission rate? How are packets aggregated? It is then mentioned in Section III.C that the packet is an MPDU and other details that indicate this protocol is applied for 802.11n+. Please clarify these details before then.}
 		\end{itemize}
 		
- 		The authors apologise for raising any confusion. The aggregation performed with Fair Share does not depend on the rate. In fact, it only depends on 		the backoff stage at the moment of transmission. That is, stations at backoff stage $k$ will aggregate and transmit an A-MPDU frame with $2^{k}$ 		data frames. This is done with the sole purpose of providing fairness to CSMA/ECA$_{\text{Hys}}$ stations with different deterministic backoffs.
+ 		The authors apologise for raising any confusion. The aggregation performed with Fair Share does not depend on 		the rate. In fact, it only depends on the backoff stage at the moment of transmission. That is, stations at backoff 		stage $k$ will aggregate and transmit an A-MPDU frame with $2^{k}$ data frames. This is done with the sole 			purpose of providing fairness to CSMA/ECA$_{\text{Hys}}$ stations with different deterministic backoffs.
 		
 		We now first refer to Fair Share mentioning the following:\\
 		
-		`\emph{Fair Share is an A-MPDU aggregation mechanism that coupled with the collision-free schedule built by CSMA/ECA$_{\text{Hys}}$ is able to provide short-term fairness. However, it also improves the throughput since the aggregation process makes the packet transmission more efficient by reducing overheads. Furthermore, the level of aggregation provided by Fair Share depends only on the buffer occupancy.}'
+		`\emph{Fair Share is an A-MPDU aggregation mechanism that coupled with the collision-free schedule built by CSMA/ECA$_{\text{Hys}}$ is able to provide short-term fairness. However, it also improves the throughput since the aggregation process makes the packet transmission more efficient by reducing overheads. Furthermore, the level of aggregation provided by Fair Share depends on the buffer occupancy and the current backoff stage.}'
 		
 		\begin{itemize}
 			\item {\bfseries It is not clear in Section III.C what the authors mean by the "inferior" backoff stage. Please clarify or replace with a more descriptive word. Perhaps: subsequent, later, following, etc.}
 		\end{itemize}
 		
-		We extended the explanation everywhere this could cause confusion. 
+		We extended the explanation everywhere this could cause confusion. Authors kindly refer the Reviewer to Section III-C in the paper.
 		
 	\subsection{Regarding ``Simulation"}
 		\begin{itemize}
@@ -103,14 +104,11 @@ The authors appreciate your contribution in enhancing the readability of the wor
 		
 		We completely regenerated the figures. All the legends follow the order of appearance of the curves in the Figure. We chose to group related figures together to save space and improve the structure of the paper.
 		
-		Backoff stages reflect the length of the collision-free schedule (if any) in CSMA/ECA$_{\text{Hys+FS}}$. When increasing the number of contenders in a network, it is expected to see an increase in the average backoff stage of each node given that a larger schedule length is needed to allocate those users. Furthermore, in saturated scenarios with channel errors nodes will rapidly end up in the maximum backoff stage due to failed transmissions, and therefore use the largest deterministic backoff.
+		Backoff stages reflect the length of the collision-free schedule (if any) in CSMA/ECA$_{\text{Hys+FS}}$. When increasing the number of contenders in a network, it is expected to see an increase in the average backoff stage of each node given that a larger schedule length is needed to allocate those users (as can be observed in Figure 7a in the paper). Furthermore, in saturated scenarios with channel errors nodes will rapidly end up in the maximum backoff stage due to failed transmissions, and therefore use the largest deterministic backoff.
 			
-		On the other hand, in non-saturated traffic conditions we see an increase of the average backoff stage when the network approaches the saturation point. This is because CSMA/ECA and CSMA/CA reset their backoff stage to zero when the MAC queue empties.
-
+		On the other hand, in non-saturated traffic conditions we see an increase of the average backoff stage when the network approaches the saturation point (see Figure 8a in the paper). This is because CSMA/ECA and CSMA/CA reset their backoff stage to zero when the MAC queue empties.
 		
-		%We included a complete Section presenting Schedule Reset. This mechanism aims at reducing the collision-free schedule length (therefore the backoff stage in CSMA/ECA). This is particularly important for CSMA/ECA with channel errors and/or non-saturated traffic conditions where the backoff stage increases rapidly to the maximum value, augmenting the time between successful transmissions.
-%		
-%		On a side node, Schedule Reset reacts to channel observations. It is not designed to provide the optimal backoff stage, but to force nodes to reduce the schedule length when possible.
+		The ideal solution is to reach collision-free operation with the lowest backoff stage possible. This may affect the aggregation performed by Fair Share, but at the same decreases the time between successful transmissions and increases the channel utilization.
 		
 		\begin{itemize}
 			\item {\bf A little more detail on the peak values at around 35 nodes for the proposed solution. In Figure 15 and 16, it appears as if 35 nodes would be the worst-case scenario for a network to remain in. Some explanation on how the dropped packets (or collision slot) increase is a temporary result before the network re-calibrates and that values in the long-run look more like the values for other N values.}
@@ -126,16 +124,20 @@ The authors appreciate your contribution in enhancing the readability of the wor
 			\item {\bfseries This reader appreciates the level of thought and detail that was put into presenting these graphs. I think the authors could improve on the explanation of the results, as there are quite a bit of very interesting results and graphs presented. The explanation is quite good as is, but it often reads as a teaser, with a need for a little more detail to close the loop.}
 		\end{itemize}
 		
-		Authors deeply appreciate the comment. We put extra effort in trying to enhance our explanations. Hopefully there are clearer now.
+		Authors deeply appreciate the comment. We put extra effort in trying to enhance our explanations. 
+		
+		We now provide a throughput comparison with the protocols presented in the related work section, consider the effects of channel errors, reviewed the algorithms presented, reworded explanations regarding non-saturated scenarios and coexistence (referring to Figure 8 and Figure 10).
+		
+		Hopefully we managed to transmit our ideas in a clearer way now. 
 		
 	\subsection{Regarding ``Other"}
 		\begin{itemize}
 			\item {\bf The authors did not discuss the impact of such things as hidden terminals on system performance (such as those discussed as early as [3]). Can the authors give insights on why that is the case? Perhaps a discussion outlining how this problem is out of scope, how it would possibly not impact performance results, how it is covered in other works... Some discussion to this avail. However, if space is a limitation, I would prefer the authors focus on deeper discussion of the results, rather than this discussion. Some mention or brief insight though would be appreciated.}
 		\end{itemize}
 	
-		The influence of hidden terminals is briefly overviewed. Nevertheless, a deep analysis of the impact of these type of terminals into our proposal is still lacking. This is expected to be assessed in a future work. Nevertheless, it is considered that hidden nodes will impact our proposal as they do in CSMA/CA networks.
+		The influence of hidden terminals is briefly overviewed (see Section III-F). Nevertheless, a deep analysis of the impact of these type of terminals into our proposal is still lacking. This is expected to be assessed in a future work. Nevertheless, it is considered that hidden nodes will impact our proposal as they do in CSMA/CA networks.
 		
-		Hidden-terminals interrupt collision-free schedules as slot drifts or channel errors do. These will provoke an increase in the schedule length of CSMA/ECA$_{\text{Hys+FS}}$ contenders, leaving more free slots between its successful transmissions and therefore leveraging the effect of the hidden terminals. It is expected to see an increase in the backoff stage and throughput even at low number of contenders and hidden terminals. Much like the aggregated throughput under slot drifts figure.
+		Hidden-terminals interrupt collision-free schedules as slot drifts or channel errors do. These will provoke an increase in the schedule length of CSMA/ECA$_{\text{Hys+FS}}$ contenders, leaving more free slots between its successful transmissions and therefore leveraging the effect of the hidden terminals. It is expected to see an increase in the backoff stage and throughput even at low number of contenders and hidden terminals. Much like the aggregated throughput under slot drifts figure (Figure 7e in the paper).
 		
 		
 %##################################################################################
@@ -150,7 +152,9 @@ Authors appreciate the Reviewer's comments regarding the scenarios proposed to t
 	
 	We appreciate your valuable comment. In fact, channel errors have a big impact over CSMA/ECA$_{\text{Hys+FS}}$. As failed transmissions due to channel errors are handled as collisions, CSMA/ECA$_{\text{Hys+FS}}$ nodes rapidly end up using the largest deterministic backoff. Even-though this means that more packets will be aggregated via Fair Share, it also implies an increase in the time between successful transmissions. 
 	
-	We have incorporated channel errors to our results alongside a mechanism to leverage its impact over CSMA/ECA$_{\text{Hys+FS}}$'s deterministic backoff, namely Schedule Reset.
+	We have incorporated channel errors to our results alongside a mechanism to leverage its impact over CSMA/ECA$_{\text{Hys+FS}}$'s deterministic backoff, namely Schedule Reset (SR).
+	
+	Schedule Reset looks at the empty slots between a node's consecutive transmissions and checks if it is possible to change the node's current deterministic backoff to occupy those empty slots. As CSMA/ECA$_{\text{Hys+FS}}$ uses a deterministic backoff $B_{\text{d}}=\lceil CW(k)/2\rceil -1$, where $CW(k)=2^{k}CW_{\min}$, the separation of empty slots should also be a power of two (please, refer to Section III-G in the paper for a complete overview of SR).
 	
 	\begin{itemize}
 		\item {\bfseries The proposed scheme is only compared against CSMA/CA.}
@@ -158,13 +162,13 @@ Authors appreciate the Reviewer's comments regarding the scenarios proposed to t
 
 	As our proposal is through to be an evolution of CSMA/CA, we compare all the performance metrics of CSMA/ECA$_{\text{Hys+FS}}$ against it. For a comparative analysis of collision-free protocols, authors respectfully refer the Reviewer to contributions like~\cite{L_MAC}.
 	
-	 In order to provide more context, average aggregated throughput and fairness curves for L-MAC and L-ZC are now included.
+	 In order to provide more context, average aggregated throughput and fairness curves for L-MAC and ZC-MAC are now included.
 	
 	\begin{itemize}
 		\item {\bfseries The authors do not propose a solution for the additional delays that may arise from Fair Share, which can be detrimental to time sensitive traffic.}
 	\end{itemize}
 	
-	In order to decrease the time between successful transmission while using Fair Share, we propose Schedule Reset. Although it is able of reducing this metric by almost $43\%$, it is still higher than the same metric observed in CSMA/CA networks. Nevertheless, we now provide throughput and time between successful transmissions curves for CSMA/ECA$_{\text{Hys}}$. Although it is not completely fair, it outperforms CSMA/CA in all tested scenarios.
+	In order to decrease the time between successful transmission while using Fair Share, we propose Schedule Reset. Although it is able of reducing the time between successful transmissions by almost $43\%$, it is still higher than the same metric observed in CSMA/CA networks. Nevertheless, we now provide throughput and time between successful transmissions curves for CSMA/ECA$_{\text{Hys}}$. Although it is not completely fair, it outperforms CSMA/CA in all tested scenarios in terms of both throughput and delay.
 
 %	\begin{figure}[tb]
 %	\centering
@@ -194,7 +198,7 @@ Authors appreciate the Reviewer's comments regarding the scenarios proposed to t
 			\label{fig:heavyErrors}
 		\end{figure}
 		
-		Due to lack of space, and because it is believed that enough contributions were packed in this single paper authors plan to develop the Reviewer's suggestions on a separate, future contribution.
+		Authors plan to carefully develop the Reviewer’s suggestions in a new paper, where dense and spatially distributed topologies will be considered in detail. The study of the CSMA/ECA behavior in those topologies is not trivial, and we believe that the space that would require a detailed analysis of them makes it unfeasible to add it in this paper.
 		
 	\begin{itemize}
 		\item {\bfseries The proposed scheme is only compared against CSMA/CA. It would be beneficial to see how CSMA/ECA performs in comparison to other proposed zero collision schemes like Zero Collision MAC (ZC-MAC) and Learning MAC, which are referred to in the related work section of the paper.}
@@ -207,7 +211,7 @@ Authors appreciate the Reviewer's comments regarding the scenarios proposed to t
 		
 		
 \section{Reviewer 3}
-Authors want to acknowledge and thank you for the comments provided. Your insight on the effects of channel errors and/or node incorporation/withdrawal from the contention are very much appreciated. Our contribution now incorporates a mechanism for reducing the collision-free schedule length, which turned out to be a key feature for outperforming CSMA/CA under heavy channel errors (like in the new real hardware implementation included in the paper).
+Authors want to acknowledge and thank you for the comments provided. Your insight on the effects of channel errors and/or node incorporation/withdrawal from the contention are very much appreciated. Our contribution now incorporates a mechanism for reducing the collision-free schedule length, which turned out to be a key feature for outperforming CSMA/CA under heavy channel errors (like in the new experimental results obtained from the real hardware implementation included in the paper).
 
 	\subsection{Regarding ``Weakness"}
 		\begin{itemize}
@@ -216,9 +220,9 @@ Authors want to acknowledge and thank you for the comments provided. Your insigh
 		
 		The authors acknowledge the apparent reduced number of comparisons with other protocols. Nevertheless, was our consideration that attending CSMA/ECA-related issues were of higher priority due to space limitations. Nevertheless, authors enthusiastically suggest~\cite{L_MAC} as an appropriate survey on collision-free MAC protocols for WLANs. Furthermore, and as mentioned in the paper:\\
 		
-		`\emph{Performing time slot reservation for each transmission is a well known technique for increasing the throughput and mantanining Quality of Service (QoS) in TDMA schemes, like LTE~\cite{canoLTEcoexistence}. Applying the same concept to CSMA networks by modifying DCF's random backoff proceedure provides similar benefits~\cite{HE}. The following are MAC protocols for WLANs, decentralised and capable of attaining greater throughput than CSMA/CA by constructing collision-free schedules using reservation techniques. A survey of collisio-free MAC protocols for WLANs is presented in~\cite{L_MAC}. In this paper we only overview those that are similar to CSMA/ECA.}'\\
+		`\emph{Performing time slot reservation for each transmission is a well known technique for increasing the throughput and mantanining Quality of Service (QoS) in TDMA schemes, like LTE~\cite{canoLTEcoexistence}. Applying the same concept to CSMA networks by modifying DCF's random backoff proceedure provides similar benefits~\cite{HE}. The following are MAC protocols for WLANs, decentralised and capable of attaining greater throughput than CSMA/CA by constructing collision-free schedules using reservation techniques. A survey of collision-free MAC protocols for WLANs is presented in~\cite{L_MAC}. In this paper we only overview those that are similar to CSMA/ECA.}'\\
 		
-		We attempt to increase the background on the subject by further constraining the category of our proposal. CSMA/ECA, as L-MAC and L-ZC are reservation-like protocols implemented for CSMA in WLANs. In the hopes of putting CSMA/ECA in context with L-MAC and L-ZC, we also included a throughput and fairness comparison.
+		We attempt to increase the background on the subject by further constraining the category of our proposal. CSMA/ECA, as L-MAC and ZC-MAC are reservation-like protocols implemented for CSMA in WLANs. In the hopes of putting CSMA/ECA in context with L-MAC and ZC-MAC, we also included a throughput and fairness comparison.
 		
 		\begin{itemize}
 			\item {\bfseries The major contributions of this paper come from the two extensions, which is probably not enough considering the journal.}
@@ -249,7 +253,11 @@ Authors want to acknowledge and thank you for the comments provided. Your insigh
 			\item {\bfseries So, when $2 < N < 7$, each node can send at most 1/8 of the slots. Shouldn't the aggregated throughput of N = 3 be around 1.5 times to the aggregate throughput of N = 2? The reviewer has similar question for later figures regarding to throughput.}
 		\end{itemize}
 		
-		Yes, in theory. Nevertheless, empty slots and other waiting periods (described by (5) in Section \emph{Throughput bounds of CSMA/ECA$_{\text{Hys+FS}}$}) reduce the channel efficiency. These waiting periods of empty slots are defined in the standard, and ensure fairness among nodes.
+		Thank you very much for raising this question, and give us the opportunity to further clarify Figure 1 with our response. To simplify the representation, in Figure 1 both the empty slots and those that contain a transmission have a similar duration. However, this is not the case, and empty slots are around 1000 times smaller than those slots that contain a transmission. Certainly, this is not shown in the figure, and to avoid any further confusion on this, we explain that in the caption.
+
+		In case $\sigma_{e}$ (empty slot duration) and $\sigma_{s}$ (duration of slots containing a transmission) are of similar size, the reviewer is right. For instance, we roughly have that the aggregate throughput once the collision-free operation has been reached is $S(2)= 2L/(6\sigma_{e} + 2\sigma_{s})$ and $S(3)= 3L/(5\sigma_{e} + 3\sigma_{s})$ for 2 and 3 contenders respectively. Given that $\sigma_{s} = \sigma_{e}$, we get that $S(3)/S(2) = 1.5$, as indicated. However, since $\sigma_{s} \approx 1000\sigma_{e}$, the ratio $S(3)/S(2)$ is bigger than 1, but relatively small. 
+
+		In later figures, this also explains why once in collision free, with few STAs we almost reach the maximum throughput, and the increase when more STAs are added is small. See for example, the throughput of CSMA/ECA in Figure 2.
 		
 		\begin{itemize}
 			\item {\bfseries It is clear that Fair Share is to solve the uneven partition caused by Hysteresis. However, k never decreases and it only increases, (at least not shown in Algorithm 3.) A mechanism for decreasing k is needed. Otherwise, k is likely to grow to m = 5 and result in fixed m long waiting time. For example, if k grows to 5, which only requires 5 collisions, the node attempts to send 32 packets every $(2 ^ 5 * 16)/2 - 1 = 255$ slots. 5 collisions might not happen in simulations with pure CSMA/ECA\_{Hys+FS} nodes. However, as this paper suggests, backward compatibility is important. A legacy CSMA/CA can easily contribute 5 collisions to other CSMA/ECA\_{Hys+FS} nodes. On the other aspect, node (even CSMA/ECA\_{Hys+FS} nodes) addition might also introduce unexpected collisions that raise k. If k reduction does not exist, it seems to the reviewer that CSMA/ECA\_{Hys+FS} will eventually converge to CSMA/ECA\_{Hys+ArgMax}.  Moreover, a mechanism for reducing k is also helpful for node removal. Finally, clock drift might also contribute to some collisions. Therefore, the algorithm needs a way to decrease k to make it realistic}
@@ -278,15 +286,17 @@ Authors want to acknowledge and thank you for the comments provided. Your insigh
 			i.e., k == 0 and CW\_min == 0. (The reviewer might be wrong.)}
 		\end{itemize}
 		
-		Having fast and accurate information about the number of contenders in WLANs is a challenging task. In fact, failure to accurately estimate this number is one of the drawbacks of protocols like L-MAC and L-ZC.
+		Having fast and accurate information about the number of contenders in WLANs is a challenging task. In fact, failure to accurately estimate this number is one of the drawbacks of protocols like L-MAC and ZC-MAC.
 		
-		To answer the question: yes, it is possible. Nevertheless, as CSMA/ECA is though to be an evolution of CSMA/CA, we do not use those CW$_{\min}$ values in order to comply with the standard. Also, it is important to keep in mind the transmission durations, described in (5).
+		To answer the question: yes, it is possible. Nevertheless, as CSMA/ECA is though to be an evolution of CSMA/CA, we do not use those CW$_{\min}$ values so we comply with the standard. 
+		
+		Furthermore, to make CSMA/ECA compatible with CSMA/CA for coexistence scenarios, the value of the deterministic backoff is roughly the expected value of CSMA/CA's random backoff at backoff stage $k$. That is, $B_{\text{d}}\coloneqq\lceil{E[0,CW(k)-1]}\rceil$ (as described in Section III-H in the paper).
 		
 		\begin{itemize}
 			\item {\bfseries The reviewer is interested in the k values in high contention scenarios. If not too difficult, please make figures for k, especially when CSMA/ECA\_{Hys+FS} co-exist with CSMA/CA. Does CSMA/CA nodes cause collision and increases k? If not, why not?}
 		\end{itemize}
 		
-		Now that Schedule Reset is introduced we acknowledge that collisions with CSMA/CA nodes, channel errors, slots drifts and addition/withdrawals of contenders will increase CSMA/ECA$_{\text{Hys+FS}}$ nodes's schedule length to its maximum value. This produces an increase in the time between successful transmissions, which the node attempts to reduce with Schedule Reset.
+		Now that Schedule Reset is introduced we acknowledge that collisions with CSMA/CA nodes, channel errors, slots drifts and addition/withdrawals of contenders will increase CSMA/ECA$_{\text{Hys+FS}}$ nodes's schedule length to its maximum value, that is, the average backoff stage will rapidly grow to the maximum value, $k=m$. This produces an increase in the time between successful transmissions, which the node attempts to reduce with Schedule Reset.
 		
 		%The effect of channel errors and slot drift is specially significant in real-hardware implementations. Therefore we provide throughput and lost frames for CSMA/ECA$_{\text{Hys}}$ with an aggressive Schedule Reset. Results show CSMA/ECA outperforming CSMA/CA, and more importantly with a very low percentage of lost frames.
 %		
